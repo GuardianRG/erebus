@@ -2,7 +2,7 @@
 reverse engineering for linux
 
 #### short build guide
-You need gtk,make,cmake
+You need make,cmake
 
 If you have the packages installed, navigate to the directory where you want to build erebus and type:
 ```
