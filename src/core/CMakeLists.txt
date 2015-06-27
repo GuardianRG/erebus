@@ -1,8 +1,5 @@
-link_directories(${GTKMM_LIBRARY_DIRS}  )
-
-include_directories(${GTKMM_INCLUDE_DIRS}  )
-
-add_executable(erebus erebus.cc)
-
-
-target_link_libraries(erebus ${GTKMM_LIBRARIES}  )
+set(SOURCE 
+	${SOURCE}
+	${CMAKE_CURRENT_SOURCE_DIR}/erebus.cc
+	PARENT_SCOPE
+)

@@ -1,13 +1,10 @@
 #include <gtkmm.h>
 
-int main(int argc, char *argv[])
-{
-	Glib::RefPtr<Gtk::Application> app =
-	Gtk::Application::create(argc, argv,
-				 "org.gtkmm.examples.base");
+#include "../gui/application.h"
+
+int main(int argc, char *argv[]) {
+	erebus::gui::Application appli(argc,argv);
+	appli.run();
 	
-	Gtk::Window window;
-	window.set_default_size(200, 200);
-	
-	return app->run(window);
+	return 0;
 }
