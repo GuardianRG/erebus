@@ -5,7 +5,6 @@
 #include "types.h"
 
 namespace erebus {
-	namespace core {
 		
 
 		class File {
@@ -21,5 +20,4 @@ namespace erebus {
 	
 			sbyte getSignedByteAt(unsigned int index) const;
 		};
-	}
 }

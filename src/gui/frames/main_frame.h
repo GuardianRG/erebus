@@ -5,7 +5,6 @@
 #include <gtkmm.h>
 
 namespace erebus {
-	namespace gui {
 		
 		class MainFrame : public Gtk::Window {
 			
@@ -30,6 +29,6 @@ namespace erebus {
 			
 			
 		};
-	}
+	
 }
 

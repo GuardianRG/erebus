@@ -5,7 +5,6 @@
 #include "main_frame.h"
 
 namespace erebus {
-	namespace gui {
 		MainFrame::MainFrame() : MainFrame("erebus",false) {
 			
 		}
@@ -95,5 +94,5 @@ namespace erebus {
 		void MainFrame::setTitle(std::string title) {
 			set_title(title);
 		}
-	}
+	
 }

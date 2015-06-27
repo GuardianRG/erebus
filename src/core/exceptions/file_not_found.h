@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 namespace erebus {
-	namespace core {
 
 /**
  * This is a exception for the case a stated file doenst exist.
@@ -17,5 +16,5 @@ public:
 	
 	}
 };
-	}
+	
 }

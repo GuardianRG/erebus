@@ -7,8 +7,6 @@
 #include "exceptions/file_not_found.h"
 
 namespace erebus {
-	namespace core {
-
 binVec FileReader::readFile(std::string path) {
 	std::ifstream file(path, std::ios::binary);
 	
@@ -34,6 +32,5 @@ binVec FileReader::readFile(std::string path) {
 	return vec;
 }
 
-	}
 	
 }

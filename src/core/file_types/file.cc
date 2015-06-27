@@ -3,7 +3,6 @@
 
 
 namespace erebus {
-	namespace core {
 		
 
 		File::File(binVec* file): file_(std::make_unique<binVec>(*file)) {
@@ -25,5 +24,4 @@ namespace erebus {
 			return static_cast<sbyte>(file_->at(index));
 		}
 		
-	}
 }

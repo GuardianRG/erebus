@@ -7,7 +7,7 @@ int main(int argc, char *argv[]) {
 	Gtk::Application::create(argc, argv,
 				 "org.suppengeist.erebus");
 	
-	erebus::gui::MainFrame mf("erebus",true);
+	erebus::MainFrame mf("erebus",true);
 	app->run(mf);
 	
 	return 0;
