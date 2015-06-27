@@ -13,8 +13,8 @@ public:
 	 * Constructor.
 	 */
 	explicit file_not_found(const std::string& msg) : std::runtime_error(msg) {
-	
+
 	}
 };
-	
+
 }

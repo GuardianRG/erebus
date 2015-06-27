@@ -6,8 +6,8 @@
 
 namespace erebus {
 
-		class FileReader {
-		public:
-			static binVec readFile(std::string path);
-		};
+class FileReader {
+public:
+	static binVec readFile(std::string path);
+};
 }
