@@ -1,10 +1,14 @@
 #include <gtkmm.h>
 
-#include "../gui/application.h"
+#include "../gui/frames/main_frame.h"
 
 int main(int argc, char *argv[]) {
-	erebus::gui::Application appli(argc,argv);
-	appli.run();
+	Glib::RefPtr<Gtk::Application> app =
+	Gtk::Application::create(argc, argv,
+				 "org.suppengeist.erebus");
+	
+	erebus::gui::MainFrame mf("erebus",true);
+	app->run(mf);
 	
 	return 0;
 }

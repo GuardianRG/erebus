@@ -1,6 +1,8 @@
 #pragma once
 
-#include <gtkmm/window.h>
+#include <string>
+
+#include <gtkmm.h>
 
 namespace erebus {
 	namespace gui {
@@ -8,9 +10,11 @@ namespace erebus {
 		class MainFrame : public Gtk::Window {
 		public:
 			MainFrame();
+			MainFrame(std::string title,bool maximized);
 			virtual ~MainFrame();
 			
 			void setPreferredSize(int width,int height);
+			void setTitle(std::string);
 			
 		protected:
 			
