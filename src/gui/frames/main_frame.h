@@ -19,6 +19,15 @@ namespace erebus {
 			
 		protected:
 			
+			Gtk::Box menuBar_;
+			Glib::RefPtr<Gtk::Builder> m_refBuilder;
+			
+			void on_menu_file_open();
+			void on_menu_file_quit();
+			
+		private:
+			void initFrame();
+			
 			
 		};
 	}
