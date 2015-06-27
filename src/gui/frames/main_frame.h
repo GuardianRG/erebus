@@ -8,6 +8,7 @@ namespace erebus {
 	namespace gui {
 		
 		class MainFrame : public Gtk::Window {
+			
 		public:
 			MainFrame();
 			MainFrame(std::string title,bool maximized);

@@ -11,7 +11,7 @@ add_subdirectory(gui)
 
 SET(erebus_CXX_FLAGS "" CACHE STRING "Flags to use in directory Bar")
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${erebus_CXX_FLAGS} -std=c++11")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${erebus_CXX_FLAGS} -std=c++14 -Wall -Werror")
 
 add_executable(erebus ${SOURCE})
 
