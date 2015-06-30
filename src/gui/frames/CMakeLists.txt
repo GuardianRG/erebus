@@ -1,5 +1,0 @@
-set(SOURCE 
-	${SOURCE}
-	${CMAKE_CURRENT_SOURCE_DIR}/main_frame.cc
-	PARENT_SCOPE
-)

@@ -1,5 +1,0 @@
-set(SOURCE 
-	${SOURCE}
-	${CMAKE_CURRENT_SOURCE_DIR}/file_not_found.cc
-	PARENT_SCOPE
-)
