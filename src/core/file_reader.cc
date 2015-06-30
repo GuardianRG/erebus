@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <iterator>
+#include <memory>
 
 #include <types.h>
 #include <file_reader.h>
@@ -8,7 +9,7 @@
 
 namespace erebus {
 
-binVec FileReader::readFile(std::string path) {
+std::unique_ptr<binVec> FileReader::readFile(std::string path) {
 	std::ifstream file(path, std::ios::binary);
 
 	if(!file.good()) {
@@ -22,10 +23,10 @@ binVec FileReader::readFile(std::string path) {
 	fileSize=file.tellg();
 	file.seekg(0,std::ios::beg);
 
-	binVec vec;
-	vec.reserve(fileSize);
+	std::unique_ptr<binVec> vec(new binVec);
+	vec->reserve(fileSize);
 
-	vec.insert(vec.begin(), std::istream_iterator<byte>(file),std::istream_iterator<byte>());
+	vec->insert(vec->begin(), std::istream_iterator<byte>(file),std::istream_iterator<byte>());
 
 	file.close();
 

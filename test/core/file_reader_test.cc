@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <iostream>
+#include <memory>
 #include <fstream>
 #include <stdio.h>
 #include <string>
@@ -56,22 +57,22 @@ protected:
 
 //Test for file1
 TEST_F(FileReaderTest, TestFile1) {
-	binVec inp_file1=erebus::FileReader::readFile("file1");
+	std::unique_ptr<binVec> inp_file1=erebus::FileReader::readFile("file1");
 
-	EXPECT_EQ(file1_.size(),inp_file1.size());
-	for(unsigned int i=0; i<inp_file1.size(); i++) {
-		EXPECT_EQ(inp_file1[i],file1_[i]);
+	EXPECT_EQ(file1_.size(),inp_file1->size());
+	for(unsigned int i=0; i<inp_file1->size(); i++) {
+		EXPECT_EQ(inp_file1->at(i),file1_[i]);
 	}
 }
 
 
 //Test for file2
 TEST_F(FileReaderTest, TestFile2) {
-	binVec inp_file2=erebus::FileReader::readFile("file2");
+	std::unique_ptr<binVec> inp_file2=erebus::FileReader::readFile("file2");
 
-	EXPECT_EQ(file2_.size(),inp_file2.size());
-	for(unsigned int i=0; i<inp_file2.size(); i++) {
-		EXPECT_EQ(inp_file2[i],file2_[i]);
+	EXPECT_EQ(file2_.size(),inp_file2->size());
+	for(unsigned int i=0; i<inp_file2->size(); i++) {
+		EXPECT_EQ(inp_file2->at(i),file2_[i]);
 	}
 }
 

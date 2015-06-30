@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Check if astyle is installed
-command -v astyle >/dev/null 2>&1 || { printf >&2 "This script needs astyle to be installed.\nSee http://astyle.sourceforge.net/ for more informations.\n";exit 1; }
+command -v astyle >/dev/null 2>&1 || { printf >&2 "This script needs astyle to be installed.\nSee http://astyle.sourceforge.net/ for more information.\n";exit 1; }
 
 
 #format all .cc files

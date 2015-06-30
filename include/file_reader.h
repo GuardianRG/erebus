@@ -16,8 +16,8 @@ public:
 	 *
 	 * @param path The path to the file to read
 	 * @throws file_not_found in case the file doestn exist
-	 * @return a std::vector&lt;unsigned char&gt; with the bytes of the file
+	 * @return a unique_ptr to a std::vector&lt;unsigned char&gt; with the bytes of the file
 	 */
-	static binVec readFile(std::string path);
+	static std::unique_ptr<binVec> readFile(std::string path);
 };
 }
