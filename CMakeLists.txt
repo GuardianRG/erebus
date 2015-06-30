@@ -17,19 +17,19 @@ include_directories(${GTKMM_INCLUDE_DIRS})
 find_package(Boost REQUIRED )
 include_directories( ${Boost_INCLUDE_DIR} )
 
-#add source directories
-add_subdirectory(src)
-add_subdirectory(test)
-
 #include header files
 include_directories(include)
 
 #set compileflags
-SET(erebus_CXX_FLAGS "" CACHE STRING "Flags to use in directory Bar")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${erebus_CXX_FLAGS} -std=c++14 -Wall -Werror")
 
+#add source directories
+add_subdirectory(include)
+add_subdirectory(src)
+add_subdirectory(test)
+
 #create executable
-add_executable(erebus ${SOURCE})
+add_executable(erebus ${SOURCE} ${HEADER_FILES})
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
-target_link_libraries(erebus ${Boost_LIBRARIES} )
+target_link_libraries(erebus ${Boost_LIBRARIES})
