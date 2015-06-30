@@ -25,10 +25,6 @@ SET(erebus_CXX_FLAGS "" CACHE STRING "Flags to use in directory Bar")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${erebus_CXX_FLAGS} -std=c++14 -Wall -Werror")
 
 #create executable
-set(SOURCE
-	${SOURCE}
-)
-
 add_executable(erebus ${SOURCE})
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
