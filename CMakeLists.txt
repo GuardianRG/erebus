@@ -13,6 +13,10 @@ pkg_check_modules(GTKMM gtkmm-3.0)
 link_directories(${GTKMM_LIBRARY_DIRS})
 include_directories(${GTKMM_INCLUDE_DIRS})
 
+#provide boost headers
+find_package(Boost REQUIRED )
+include_directories( ${Boost_INCLUDE_DIR} )
+
 #add source directories
 add_subdirectory(src)
 add_subdirectory(test)
@@ -28,3 +32,4 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${erebus_CXX_FLAGS} -std=c++14 -Wall -We
 add_executable(erebus ${SOURCE})
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
+target_link_libraries(erebus ${Boost_LIBRARIES} )

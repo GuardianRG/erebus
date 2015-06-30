@@ -2,12 +2,11 @@
 reverse engineering for linux
 
 #### short build guide
-As libraries you need gtk.
-To build this project you need the headerfiles for gtkmm.
+You need gtkmm, boost dev packages.
+You need the gtk libraries.
+You need make,cmake programs.
 
-You need make,cmake
-
-If you have the packages installed, navigate to the directory where you want to build erebus and type:
+If you have everything installed, navigate to the directory where you want to build erebus and type:
 ```
 git clone https://github.com/SuppenGeist/erebus
 cd erebus
