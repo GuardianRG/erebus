@@ -15,6 +15,7 @@ printf "\n\nFormatting all header files...\n\n"
 astyle -r "include/*.h" -t -v
 
 #delete all *.orig files created by astyle
-printf "\n\nDeleting all temporary file...\n"
+printf "\n\nDeleting all temporary files...\n"
 find src/ -name '*.orig' -delete
+find test/ -name '*.orig' -delete
 printf "Done.\n"

@@ -12,11 +12,9 @@ binVec FileReader::readFile(std::string path) {
 	std::ifstream file(path, std::ios::binary);
 
 	if(!file.good()) {
-
 		file.close();
 		throw new file_not_found(path+" does not exist!");
 	}
-
 	file.unsetf(std::ios::skipws);
 
 	std::streampos fileSize;

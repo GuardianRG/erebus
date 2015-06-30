@@ -2,5 +2,6 @@
 *.o
 *.obj
 *.kate-swp
+*.orig
 
 build/
