@@ -7,11 +7,12 @@ command -v astyle >/dev/null 2>&1 || { printf >&2 "This script needs astyle to b
 #format all .cc files
 printf "\nFormatting all *.cc files...\n\n"
 astyle -r "src/*.cc" -t -v
+astyle -r "test/*.cc" -t -v
 
 
 #format all header files
 printf "\n\nFormatting all header files...\n\n"
-astyle -r "src/*.h" -t -v
+astyle -r "include/*.h" -t -v
 
 #delete all *.orig files created by astyle
 printf "\n\nDeleting all temporary file...\n"
