@@ -18,4 +18,5 @@ astyle -r "include/*.h" -t -v
 printf "\n\nDeleting all temporary files...\n"
 find src/ -name '*.orig' -delete
 find test/ -name '*.orig' -delete
+find include/ -name '*.orig' -delete
 printf "Done.\n"
