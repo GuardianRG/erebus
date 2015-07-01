@@ -4,7 +4,7 @@ reverse engineering for linux
 #### short build guide
 You need gtkmm, boost dev packages.
 You need the gtk libraries.
-You need make,cmake programs.
+You need make,cmake,svn programs.
 
 If you have everything installed, navigate to the directory where you want to build erebus and type:
 ```
@@ -19,4 +19,11 @@ make
 To execute the program type:
 ```
 ./erebus
+```
+
+#### documentation
+
+To create a documentation type
+```
+doxygen
 ```
