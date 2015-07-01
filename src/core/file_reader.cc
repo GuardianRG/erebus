@@ -14,7 +14,7 @@ std::unique_ptr<binVec> FileReader::readFile(std::string path) {
 
 	if(!file.good()) {
 		file.close();
-		throw new file_not_found(path+" does not exist!");
+		throw file_not_found(path+" does not exist!");
 	}
 	file.unsetf(std::ios::skipws);
 
