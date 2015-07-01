@@ -10,27 +10,13 @@ project(erebus CXX)
 # Enable ExternalProject CMake module
 include(ExternalProject)
 
-# Set the build type if it isn't already
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Release)
-endif()
-
-# Set default ExternalProject root directory
-
 # Add gtest
 ExternalProject_Add(
     googletest
     SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk/
     TIMEOUT 10
-    # Force separate output paths for debug and release builds to allow easy
-    # identification of correct lib in subsequent TARGET_LINK_LIBRARIES commands
-    CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
-               -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG:PATH=DebugLibs
-               -DCMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE:PATH=ReleaseLibs
-               -Dgtest_force_shared_crt=ON
-    # Disable install step
+    CMAKE_ARGS -Dgtest_force_shared_crt=ON
     INSTALL_COMMAND ""
-    # Wrap download, configure and build steps in a script to log output
     LOG_DOWNLOAD ON
     LOG_CONFIGURE ON
     LOG_BUILD ON
@@ -49,6 +35,12 @@ else()
   set(Suffix ".a")
   set(Pthread "-pthread")
 endif()
+
+set(gtest_LIBRARIES 
+	${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest${Suffix}
+	${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main${Suffix}
+	${Pthread}
+)
 
 enable_testing()
 
