@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string>
 
+#include <exceptions/file_not_found.h>
 #include <file_reader.h>
 
 namespace {
@@ -74,6 +75,19 @@ TEST_F(FileReaderTest, TestFile2) {
 	for(unsigned int i=0; i<inp_file2->size(); i++) {
 		EXPECT_EQ(inp_file2->at(i),file2_[i]);
 	}
+}
+
+//Test for an empty path
+TEST_F(FileReaderTest, TestEmptyPath) {
+	EXPECT_THROW(erebus::FileReader::readFile(""),erebus::file_not_found);
+}
+
+
+
+
+//Test for an nonexisting file
+TEST_F(FileReaderTest, TestNonExistingFile) {
+	EXPECT_THROW(erebus::FileReader::readFile("idontexist"),erebus::file_not_found);
 }
 
 
