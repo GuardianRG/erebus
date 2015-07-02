@@ -13,7 +13,7 @@ namespace erebus {
 class MainView : public Gtk::Window,public IMainView {
 
 public:
-	MainView();
+	MainView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 	~MainView();
 
 	void setPreferredSize(int width,int height) override;
@@ -23,8 +23,6 @@ public:
 
 protected:
 
-	Gtk::Box menuBar_;
-	Glib::RefPtr<Gtk::Builder> m_refBuilder;
 
 	void on_menu_file_open();
 	void on_menu_file_quit();

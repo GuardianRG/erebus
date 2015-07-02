@@ -26,10 +26,13 @@ int main(int argc, char *argv[]) {
 		return 1;
 	}
 	
-	Gtk::Window* window=nullptr;
-	refBuilder->get_widget("window1", window);
-	if(window) {
-		app->run(*window);
+	
+	erebus::MainView* w;
+	refBuilder->get_widget_derived("window1", w);
+	
+	if(w) {
+		w->setTitle("SWAAAAAAAAG");
+		app->run(*w);
 	}
 	
 	return 0;
