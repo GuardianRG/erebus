@@ -56,8 +56,8 @@ link_directories(${GTKMM_LIBRARY_DIRS})
 include_directories(${GTKMM_INCLUDE_DIRS})
 
 #provide boost headers
-find_package(Boost REQUIRED )
-include_directories( ${Boost_INCLUDE_DIR} )
+#find_package(Boost REQUIRED )
+#include_directories( ${Boost_INCLUDE_DIR} )
 
 #include header files
 include_directories(include)

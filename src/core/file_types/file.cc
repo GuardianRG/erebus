@@ -1,11 +1,15 @@
 #include <file.h>
 #include <types.h>
-
+#include <string>
+#include <memory>
 
 namespace erebus {
 
 
-File::File(std::unique_ptr<binVec> file): file_(std::move(file)) {
+File::File(std::unique_ptr<binVec> file): File(std::move(file),"") {
+	
+}
+File::File(std::unique_ptr<binVec> file,std::string path): file_(std::move(file)),path_(path) {
 	
 }
 

@@ -1,6 +1,10 @@
 #include <gtkmm.h>
+
+#include <iostream>
+
 #include <main_view.h>
 #include <main_view_presenter.h>
+#include <model.h>
 
 int main(int argc, char *argv[]) {
 	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
@@ -8,7 +12,7 @@ int main(int argc, char *argv[]) {
 	Glib::RefPtr<Gtk::Builder> refBuilder = Gtk::Builder::create();
 	try
 	{
-		refBuilder->add_from_file("resources/view1.glade");
+		refBuilder->add_from_file("resources/main_view.glade");
 	}
 	catch(const Glib::FileError& ex)
 	{
@@ -29,9 +33,14 @@ int main(int argc, char *argv[]) {
 	
 	erebus::MainView* w;
 	refBuilder->get_widget_derived("window1", w);
+	erebus::Model m;
+	
+	erebus::MainViewPresenter p;
+	p.setView(w);
+	p.setModel(&m);
+	w->setPresenter(&p);
 	
 	if(w) {
-		w->setTitle("SWAAAAAAAAG");
 		app->run(*w);
 	}
 	

@@ -1,8 +1,9 @@
 #pragma once
 
-#include <memory>
 
 #include <types.h>
+#include <string>
+#include <memory>
 
 namespace erebus {
 
@@ -11,6 +12,7 @@ namespace erebus {
  */
 class File {
 	std::unique_ptr<binVec>	file_;
+	std::string 		path_;
 
 public:
 	/**
@@ -19,6 +21,14 @@ public:
 	 * @param file a pointer to the binary data
 	 */
 	File(std::unique_ptr<binVec> file);
+	
+	/**
+	 * Constructor.
+	 * 
+	 * @param file a pointer to the binary data
+	 * @param path path to the read file. is empty if there is no path
+	 */
+	File(std::unique_ptr<binVec> file,std::string path);
 	
 	/**
 	 * Destructor.
