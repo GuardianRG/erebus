@@ -73,16 +73,7 @@ add_subdirectory(test)
 #create executable
 add_executable(erebus ${SOURCE} ${HEADER_FILES})
 
-
-add_custom_command(
-    OUTPUT "${PROJECT_BINARY_DIR}/view1.glade"
-    COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/src/view/gtk/view1.glade" "${PROJECT_BINARY_DIR}"
-    DEPENDS "${PROJECT_SOURCE_DIR}/src/view/gtk/view1.glade"
-    COMMENT "add file")
- 
-add_custom_target(view1.glade DEPENDS "${PROJECT_BINARY_DIR}/view1.glade")
-
-add_dependencies(erebus view1.glade)
+add_subdirectory(resources)
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
 target_link_libraries(erebus ${Boost_LIBRARIES})

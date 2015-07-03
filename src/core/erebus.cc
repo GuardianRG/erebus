@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
 	Glib::RefPtr<Gtk::Builder> refBuilder = Gtk::Builder::create();
 	try
 	{
-		refBuilder->add_from_file("view1.glade");
+		refBuilder->add_from_file("resources/view1.glade");
 	}
 	catch(const Glib::FileError& ex)
 	{
