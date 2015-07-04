@@ -1,5 +1,7 @@
 #test/core/CMakeLists.txt
 
+add_subdirectory(file_types)
+
 #create unit test for file_reader.cc
 add_executable(core__file_reader_test 
 	file_reader_test.cc 

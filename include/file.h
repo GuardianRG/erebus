@@ -54,14 +54,6 @@ class File {
 	 *@return unsigned byte at index
 	 */
 	byte getUnsignedByteAt(unsigned int index) const;
-
-	/**
-	 * Return the signed byte at the given index.
-	 *
-	 * @param index index to read byte from
-	 * @return signed byte at index
-	 */
-	sbyte getSignedByteAt(unsigned int index) const;
 };
 
 }//namespace erebus

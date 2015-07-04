@@ -30,8 +30,4 @@ byte File::getUnsignedByteAt(unsigned int index) const {
 	return file_->at(index);
 }
 
-sbyte File::getSignedByteAt(unsigned int index) const {
-	return static_cast<sbyte>(file_->at(index));
-}
-
 }//namespace erebus
