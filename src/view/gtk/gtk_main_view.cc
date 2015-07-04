@@ -37,7 +37,6 @@ void GtkMainView::on_menu_file_open_click() {
 
 	//Handle the response:
 	if(result==Gtk::RESPONSE_OK) {
-		presenter_->showErrorMessage("Error while loading file!");
 		try {
 			presenter_->loadFile(dialog.get_filename());
 		} catch(...) {
