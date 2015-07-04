@@ -9,7 +9,7 @@
 
 namespace erebus {
 
-std::unique_ptr<binVec> FileReader::readFile(std::string path) {
+binVec* FileReader::readFile(std::string path) {
 	std::ifstream file(path, std::ios::binary);
 
 	if(!file.good()) {
@@ -23,7 +23,7 @@ std::unique_ptr<binVec> FileReader::readFile(std::string path) {
 	fileSize=file.tellg();
 	file.seekg(0,std::ios::beg);
 
-	std::unique_ptr<binVec> vec(new binVec);
+	binVec* vec(new binVec);
 	vec->reserve(fileSize);
 
 	vec->insert(vec->begin(), std::istream_iterator<byte>(file),std::istream_iterator<byte>());
@@ -33,4 +33,4 @@ std::unique_ptr<binVec> FileReader::readFile(std::string path) {
 	return vec;
 }
 
-}
+}//namespace erebus

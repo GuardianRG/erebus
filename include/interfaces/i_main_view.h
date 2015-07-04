@@ -4,10 +4,17 @@
 
 namespace erebus {
 
+/**
+ * The interface for the MainView.
+ */
 class IMainView: public IView {
-public:
-	virtual ~IMainView(){}
+
+  public:
+	/**
+	 * Destructor.
+	 */
+	virtual ~IMainView() {}
 };
 
 
-}
+}//namespace erebus

@@ -2,15 +2,20 @@
 #include <types.h>
 #include <string>
 #include <memory>
+#include <vector>
 
 namespace erebus {
 
+File::File(binVec* file): File(file,"") {
 
-File::File(std::unique_ptr<binVec> file): File(std::move(file),"") {
-	
 }
-File::File(std::unique_ptr<binVec> file,std::string path): file_(std::move(file)),path_(path) {
-	
+
+File::File(binVec* file,std::string path): file_(std::make_unique<binVec>(*file)),path_(path) {
+
+}
+
+File::File(const File &obj): file_(std::make_unique<binVec>(*(obj.file_.get()))),path_(obj.path_) {
+
 }
 
 File::~File() {
@@ -29,4 +34,4 @@ sbyte File::getSignedByteAt(unsigned int index) const {
 	return static_cast<sbyte>(file_->at(index));
 }
 
-}
+}//namespace erebus

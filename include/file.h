@@ -14,48 +14,54 @@ class File {
 	std::unique_ptr<binVec>	file_;
 	std::string 		path_;
 
-public:
+  public:
 	/**
 	 * Constructor.
-	 * 
-	 * @param file a pointer to the binary data
+	 *
+	 * @param file a pointer to the binary data.
 	 */
-	File(std::unique_ptr<binVec> file);
-	
+	File(binVec* file);
+
 	/**
 	 * Constructor.
-	 * 
-	 * @param file a pointer to the binary data
+	 *
+	 * @param file a pointer to the binary data.
 	 * @param path path to the read file. is empty if there is no path
 	 */
-	File(std::unique_ptr<binVec> file,std::string path);
-	
+	File(binVec* file,std::string path);
+
+	/**
+	 * Copy constructor.
+	 */
+	File(const File &obj);
+
 	/**
 	 * Destructor.
 	 */
 	virtual ~File();
-	
+
 	/**
 	 * Returns the size of the file.
-	 * 
+	 *
 	 * @return size of the file
 	 */
 	unsigned int getFileSize() const;
-	
+
 	/**
 	 * Returns the unsigned byte at the given index.
 	 *
 	 *@param index index to read byte from
-	 *@return unsigned byte at index 
+	 *@return unsigned byte at index
 	 */
 	byte getUnsignedByteAt(unsigned int index) const;
-	
+
 	/**
 	 * Return the signed byte at the given index.
-	 * 
+	 *
 	 * @param index index to read byte from
 	 * @return signed byte at index
 	 */
 	sbyte getSignedByteAt(unsigned int index) const;
 };
-}
+
+}//namespace erebus
