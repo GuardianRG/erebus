@@ -11,5 +11,6 @@ set(HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_main_view.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_builder.h
 	${CMAKE_CURRENT_SOURCE_DIR}/model.h
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_application_manager.h
 	PARENT_SCOPE
 )

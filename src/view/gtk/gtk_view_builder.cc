@@ -8,7 +8,7 @@ namespace erebus {
 GtkMainView* GtkViewBuilder::buildMainView() {
 	//path to the template for main_view
 	std::string viewTemplate="resources/main_view.glade";
-	
+
 	//Parse template
 	Glib::RefPtr<Gtk::Builder> refBuilder = Gtk::Builder::create();
 	try {
@@ -16,12 +16,12 @@ GtkMainView* GtkViewBuilder::buildMainView() {
 	} catch(...) {
 		return nullptr;
 	}
-	
+
 	//create MainView
 	erebus::GtkMainView* w;
 	refBuilder->get_widget_derived("main_view", w);
-	
+
 	return w;
-}	
-	
+}
+
 }

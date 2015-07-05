@@ -4,15 +4,15 @@
 
 namespace erebus {
 
-	/**
-	 * This class provides methods to create the concrete views.
-	 */
+/**
+ * This class provides methods to create the concrete views.
+ */
 class GtkViewBuilder {
-	
-public:
+
+  public:
 	/**
 	 * Creates a GtkMainView.
-	 * 
+	 *
 	 * @return pointer to the GtkMainView
 	 */
 	static GtkMainView* buildMainView();
