@@ -50,10 +50,16 @@ enable_testing()
 
 
 #provide gtkmm headers
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(GTKMM gtkmm-3.0)
-link_directories(${GTKMM_LIBRARY_DIRS})
-include_directories(${GTKMM_INCLUDE_DIRS})
+
+if(UNIX)
+	find_package(PkgConfig REQUIRED)
+	
+	pkg_check_modules(GTKMM gtkmm-3.0)
+	if(GTKMM_FOUND)
+		link_directories(${GTKMM_LIBRARY_DIRS})
+		include_directories(${GTKMM_INCLUDE_DIRS})
+	endif()
+endif()
 
 #provide boost headers
 #find_package(Boost REQUIRED )
@@ -74,6 +80,10 @@ add_subdirectory(test)
 add_executable(erebus ${SOURCE} ${HEADER_FILES})
 
 add_subdirectory(resources)
+
+if(GTKMM_FOUND)
+	target_link_libraries(erebus gtk_gui)
+endif()
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
 target_link_libraries(erebus ${Boost_LIBRARIES})

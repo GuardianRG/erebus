@@ -1,6 +1,8 @@
 #src/view/CMakeLists.txt
 
-add_subdirectory(gtk)
+if(GTKMM_FOUND)
+	add_subdirectory(gtk)
+endif()
 
 set(SOURCE
 	${SOURCE}

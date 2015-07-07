@@ -1,11 +1,19 @@
 #src/view/gtk/CMakeLists.txt
 
-set(SOURCE
-	${SOURCE}
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_main_view.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_widget_builder.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_application_manager.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_file_hex_view.cc
-	PARENT_SCOPE
+include_directories(include)
+
+set(GTK_GUI_SOURCES
+	${GTK_GUI_SOURCES}
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_empty_view.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_main_window.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/gui_manager.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_builder_factory.cc
 )
 
+set(GTK_GUI_HEADERS
+	${GTK_GUI_SOURCES}
+)
+
+add_subdirectory(include)
+
+add_library(gtk_gui STATIC ${GTK_GUI_SOURCES} ${GTK_GUI_HEADERS} ${VIEW_HEADERS})
