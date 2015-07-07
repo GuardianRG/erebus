@@ -3,7 +3,7 @@
 #include <string>
 
 #include <gtk_application_manager.h>
-#include <gtk_view_builder.h>
+#include <gtk_widget_builder.h>
 #include <main_view_presenter.h>
 
 namespace erebus {
@@ -28,7 +28,7 @@ void GtkApplicationManager::initMainView() {
 	mainViewPresenter_=new MainViewPresenter();
 	mainViewPresenter_->setModel(model_);
 
-	mainView_=GtkViewBuilder::buildMainView();
+	mainView_=GtkWidgetBuilder::buildMainView();
 	mainView_->setPresenter(mainViewPresenter_);
 
 	mainViewPresenter_->setView(mainView_);

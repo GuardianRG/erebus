@@ -9,8 +9,9 @@ set(HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/types.h
 	${CMAKE_CURRENT_SOURCE_DIR}/file.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_main_view.h
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_builder.h
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_widget_builder.h
 	${CMAKE_CURRENT_SOURCE_DIR}/model.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_application_manager.h
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_file_hex_view.h
 	PARENT_SCOPE
 )

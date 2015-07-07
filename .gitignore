@@ -3,6 +3,7 @@
 *.obj
 *.kate-swp
 *.orig
+\#*\#
 
 build/
 doxyDoc/

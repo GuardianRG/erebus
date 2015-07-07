@@ -10,8 +10,29 @@
 namespace erebus {
 
 GtkMainView::GtkMainView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder) : Gtk::Window(cobject) {
+	
 	refBuilder->get_widget("menu_file_open",menu_file_open_);
 	menu_file_open_->signal_activate().connect(sigc::mem_fun(*this,&GtkMainView::on_menu_file_open_click));
+	
+	refBuilder->get_widget("menu_file_quit",menu_file_quit_);
+	menu_file_quit_->signal_activate().connect(sigc::mem_fun(*this,&GtkMainView::on_menu_file_quit_click));
+	
+	refBuilder->get_widget("menu_help_about",menu_help_about_);
+	menu_help_about_->signal_activate().connect(sigc::mem_fun(*this,&GtkMainView::on_menu_help_about_click));
+	
+	
+	
+	refBuilder->get_widget("toolbar_open",toolbar_open_);
+	toolbar_open_->signal_clicked().connect(sigc::mem_fun(*this,&GtkMainView::on_toolbar_open_click));
+	
+	
+	
+	refBuilder->get_widget("paned1",paned1_);
+	
+	refBuilder->get_widget("paned2",paned2_);
+	
+	refBuilder->get_widget("paned3",paned3_);
+	
 
 
 	setPreferredSize(800,600);
@@ -43,7 +64,18 @@ void GtkMainView::on_menu_file_open_click() {
 			presenter_->showErrorMessage("Error while loading file!");
 		}
 	}
+}
 
+void GtkMainView::on_menu_file_quit_click() {
+	
+}
+
+void GtkMainView::on_menu_help_about_click() {
+	
+}
+
+void GtkMainView::on_toolbar_open_click() {
+	on_menu_file_open_click();
 }
 
 void GtkMainView::maximize() {
