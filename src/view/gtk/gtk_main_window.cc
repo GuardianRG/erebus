@@ -1,5 +1,8 @@
 #include <gtk_main_window.h>
 
+#include <presenter/interfaces/i_presenter.h>
+#include <presenter/interfaces/i_main_window_presenter.h>
+
 namespace erebus {
 
 GTK_MainWindow::GTK_MainWindow() {
@@ -24,6 +27,10 @@ void GTK_MainWindow::maximize() {
 }
 void GTK_MainWindow::unmaximize() {
 	Gtk::Window::unmaximize();
+}
+
+void GTK_MainWindow::setPresenter(IPresenter* presenter) {
+	presenter_=static_cast<IMainWindowPresenter*>(presenter);
 }
 
 	

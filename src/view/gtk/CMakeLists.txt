@@ -16,4 +16,4 @@ set(GTK_GUI_HEADERS
 
 add_subdirectory(include)
 
-add_library(gtk_gui STATIC ${GTK_GUI_SOURCES} ${GTK_GUI_HEADERS} ${VIEW_HEADERS})
+add_library(gtk_gui STATIC ${GTK_GUI_SOURCES} ${GTK_GUI_HEADERS} ${VIEW_HEADERS} ${PRESENTER_HEADERS})

@@ -8,10 +8,13 @@
 #include <gtk_main_window.h>
 #include <view/interfaces/i_main_window.h>
 #include <gtk_gui_state_object.h>
+#include <presenter/interfaces/i_main_window_presenter.h>
+#include <presenter/main_window_presenter.h>
+#include <model.h>
 
 namespace erebus {
 	
-GUIManager::GUIManager(int& argc, char**& argv):argc_(argc),argv_(argv) {
+GUIManager::GUIManager(Model* model,int& argc, char**& argv):argc_(argc),argv_(argv),model_(model) {
 	stateObject_=new GTK_GUIStateObject;
 	
 	GTK_GUIStateObject* guido=GTK_GUIStateObject::getState(stateObject_);
@@ -28,6 +31,10 @@ GUIManager::GUIManager(int& argc, char**& argv):argc_(argc),argv_(argv) {
 	builder->get_widget_derived("main_window", mw);
 	
 	mainWindow_=static_cast<IMainWindow*>(mw);
+	
+	IMainWindowPresenter* presenter=new MainWindowPresenter;
+	presenter->setWindow(mainWindow_);
+	mainWindow_->setPresenter(presenter);
 	
 }
 
