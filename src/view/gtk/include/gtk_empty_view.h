@@ -6,7 +6,10 @@ namespace erebus {
 
 class GTK_EmptyView : public IEmptyView {
 public:
+	GTK_EmptyView();
+	~GTK_EmptyView();
 	
+	void showContextMenu();
 };
 
 }

@@ -2,14 +2,18 @@
 
 #include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_main_window_presenter.h>
+#include <presenter/view_presenter.h>
 
 namespace erebus {
 
 GTK_MainWindow::GTK_MainWindow() {
 	
 }
-GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject) {
-	
+GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject){
+	refBuilder->get_widget_derived("basic_viewport", basicViewport_);
+	basicViewport_->setParent(nullptr);
+	ViewPresenter* pres=new ViewPresenter;
+	basicViewport_->setPresenter(pres);
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
