@@ -116,9 +116,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="margin_bottom">5</property>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
             <property name="expand">True</property>

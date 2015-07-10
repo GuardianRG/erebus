@@ -12,6 +12,12 @@ namespace erebus {
 		IViewPresenter*	presenter_;
 		
 		IView*		parent_;
+		
+		Gtk::Menu 	popupMenu_;
+		
+		int buffer_;
+		
+		void on_popup_menu_view_split_view_click();
 	public:
 		GTK_View(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 		~GTK_View();
@@ -21,6 +27,10 @@ namespace erebus {
 		void showContextMenu() override;
 		
 		void splitView() override;
+		
+		void addContextMenuItem(Gtk::MenuItem& child);
+		
+		void buildContextMenu();
 		
 		void setPresenter(IPresenter* presenter) override;
 		

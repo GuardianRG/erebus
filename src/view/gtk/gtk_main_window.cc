@@ -13,6 +13,9 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	refBuilder->get_widget_derived("basic_viewport", basicViewport_);
 	basicViewport_->setParent(nullptr);
 	ViewPresenter* pres=new ViewPresenter;
+	pres->setView(basicViewport_);
+	pres->setParent(pres);
+	basicViewport_->buildContextMenu();
 	basicViewport_->setPresenter(pres);
 }
 

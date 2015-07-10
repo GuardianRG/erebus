@@ -15,10 +15,21 @@ namespace erebus {
 		view_=view;
 	}
 	void ViewPresenter::on_right_button_click() {
-		std::cout<<"RIGHT"<<std::endl;
+		view_->showContextMenu();
 	}
 	void ViewPresenter::on_left_button_click() {
-		std::cout<<"LEFT"<<std::endl;
 		
+	}
+	
+	void ViewPresenter::setParent(IViewPresenter* parent) {
+		parent_=parent;
+	}
+	
+	void ViewPresenter::splitView() {
+		view_->splitView();
+	}
+	
+	void ViewPresenter::on_popup_menu_view_split_view_click() {
+		parent_->splitView();
 	}
 }
