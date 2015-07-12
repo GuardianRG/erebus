@@ -5,7 +5,7 @@
 
 namespace erebus {
 class GTK_BuilderFactory {
-public:
+  public:
 	static Glib::RefPtr<Gtk::Builder> getBuilder(std::string path);
-};	
+};
 }

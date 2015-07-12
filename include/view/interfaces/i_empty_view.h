@@ -5,7 +5,7 @@
 namespace erebus {
 
 class IEmptyView : public IView {
-public:	
+  public:
 	virtual ~IEmptyView() {}
 };
 

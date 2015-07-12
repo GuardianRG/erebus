@@ -3,7 +3,7 @@
 namespace erebus {
 
 class IGUIStateObject {
-public:
+  public:
 	virtual ~IGUIStateObject() {}
 };
 

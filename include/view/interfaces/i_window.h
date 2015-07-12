@@ -6,13 +6,13 @@
 namespace erebus {
 
 class IPresenter;
-	
+
 class IWindow {
-public:
+  public:
 	virtual ~IWindow() {};
-	
+
 	virtual void setPresenter(IPresenter* presenter)=0;
-	
+
 	virtual void setTitle(std::string title)=0;
 	virtual void setPreferredSize(int width,int height)=0;
 	virtual void maximize()=0;

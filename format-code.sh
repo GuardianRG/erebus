@@ -13,6 +13,7 @@ astyle -r "test/*.cc" -t -v -A14
 #format all header files
 printf "\n\nFormatting all header files...\n\n"
 astyle -r "include/*.h" -t -v -A14
+astyle -r "src/*.h" -t -v -A14
 
 #delete all *.orig files created by astyle
 printf "\n\nDeleting all temporary files...\n"

@@ -10,21 +10,21 @@ namespace erebus {
 class GUIManager {
 	int&		argc_;
 	char**& 	argv_;
-	
+
 	Model*		model_;
-	
+
 	IMainWindow	*mainWindow_;
-	
+
 	IGUIStateObject	*stateObject_;
-	
-public:
+
+  public:
 	GUIManager(Model* model,int& argc, char**& argv);
-	
+
 	GUIManager(const GUIManager &obj)=delete;
-	
+
 	~GUIManager();
-	
-	
+
+
 	void runGUI();
 };
 

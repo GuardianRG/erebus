@@ -5,7 +5,7 @@
 namespace erebus {
 
 class IMainWindow : public IWindow {
-public:
+  public:
 	virtual ~IMainWindow() {};
 };
 

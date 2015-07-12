@@ -3,18 +3,18 @@
 #include <view/interfaces/i_main_window.h>
 
 namespace erebus {
-	
-	MainWindowPresenter::MainWindowPresenter() {
-		
-	}
-	
-	MainWindowPresenter::~MainWindowPresenter() {
-		
-	}
-	
-	void MainWindowPresenter::setWindow(IWindow* window) {
-		mainWindow_=static_cast<IMainWindow*>(window);
-	}
-	
-	
+
+MainWindowPresenter::MainWindowPresenter() {
+
+}
+
+MainWindowPresenter::~MainWindowPresenter() {
+
+}
+
+void MainWindowPresenter::setWindow(IWindow* window) {
+	mainWindow_=static_cast<IMainWindow*>(window);
+}
+
+
 }

@@ -3,24 +3,31 @@
 #include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <presenter/view_presenter.h>
+#include <gtk_view_container.h>
+#include <presenter/view_container_presenter.h>
 
 namespace erebus {
 
 GTK_MainWindow::GTK_MainWindow() {
-	
+
 }
-GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject){
-	refBuilder->get_widget_derived("basic_viewport", basicViewport_);
-	basicViewport_->setParent(nullptr);
-	ViewPresenter* pres=new ViewPresenter;
-	pres->setView(basicViewport_);
-	pres->setParent(pres);
-	basicViewport_->buildContextMenu();
-	basicViewport_->setPresenter(pres);
+GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Window(cobject) {
+	Gtk::Viewport *base;
+	refBuilder->get_widget("base_view",base);
+
+	ViewContainerPresenter* presenter=new ViewContainerPresenter;
+	GTK_ViewContainer *vc=new GTK_ViewContainer(*base,nullptr);
+
+	presenter->setView(vc);
+	vc->setPresenter(presenter);
+
+	base->add(*vc);
+
+	show_all_children();
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
-	
+
 }
 
 void GTK_MainWindow::setTitle(std::string title) {
@@ -40,5 +47,5 @@ void GTK_MainWindow::setPresenter(IPresenter* presenter) {
 	presenter_=static_cast<IMainWindowPresenter*>(presenter);
 }
 
-	
+
 }

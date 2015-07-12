@@ -9,6 +9,7 @@ set(GTK_GUI_SOURCES
 	${CMAKE_CURRENT_SOURCE_DIR}/gui_manager.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_builder_factory.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container.cc
 )
 
 set(GTK_GUI_HEADERS

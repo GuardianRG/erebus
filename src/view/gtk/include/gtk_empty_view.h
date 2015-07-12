@@ -5,11 +5,11 @@
 namespace erebus {
 
 class GTK_EmptyView  {
-public:
+  public:
 	GTK_EmptyView();
 	~GTK_EmptyView();
-	
-	
+
+
 };
 
 }

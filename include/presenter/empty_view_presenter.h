@@ -4,10 +4,10 @@
 #include <presenter/view_presenter.h>
 
 namespace erebus {
-	class EmptyViewPresenter :public IEmptyViewPresenter,public ViewPresenter {
-	public:
-		EmptyViewPresenter();
-		~EmptyViewPresenter();
-		
-	};
+class EmptyViewPresenter :public IEmptyViewPresenter,public ViewPresenter {
+  public:
+	EmptyViewPresenter();
+	~EmptyViewPresenter();
+
+};
 }

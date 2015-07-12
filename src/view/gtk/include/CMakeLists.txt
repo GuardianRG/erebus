@@ -7,5 +7,6 @@ set(GTK_GUI_HEADERS
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_builder_factory.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_gui_state_object.h
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container.h
 	PARENT_SCOPE
 )
