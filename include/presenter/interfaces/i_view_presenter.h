@@ -16,10 +16,6 @@ class IViewPresenter:public IPresenter {
 	virtual void setView(IView* view)=0;
 
 	virtual void setParent(IViewPresenter* parent)=0;
-
-	virtual void splitView()=0;
-
-	virtual void on_popup_menu_view_split_view_click()=0;
 };
 
 }

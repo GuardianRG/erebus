@@ -1,6 +1,7 @@
 #pragma once
 
 #include <view/interfaces/i_view_container.h>
+#include <view/view_type.h>
 
 namespace erebus {
 
@@ -13,5 +14,6 @@ class IViewContainerPresenter {
 	virtual void on_left_button_click()=0;
 	virtual void on_context_menu_split_view_horizontal_click()=0;
 	virtual void on_context_menu_split_view_vertical_click()=0;
+	virtual void on_context_menu_add_view_click(ViewType type)=0;
 };
 }

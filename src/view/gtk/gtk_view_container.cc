@@ -5,19 +5,26 @@
 #include <presenter/interfaces/i_view_container_presenter.h>
 #include <presenter/view_container_presenter.h>
 #include <iostream>
+#include <gtk_empty_view.h>
+#include <view/view_type.h>
+#include <view/interfaces/i_empty_view.h>
+#include <presenter/interfaces/i_empty_view_presenter.h>
+#include <presenter/empty_view_presenter.h>
 
 namespace erebus {
 
-GTK_ViewContainer::GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook): Gtk::Viewport(h_adjustment,v_adjustment) {
+GTK_ViewContainer::GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook): Gtk::Viewport(h_adjustment,v_adjustment),h_adjustment_(h_adjustment),v_adjustment_(v_adjustment) {
 
-	if(notebook==nullptr)
+	if(notebook==nullptr) {
 		notebook_=new Gtk::Notebook;
+		showTabs(false);
+	}
 	else
 		notebook_=notebook;
 
 	add(*notebook_);
 
-	show_all_children();
+	
 
 	add_events(Gdk::BUTTON_PRESS_MASK );
 
@@ -25,44 +32,22 @@ GTK_ViewContainer::GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
 #endif
 
-	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
-	Gtk::MenuItem* split_h = Gtk::manage(new Gtk::MenuItem("Split horizontal"));
-	Gtk::MenuItem* split_v = Gtk::manage(new Gtk::MenuItem("Split vertical"));
-	Gtk::MenuItem* add_view = Gtk::manage(new Gtk::MenuItem("Add View"));
+	popupMenu_=new Gtk::Menu;
+	
+	
+	buildContextMenu(popupMenu_);
 
-	split_h->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_split_view_horizontal_click) );
-	split_v->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_split_view_vertical_click) );
+	popupMenu_->accelerate(*this);
+	popupMenu_->show_all();
 
-
-
-
-	popupMenu_.append(*sep);
-	popupMenu_.append(*split_h);
-	popupMenu_.append(*split_v);
-	popupMenu_.append(*add_view);
-	/*Gtk::Menu* submenu=Gtk::manage(new Gtk::Menu);
-
-	Gtk::MenuItem* split_view_item = Gtk::manage(new Gtk::MenuItem("Split view"));
-	split_view_item->signal_activate().connect(
-		sigc::mem_fun(*this, &GTK_View::on_popup_menu_view_split_view_click) );
-
-	submenu->append(*split_view_item);
-
-	base_item->set_submenu(*submenu);
-
-	addContextMenuItem(*base_item);*/
-
-	popupMenu_.accelerate(*this);
-	popupMenu_.show_all();
-
-
+	show_all_children();
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
 
 }
-bool GTK_ViewContainer::isTopLevelContainer() {
-	return !(notebook_==nullptr);
+bool GTK_ViewContainer::isEmpty() {
+	return notebook_==nullptr||notebook_->get_n_pages()==0;
 }
 
 void GTK_ViewContainer::on_context_menu_split_view_horizontal_click() {
@@ -72,37 +57,66 @@ void GTK_ViewContainer::on_context_menu_split_view_vertical_click() {
 	presenter_->on_context_menu_split_view_vertical_click();
 }
 void GTK_ViewContainer::showContextMenu() {
-	popupMenu_.popup(3,buffer_);
+	popupMenu_->popup(3,buffer_);
 }
-bool GTK_ViewContainer::on_button_press_event(GdkEventButton* event) {
-	bool return_value = false;
-
-	return_value = Viewport::on_button_press_event(event);
-
-	if( (event->type == GDK_BUTTON_PRESS)) {
-		switch(event->button) {
-		case 3:
-			buffer_=event->time;
-			presenter_->on_right_button_click();
-			break;
-		case 1:
-			buffer_=event->time;
-			presenter_->on_left_button_click();
-			break;
-		default:
-			;
-		};
-
-	}
-
-	return return_value;
+void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
+	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
+	Gtk::MenuItem* split_h = Gtk::manage(new Gtk::MenuItem("Split horizontal"));
+	Gtk::MenuItem* split_v = Gtk::manage(new Gtk::MenuItem("Split vertical"));
+	Gtk::MenuItem* add_view = Gtk::manage(new Gtk::MenuItem("Add View"));
+	
+	split_h->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_split_view_horizontal_click) );
+	split_v->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_split_view_vertical_click) );
+	
+	Gtk::Menu* view_menu=Gtk::manage(new Gtk::Menu);
+	  
+	 Gtk::MenuItem* empty_view = Gtk::manage(new Gtk::MenuItem("Empty View"));
+	 empty_view->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_add_view_empty_view_click) );
+		 
+		 view_menu->append(*empty_view);
+		 
+		add_view->set_submenu(*view_menu);
+	
+	
+	menu->append(*sep);
+	menu->append(*split_h);
+	menu->append(*split_v);
+	menu->append(*add_view);
+	
+	
+	
 }
-
+void GTK_ViewContainer::on_context_menu_add_view_empty_view_click() {
+	presenter_->on_context_menu_add_view_click(ViewType::EMPTY_VIEW);
+}
 
 void GTK_ViewContainer::setPresenter(IViewContainerPresenter* presenter) {
 	presenter_=presenter;
 }
-
+bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
+	bool return_value = false;
+	return_value = Viewport::on_button_press_event(ev);
+	
+	if( (ev->type == GDK_BUTTON_PRESS)) {
+		switch(ev->button) {
+			case 3:
+				buffer_=ev->time;
+				presenter_->on_right_button_click();
+				break;
+			case 1:
+				buffer_=ev->time;
+				presenter_->on_left_button_click();
+				break;
+			default:
+				;
+		};
+		
+	}
+	return return_value;
+}
+bool GTK_ViewContainer::isTopLevel() {
+	return notebook_!=nullptr;
+}
 void GTK_ViewContainer::split() {
 	Gtk::Container::remove(*notebook_);
 
@@ -117,6 +131,7 @@ void GTK_ViewContainer::split() {
 
 	vc1->setPresenter(vcp1);
 	vc2->setPresenter(vcp2);
+	
 
 	paned_->add1(*vc1);
 	paned_->add2(*vc2);
@@ -128,7 +143,8 @@ void GTK_ViewContainer::split() {
 	add(*paned_);
 
 	notebook_=nullptr;
-
+	
+	
 	show_all_children();
 }
 
@@ -147,6 +163,31 @@ void GTK_ViewContainer::splitVertical() {
 	paned_->set_position(rec.get_height()/2);
 
 	split();
+}
+
+void GTK_ViewContainer::addView(ViewType type) {
+	switch(type) {
+		case ViewType::EMPTY_VIEW:
+		{
+			GTK_EmptyView* ev=new GTK_EmptyView(h_adjustment_,v_adjustment_);
+			ev->setTitle("TEST");
+			ev->setViewContainer(this);
+			ev->createContextMenu();
+			EmptyViewPresenter* p=new EmptyViewPresenter;
+			p->setView(ev);
+			ev->setPresenter(p);
+			addView(ev);
+			break;
+		}
+		default:;
+	}
+}
+void GTK_ViewContainer::addView(IView* view) {
+	if(notebook_->get_n_pages()>=1)
+		showTabs(true);
+	notebook_->append_page(*(dynamic_cast<GTK_View*>(view)),view->getTitle());
+	
+	show_all_children();
 }
 
 void GTK_ViewContainer::showTabs(bool showTabs) {

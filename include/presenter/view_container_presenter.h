@@ -23,5 +23,6 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 
 
 	virtual void on_context_menu_split_view_horizontal_click()override;
+	virtual void on_context_menu_add_view_click(ViewType type)override;
 };
 }

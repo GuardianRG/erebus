@@ -1,12 +1,14 @@
 #pragma once
+#include <gtkmm.h>
 
-#include <view/interfaces/i_empty_view.h>
+#include <gtk_view.h>
+
 
 namespace erebus {
 
-class GTK_EmptyView  {
+class GTK_EmptyView:public GTK_View  {
   public:
-	GTK_EmptyView();
+	  GTK_EmptyView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
 	~GTK_EmptyView();
 
 

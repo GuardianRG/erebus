@@ -12,7 +12,7 @@ ViewContainerPresenter::~ViewContainerPresenter() {
 }
 
 void ViewContainerPresenter::on_right_button_click() {
-	if(view_->isTopLevelContainer())
+	if(view_->isTopLevel())
 		view_->showContextMenu();
 	//view_->showContextMenu();
 }
@@ -26,6 +26,10 @@ void ViewContainerPresenter::on_context_menu_split_view_horizontal_click() {
 }
 void ViewContainerPresenter::on_context_menu_split_view_vertical_click() {
 	view_->splitVertical();
+}
+
+void ViewContainerPresenter::on_context_menu_add_view_click(ViewType type) {
+	view_->addView(type);
 }
 
 void ViewContainerPresenter::setView(IViewContainer* view) {
