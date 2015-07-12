@@ -9,7 +9,6 @@ namespace erebus {
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	Gtk::Notebook*	notebook_;
 	Gtk::Paned*	paned_;
-	Gtk::Viewport&	parent_;
 
 	IViewContainerPresenter* presenter_;
 
@@ -22,7 +21,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void on_context_menu_split_view_horizontal_click();
 	void on_context_menu_split_view_vertical_click();
   public:
-	GTK_ViewContainer(Gtk::Viewport &vp,Gtk::Notebook* notebook);
+	GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook);
 	~GTK_ViewContainer();
 
 	void setPresenter(IViewContainerPresenter* presenter)override;

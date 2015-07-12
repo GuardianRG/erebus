@@ -8,7 +8,8 @@
 
 namespace erebus {
 
-GTK_ViewContainer::GTK_ViewContainer(Gtk::Viewport &vp,Gtk::Notebook* notebook): Gtk::Viewport(vp.get_hadjustment(),vp.get_vadjustment()),parent_(vp) {
+GTK_ViewContainer::GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook): Gtk::Viewport(h_adjustment,v_adjustment) {
+
 	if(notebook==nullptr)
 		notebook_=new Gtk::Notebook;
 	else
@@ -105,8 +106,8 @@ void GTK_ViewContainer::setPresenter(IViewContainerPresenter* presenter) {
 void GTK_ViewContainer::split() {
 	Gtk::Container::remove(*notebook_);
 
-	GTK_ViewContainer* vc1=new GTK_ViewContainer(parent_,notebook_);
-	GTK_ViewContainer* vc2=new GTK_ViewContainer(parent_,nullptr);
+	GTK_ViewContainer* vc1=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_);
+	GTK_ViewContainer* vc2=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),nullptr);
 
 	ViewContainerPresenter* vcp1=new ViewContainerPresenter;
 	ViewContainerPresenter* vcp2=new ViewContainerPresenter;

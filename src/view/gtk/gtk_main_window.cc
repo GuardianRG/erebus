@@ -16,7 +16,7 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	refBuilder->get_widget("base_view",base);
 
 	ViewContainerPresenter* presenter=new ViewContainerPresenter;
-	GTK_ViewContainer *vc=new GTK_ViewContainer(*base,nullptr);
+	GTK_ViewContainer *vc=new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr);
 
 	presenter->setView(vc);
 	vc->setPresenter(presenter);
