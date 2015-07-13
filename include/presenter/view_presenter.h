@@ -16,7 +16,6 @@ class ViewPresenter :public IViewPresenter {
 	void setView(IView* view) override;
 	void on_right_button_click() override;
 	void on_left_button_click() override;
-	void setParent(IViewPresenter* parent) override;
 
 
 };

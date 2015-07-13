@@ -14,8 +14,6 @@ class IViewPresenter:public IPresenter {
 	virtual void on_left_button_click()=0;
 
 	virtual void setView(IView* view)=0;
-
-	virtual void setParent(IViewPresenter* parent)=0;
 };
 
 }

@@ -21,7 +21,4 @@ void ViewPresenter::on_left_button_click() {
 
 }
 
-void ViewPresenter::setParent(IViewPresenter* parent) {
-	parent_=parent;
-}
 }
