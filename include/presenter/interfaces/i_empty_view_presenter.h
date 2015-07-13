@@ -4,7 +4,7 @@
 
 namespace erebus {
 
-class IEmptyViewPresenter : public IViewPresenter {
+class IEmptyViewPresenter:public IViewPresenter {
   public:
 	virtual ~IEmptyViewPresenter() {}
 };

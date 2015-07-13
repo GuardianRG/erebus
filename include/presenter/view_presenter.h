@@ -13,9 +13,9 @@ class ViewPresenter :public IViewPresenter {
 	ViewPresenter();
 	virtual ~ViewPresenter();
 
-	virtual void setView(IView* view) override;
-	virtual void on_right_button_click() override;
-	virtual void on_left_button_click() override;
+	void setView(IView* view) override;
+	void on_right_button_click() override;
+	void on_left_button_click() override;
 	void setParent(IViewPresenter* parent) override;
 
 
