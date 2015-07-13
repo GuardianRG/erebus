@@ -13,8 +13,8 @@ namespace erebus {
 class GTK_BuilderFactory {
 	GTK_BuilderFactory();
   public:
-	  ~GTK_BuilderFactory() {}
-	  
+	~GTK_BuilderFactory() {}
+
 	/**
 	 * Creates a builder from the file on the given path.
 	 *

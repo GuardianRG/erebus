@@ -33,7 +33,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 #endif
 
 	popupMenu_=new Gtk::Menu;
-	
+
 	buildContextMenu(popupMenu_);
 
 	popupMenu_->accelerate(*this);
@@ -86,7 +86,7 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	menu->append(*split_h);
 	menu->append(*split_v);
 	menu->append(*add_view);
-	
+
 }
 void GTK_ViewContainer::on_context_menu_add_view_empty_view_click() {
 	presenter_->on_context_menu_add_view_click(ViewType::EMPTY_VIEW);

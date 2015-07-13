@@ -113,17 +113,17 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * Gets called when a mouseclick on this container occured.
 	 */
 	bool on_button_press_event(GdkEventButton *ev) override;
-	
+
 	/**
 	 * Returns the horizontal adjustment.
-	 * 
+	 *
 	 * @return the horizontal adjustment
 	 */
 	Glib::RefPtr<Gtk::Adjustment> getHAdjustment();
-	
+
 	/**
 	 * Returns the vertical adjustment.
-	 * 
+	 *
 	 * @return the vertical adjustment
 	 */
 	Glib::RefPtr<Gtk::Adjustment> getVAdjustment();

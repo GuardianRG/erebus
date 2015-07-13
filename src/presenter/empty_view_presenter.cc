@@ -14,7 +14,7 @@ void EmptyViewPresenter::on_right_button_click() {
 	ViewPresenter::on_right_button_click();
 }
 void EmptyViewPresenter::on_left_button_click() {
-	
+
 }
 
 void EmptyViewPresenter::setParent(IViewPresenter* parent) {

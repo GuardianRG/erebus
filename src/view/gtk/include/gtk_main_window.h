@@ -10,9 +10,9 @@
 
 namespace erebus {
 
-	/**
-	 * This class is the main window.
-	 */
+/**
+ * This class is the main window.
+ */
 class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	IMainWindowPresenter*	presenter_;
 
@@ -20,25 +20,25 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	GTK_ViewContainer*	basicView_;
 
   public:
-	  /**
-	   * Constructor.
-	   */
-	GTK_MainWindow();
-	
 	/**
 	 * Constructor.
-	 * 
+	 */
+	GTK_MainWindow();
+
+	/**
+	 * Constructor.
+	 *
 	 * This Constructor is need for building this window from a builder.
 	 */
 	GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
-	
+
 	/**
 	 * Copy constructor.
-	 * 
+	 *
 	 * Deleted until needed.
 	 */
 	GTK_MainWindow(const GTK_MainWindow &obj)=delete;
-	
+
 	/**
 	 * Destructor.
 	 */
@@ -49,22 +49,22 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	 * See IMainWindow::setPresenter
 	 */
 	void setPresenter(IPresenter* presenter) override;
-	
+
 	/**
 	 * See IMainWindow::setTitle
 	 */
 	void setTitle(std::string title) override;
-	
+
 	/**
 	 * See IMainWindow::setPreferredSize
 	 */
 	void setPreferredSize(int width,int height) override;
-	
+
 	/**
 	 * See IMainWindow::maximize
 	 */
 	void maximize() override;
-	
+
 	/**
 	 * See IMainWindow::unmaximize
 	 */
