@@ -6,6 +6,7 @@
 #include <iterator>
 
 #include <presenter/interfaces/i_view_container_presenter.h>
+#include <view/interfaces/i_view_container.h>
 
 #include <presenter/view_container_presenter.h>
 #include <view/view_type.h>
@@ -16,8 +17,9 @@ namespace erebus {
 GTK_ViewContainer::GTK_ViewContainer(
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-    Gtk::Notebook* notebook):
+    Gtk::Notebook* notebook,IViewContainer* parent):
 	Gtk::Viewport(h_adjustment,v_adjustment),
+	parent_(parent),
 	h_adjustment_(h_adjustment),
 	v_adjustment_(v_adjustment) {
 
@@ -95,10 +97,21 @@ void GTK_ViewContainer::closeView(IView* view) {
 	delete buffer;
 }
 
+void GTK_ViewContainer::setParent(IViewContainer* parent) {
+	parent_=parent;
+}
+
 void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
 
 	Gtk::MenuItem* join=Gtk::manage(new Gtk::MenuItem("Join"));
+	join->set_sensitive(false);
+	if(parent_!=nullptr) {
+		if(parent_->isSplittet())
+			join->set_sensitive(true);
+	}
+
+
 	Gtk::MenuItem* split=Gtk::manage(new Gtk::MenuItem("Split"));
 	Gtk::MenuItem* add_view = Gtk::manage(new Gtk::MenuItem("Add View"));
 
@@ -138,6 +151,7 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 void GTK_ViewContainer::joinContainer() {
 	if(!isSplit_)
 		return;
+	isSplit_=false;
 
 	GTK_ViewContainer* container1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
 	GTK_ViewContainer* container2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
@@ -200,8 +214,6 @@ void GTK_ViewContainer::joinContainer() {
 
 	add(*notebook_);
 
-	isSplit_=false;
-
 	show_all_children();
 }
 
@@ -251,6 +263,10 @@ bool GTK_ViewContainer::isTopLevel() {
 	return !isSplit_;
 }
 
+bool GTK_ViewContainer::isSplittet() {
+	return isSplit_;
+}
+
 void GTK_ViewContainer::split() {
 	if(isSplit_)
 		return;
@@ -258,8 +274,8 @@ void GTK_ViewContainer::split() {
 
 	Gtk::Container::remove(*notebook_);
 
-	GTK_ViewContainer* vc1=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_);
-	GTK_ViewContainer* vc2=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),nullptr);
+	GTK_ViewContainer* vc1=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_,this);
+	GTK_ViewContainer* vc2=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),nullptr,this);
 
 	ViewContainerPresenter* vcp1=new ViewContainerPresenter;
 	ViewContainerPresenter* vcp2=new ViewContainerPresenter;
@@ -273,8 +289,8 @@ void GTK_ViewContainer::split() {
 	vc1->setPresenter(vcp1);
 	vc2->setPresenter(vcp2);
 
-	vc1->set_shadow_type(Gtk::SHADOW_OUT);
-	vc2->set_shadow_type(Gtk::SHADOW_OUT);
+	vc1->setParent(this);
+	vc2->setParent(this);
 
 
 	paned_->pack1(*vc1,true,false);

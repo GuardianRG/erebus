@@ -25,6 +25,13 @@ class IViewContainer {
 	virtual void setPresenter(IViewContainerPresenter* presenter)=0;
 
 	/**
+	 * Sets the container that this container contains.
+	 *
+	 * @parent parent of this container
+	 */
+	virtual void setParent(IViewContainer* parent)=0;
+
+	/**
 	 * Splits the container horizontal.
 	 *
 	 * Is the container is already splitted nothings happens.
@@ -49,6 +56,13 @@ class IViewContainer {
 	 * @return is true when this container contains no views.
 	 */
 	virtual bool isEmpty()=0;
+
+	/**
+	 * Wether the container is splittet or not.
+	 *
+	 * @return true, when the container is splitte
+	 */
+	virtual bool isSplittet()=0;
 
 	/**
 	 * @return is true when this container has not yet been split.

@@ -16,6 +16,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	Gtk::Paned*			paned_;
 
 	IViewContainerPresenter* 	presenter_;
+	IViewContainer*			parent_;
 
 	Gtk::Menu* 			popupMenu_;
 
@@ -42,7 +43,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * @param h_adjustment horizontal adjustment for the child views.
 	 * @param v_adjustment vertical adjustment for the child views.
 	 */
-	GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook);
+	GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook,IViewContainer* parent);
 
 	/**
 	 * Cop constructor.
@@ -60,6 +61,11 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * See IViewContainer::setPresenter
 	 */
 	void setPresenter(IViewContainerPresenter* presenter)override;
+
+	/**
+	 * See IViewContainer::setParent
+	 */
+	void setParent(IViewContainer* parent)override;
 
 	/**
 	 * See IViewContainer::splitHorizontal
@@ -81,6 +87,10 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 */
 	void addView(ViewType type)override;
 
+	/**
+	 * See IViewContainer::isSplittet
+	 */
+	bool isSplittet()override;
 
 	/**
 	 * See IViewContainer::showTabs
