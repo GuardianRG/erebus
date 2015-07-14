@@ -87,3 +87,10 @@ endif()
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
 target_link_libraries(erebus ${Boost_LIBRARIES})
+
+add_custom_command(
+	TARGET erebus POST_BUILD
+    	COMMAND ${PROJECT_SOURCE_DIR}/format-code.sh
+    	DEPENDS "${PROJECT_SOURCE_DIR}/format-code.sh"
+    	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    	COMMENT "Formats the code")
