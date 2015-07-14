@@ -11,7 +11,8 @@ namespace erebus {
  * This class is concrete view container presenter.
  */
 class ViewContainerPresenter:public IViewContainerPresenter {
-	IViewContainer*		container_;
+	IViewContainer*			container_;
+	IViewContainerPresenter*	parent_;
 
   public:
 	/**
@@ -38,6 +39,16 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	virtual void setViewContainer(IViewContainer* container) override;
 
 	/**
+	 * See IViewContainerPresenter::on_context_menu_join_click
+	 */
+	virtual void on_context_menu_join_click()override;
+
+	/**
+	 * See IViewContainerPresenter::getViewContainer
+	 */
+	virtual IViewContainer* getViewContainer()override;
+
+	/**
 	 * See IViewContainerPresenter::on_right_button_click
 	 */
 	virtual void on_right_button_click()override;
@@ -50,12 +61,17 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * See IViewContainerPresenter::on_context_menu_split_view_vertical_click
 	 */
-	virtual void on_context_menu_split_view_vertical_click()override;
+	virtual void on_context_menu_split_vertical_click()override;
+
+	/**
+	 * See IViewContainerPresenter::setParent
+	 */
+	virtual void setParent(IViewContainerPresenter* parent)override;
 
 	/**
 	 * See IViewContainerPresenter::on_context_menu_split_view_horizontal_click
 	 */
-	virtual void on_context_menu_split_view_horizontal_click()override;
+	virtual void on_context_menu_split_horizontal_click()override;
 
 	/**
 	 * See IViewContainerPresenter::on_context_menu_add_view_click

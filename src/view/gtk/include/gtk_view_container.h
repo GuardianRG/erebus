@@ -30,8 +30,9 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void split();
 	void sanityCheck();
 
-	void on_context_menu_split_view_horizontal_click();
-	void on_context_menu_split_view_vertical_click();
+	void on_context_menu_join_click();
+	void on_context_menu_split_horizontal_click();
+	void on_context_menu_split_vertical_click();
 	void on_context_menu_add_view_empty_view_click();
 
   public:
@@ -89,8 +90,12 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::showContextMenu
 	 */
-
 	void showContextMenu()override;
+
+	/**
+	 * See IViewContainer::joinContainer
+	 */
+	void joinContainer() override;
 
 	/**
 	 * See IViewContainer::isEmpty

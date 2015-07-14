@@ -23,6 +23,20 @@ class IViewContainerPresenter {
 	virtual void setViewContainer(IViewContainer* container)=0;
 
 	/**
+	 * Sets the parent of this presenter.
+	 *
+	 * @param parent parent
+	 */
+	virtual void setParent(IViewContainerPresenter* parent)=0;
+
+	/**
+	 * Return the view container this presenter operates on.
+	 *
+	 * @return the view container this presenter operates on
+	 */
+	virtual IViewContainer* getViewContainer()=0;
+
+	/**
 	 * Handels a right mouse button click.
 	 */
 	virtual void on_right_button_click()=0;
@@ -33,14 +47,19 @@ class IViewContainerPresenter {
 	virtual void on_left_button_click()=0;
 
 	/**
+	 * Handels the join in the context menu.
+	 */
+	virtual void on_context_menu_join_click()=0;
+
+	/**
 	 * Handels the split view horizontal in the context menu.
 	 */
-	virtual void on_context_menu_split_view_horizontal_click()=0;
+	virtual void on_context_menu_split_horizontal_click()=0;
 
 	/**
 	 * Handels the split view vertical in the context menu.
 	 */
-	virtual void on_context_menu_split_view_vertical_click()=0;
+	virtual void on_context_menu_split_vertical_click()=0;
 
 	/**
 	 * Handels a click on a wie to add in the context menu.

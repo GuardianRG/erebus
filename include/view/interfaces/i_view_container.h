@@ -56,6 +56,13 @@ class IViewContainer {
 	virtual bool isTopLevel()=0;
 
 	/**
+	 * Joins the container if it was split.
+	 *
+	 * If the container is not split nothing happens.
+	 */
+	virtual void joinContainer()=0;
+
+	/**
 	 * Shows the context menu.
 	 */
 	virtual void showContextMenu()=0;
