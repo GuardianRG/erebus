@@ -23,7 +23,7 @@ class GTK_ViewBuilder {
 
 	/**
 	 * Builds an empty view.
-	 * 
+	 *
 	 * This method chooses an appropiat presenter for the empty view.
 	 *
 	 * @param container the container the view will be in.

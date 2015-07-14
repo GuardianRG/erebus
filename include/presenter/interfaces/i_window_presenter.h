@@ -4,20 +4,20 @@
 #include <view/interfaces/i_window.h>
 
 namespace erebus {
-	
-	/**
-	 * This class is the interface for a window presenter.
-	 */
+
+/**
+ * This class is the interface for a window presenter.
+ */
 class IWindowPresenter:public IPresenter {
   public:
-	  /**
-	   * Destructor.
-	   */
+	/**
+	 * Destructor.
+	 */
 	virtual ~IWindowPresenter() {}
 
 	/**
 	 * Sets the window to operate on.
-	 * 
+	 *
 	 * @param window to operate on
 	 */
 	virtual void setWindow(IWindow* window) =0;

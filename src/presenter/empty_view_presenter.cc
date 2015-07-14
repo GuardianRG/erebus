@@ -4,7 +4,7 @@
 #include <view/interfaces/i_empty_view.h>
 
 namespace erebus {
-	
+
 EmptyViewPresenter::EmptyViewPresenter() {
 
 }
@@ -18,7 +18,7 @@ void EmptyViewPresenter::on_right_button_click() {
 	view_->showContextMenu();
 }
 void EmptyViewPresenter::on_left_button_click() {
-	
+
 }
 
 }//namespace erbus

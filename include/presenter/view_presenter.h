@@ -5,26 +5,26 @@
 
 namespace erebus {
 
-	/**
-	 * This class is a conrete view presenter.
-	 */
+/**
+ * This class is a conrete view presenter.
+ */
 class ViewPresenter :public IViewPresenter {
 	IView* view_;
 
 	IViewPresenter*	parent_;
   public:
-	  /**
-	   * Constructor.
-	   */
+	/**
+	 * Constructor.
+	 */
 	ViewPresenter();
-	
+
 	/**
 	 * Copy constructor.
-	 * 
+	 *
 	 * Deleted until needed.
 	 */
 	ViewPresenter(const ViewPresenter &obj)=delete;
-	
+
 	/**
 	 * Destructor.
 	 */
@@ -34,12 +34,12 @@ class ViewPresenter :public IViewPresenter {
 	 * See IViewPresenter::setView
 	 */
 	virtual void setView(IView* view) override;
-	
+
 	/**
 	 * See IViewPresenter::on_right_button_click
 	 */
 	virtual void on_right_button_click() override;
-	
+
 	/**
 	 * See IViewPresenter::on_left_button_click
 	 */

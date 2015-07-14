@@ -25,7 +25,7 @@ GTK_View::~GTK_View() {
 
 
 void GTK_View::init() {
-	
+
 	add_events(Gdk::BUTTON_PRESS_MASK );
 
 #ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
@@ -92,10 +92,10 @@ IViewContainer* GTK_View::getViewContainer() {
 
 void GTK_View::createContextMenu() {
 	sanityCheck();
-	
+
 	delete popupMenu_;
 	popupMenu_=new Gtk::Menu;
-	
+
 	container_->buildContextMenu(popupMenu_);
 
 	popupMenu_->accelerate(*this);
@@ -103,7 +103,7 @@ void GTK_View::createContextMenu() {
 }
 void GTK_View::showContextMenu() {
 	assert(popupMenu_!=nullptr&&"No popup menus et for GTK_View");
-	
+
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 }//namespace erebus

@@ -21,7 +21,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 
 	Glib::RefPtr<Gtk::Adjustment> 	h_adjustment_;
 	Glib::RefPtr<Gtk::Adjustment>	v_adjustment_;
-	
+
 	bool				isSplit_;
 
 	int 				timeBuffer_;

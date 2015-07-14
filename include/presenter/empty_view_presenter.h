@@ -4,40 +4,40 @@
 #include <view/interfaces/i_empty_view.h>
 
 namespace erebus {
-	
-	/**
-	 * This class is a concrete empty view presenter.
-	 */
+
+/**
+ * This class is a concrete empty view presenter.
+ */
 class EmptyViewPresenter :public IEmptyViewPresenter {
 	IEmptyView* view_;
   public:
-	  /**
-	   * Constructor.
-	   */
+	/**
+	 * Constructor.
+	 */
 	EmptyViewPresenter();
-	
+
 	/**
 	 * Copy constructor.
-	 * 
+	 *
 	 * Deleted until needed.
 	 */
 	EmptyViewPresenter(const EmptyViewPresenter &obj)=delete;
-	
+
 	/**
 	 * Destructor.
 	 */
 	virtual ~EmptyViewPresenter();
-	
+
 	/**
 	 * See IEmptyViewPresenter::setView
 	 */
 	virtual void setView(IView* view) override;
-	
+
 	/**
 	 * See IEmptyViewPresenter::on_right_button_click
 	 */
 	virtual void on_right_button_click() override;
-	
+
 	/**
 	 * See IEmptyViewPresenter::on_left_button_click
 	 */

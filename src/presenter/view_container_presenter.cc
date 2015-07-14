@@ -15,7 +15,7 @@ void ViewContainerPresenter::on_right_button_click() {
 		container_->showContextMenu();
 }
 void ViewContainerPresenter::on_left_button_click() {
-	
+
 }
 
 void ViewContainerPresenter::on_context_menu_split_view_horizontal_click() {

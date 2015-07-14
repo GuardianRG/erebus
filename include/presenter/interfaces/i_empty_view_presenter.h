@@ -4,14 +4,14 @@
 
 namespace erebus {
 
-	/**
-	 * This class is the interfaces for a empty view presenter.
-	 */
+/**
+ * This class is the interfaces for a empty view presenter.
+ */
 class IEmptyViewPresenter:public IViewPresenter {
   public:
-	  /**
-	   * Destructor.
-	   */
+	/**
+	 * Destructor.
+	 */
 	virtual ~IEmptyViewPresenter() {}
 };
 

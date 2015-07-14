@@ -5,30 +5,30 @@
 #include <view/interfaces/i_main_window.h>
 
 namespace erebus {
-	
-	/**
-	 * This class is a concrete main window presenter.
-	 */
+
+/**
+ * This class is a concrete main window presenter.
+ */
 class MainWindowPresenter:public IMainWindowPresenter {
 	IMainWindow*	mainWindow_;
   public:
-	  /**
-	   * Constructor.
-	   */
+	/**
+	 * Constructor.
+	 */
 	MainWindowPresenter();
-	
+
 	/**
 	 * Copy constructor.
-	 * 
+	 *
 	 * Deleted until needed.
 	 */
 	MainWindowPresenter(const MainWindowPresenter &obj)=delete;
-	
+
 	/**
 	 * Destructor.
 	 */
 	virtual ~MainWindowPresenter();
-	
+
 	/**
 	 * See IMainWindowPresenter::setWindow
 	 */
