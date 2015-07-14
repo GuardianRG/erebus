@@ -69,7 +69,9 @@ endif()
 include_directories(include)
 
 #set compileflags
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${erebus_CXX_FLAGS} -std=c++14 -Wall -Werror")
+#SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++14 -Wall -Werror")
+#SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++14 -Wall -Werror")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Werror")
 
 #add source directories
 add_subdirectory(include)
@@ -88,6 +90,7 @@ endif()
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
 target_link_libraries(erebus ${Boost_LIBRARIES})
 
+#Add command to automatically format the code when building
 add_custom_command(
 	TARGET erebus POST_BUILD
     	COMMAND ${PROJECT_SOURCE_DIR}/format-code.sh
