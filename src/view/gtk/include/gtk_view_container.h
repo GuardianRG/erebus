@@ -93,6 +93,11 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void showContextMenu()override;
 
 	/**
+	 * See IViewContainer::closeView
+	 */
+	void closeView(IView* view)override;
+
+	/**
 	 * See IViewContainer::joinContainer
 	 */
 	void joinContainer() override;

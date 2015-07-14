@@ -31,6 +31,7 @@ class GTK_View:public Gtk::Viewport,public IView {
 
 	void init();
 
+	void on_context_menu_close_click();
 
   protected:
 	/**
@@ -88,6 +89,10 @@ class GTK_View:public Gtk::Viewport,public IView {
 	 */
 	void setViewContainer(IViewContainer* container) override;
 
+	/**
+	 * See IView::close
+	 */
+	virtual void close() override;
 
 	/**
 	 * See IView::setTitle

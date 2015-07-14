@@ -93,16 +93,31 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 	return return_value;
 }
 
+void GTK_View::close() {
+	container_->closeView(this);
+}
+
 IViewContainer* GTK_View::getViewContainer() {
 	return container_;
 }
 
+void GTK_View::on_context_menu_close_click() {
+	presenter_->on_context_menu_close_click();
+}
 
 void GTK_View::createContextMenu() {
 	assert( container_!=nullptr && "No view container set for GTK_View");
 
 	delete popupMenu_;
 	popupMenu_=new Gtk::Menu;
+
+	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
+	Gtk::MenuItem* close = Gtk::manage(new Gtk::MenuItem("Close view"));
+
+	close->signal_activate().connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_close_click) );
+
+	popupMenu_->append(*sep);
+	popupMenu_->append(*close);
 
 	container_->buildContextMenu(popupMenu_);
 

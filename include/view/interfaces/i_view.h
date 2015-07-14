@@ -48,6 +48,11 @@ class IView {
 	virtual void showContextMenu()=0;
 
 	/**
+	 * Closes the view.
+	 */
+	virtual void close()=0;
+
+	/**
 	 * Sets the container in which the view is contained.
 	 *
 	 * @param container container of the view

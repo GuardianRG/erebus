@@ -67,5 +67,7 @@ class IViewContainerPresenter {
 	 * @param type the type of the view to add
 	 */
 	virtual void on_context_menu_add_view_click(ViewType type)=0;
+
+
 };
 }//namespace erbus

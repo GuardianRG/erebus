@@ -27,6 +27,11 @@ class IViewPresenter:public IPresenter {
 	virtual void on_left_button_click()=0;
 
 	/**
+	 * Handels the close in the context menu.
+	 */
+	virtual void on_context_menu_close_click()=0;
+
+	/**
 	 * Sets the view to operate on.
 	 *
 	 * @param view view to operate on

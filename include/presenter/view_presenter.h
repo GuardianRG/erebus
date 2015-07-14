@@ -45,6 +45,11 @@ class ViewPresenter :public IViewPresenter {
 	 */
 	virtual void on_left_button_click() override;
 
+	/**
+	 * See IViewPresenter::on_context_menu_close_click
+	 */
+	virtual void on_context_menu_close_click() override;
+
 
 };
 

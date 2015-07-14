@@ -43,5 +43,10 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	 */
 	virtual void on_left_button_click() override;
 
+	/**
+	 * See IEmptyViewPresenter::on_context_menu_close_click
+	 */
+	virtual void on_context_menu_close_click() override;
+
 };
 }//namespace erbus

@@ -80,5 +80,13 @@ class IViewContainer {
 	 * @param type type of the view to add
 	 */
 	virtual void addView(ViewType type)=0;
+
+	/**
+	 * Closes a view.
+	 *
+	 * @param view the view to close
+	 */
+	virtual void closeView(IView* view)=0;
+
 };
 }//namespace erbus

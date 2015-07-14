@@ -88,6 +88,13 @@ void GTK_ViewContainer::showContextMenu() {
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
+void GTK_ViewContainer::closeView(IView* view) {
+	GTK_View* buffer=static_cast<GTK_View*>(view);
+
+	notebook_->remove(*buffer);
+	delete buffer;
+}
+
 void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
 
