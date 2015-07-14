@@ -21,4 +21,4 @@ void ViewPresenter::on_left_button_click() {
 
 }
 
-}
+}//namespace erbus

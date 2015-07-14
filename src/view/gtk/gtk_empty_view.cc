@@ -16,4 +16,8 @@ GTK_EmptyView::GTK_EmptyView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::Re
 GTK_EmptyView::~GTK_EmptyView() {
 
 }
+
+void GTK_EmptyView::createContextMenu() {
+	GTK_View::createContextMenu();
+}
 }//namespace erebus

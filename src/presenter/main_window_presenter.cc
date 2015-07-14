@@ -16,5 +16,4 @@ void MainWindowPresenter::setWindow(IWindow* window) {
 	mainWindow_=static_cast<IMainWindow*>(window);
 }
 
-
-}
+}//namespace erbus

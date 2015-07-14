@@ -99,6 +99,11 @@ class GTK_View:public Gtk::Viewport,public IView {
 	 * See IView::getTitle
 	 */
 	std::string getTitle() override;
+	
+	/**
+	 * See IView::getViewContainer
+	 */
+	IViewContainer* getViewContainer() override;
 
 	/**
 	 * See IView::showContextMenu
@@ -115,7 +120,7 @@ class GTK_View:public Gtk::Viewport,public IView {
 	 * should be called. It does the rest of the initilization.
 	 */
 	virtual void createContextMenu();
-
+	
 
 	/**
 	 * Gets by a click on the view.

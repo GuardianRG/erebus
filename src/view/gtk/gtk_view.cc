@@ -8,6 +8,7 @@
 #include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
 
+
 namespace erebus {
 
 GTK_View::GTK_View(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment):Gtk::Viewport(h_adjustment,v_adjustment) {
@@ -24,8 +25,7 @@ GTK_View::~GTK_View() {
 
 
 void GTK_View::init() {
-	popupMenu_=new Gtk::Menu();
-
+	
 	add_events(Gdk::BUTTON_PRESS_MASK );
 
 #ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
@@ -35,6 +35,7 @@ void GTK_View::init() {
 	title_="";
 	presenter_=nullptr;
 	container_=nullptr;
+	popupMenu_=nullptr;
 }
 
 void GTK_View::setPresenter(IPresenter* presenter) {
@@ -81,18 +82,28 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 		};
 
 	}
-	popupMenu_->deactivate();
 	return return_value;
 }
+
+IViewContainer* GTK_View::getViewContainer() {
+	return container_;
+}
+
+
 void GTK_View::createContextMenu() {
 	sanityCheck();
-
+	
+	delete popupMenu_;
+	popupMenu_=new Gtk::Menu;
+	
 	container_->buildContextMenu(popupMenu_);
 
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();
 }
 void GTK_View::showContextMenu() {
+	assert(popupMenu_!=nullptr&&"No popup menus et for GTK_View");
+	
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 }//namespace erebus

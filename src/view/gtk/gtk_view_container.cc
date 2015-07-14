@@ -2,6 +2,8 @@
 
 #include <gtkmm.h>
 
+#include <assert.h>
+
 #include <presenter/interfaces/i_view_container_presenter.h>
 
 #include <presenter/view_container_presenter.h>
@@ -21,8 +23,17 @@ GTK_ViewContainer::GTK_ViewContainer(
 	if(notebook==nullptr) {
 		notebook_=new Gtk::Notebook;
 		showTabs(false);
-	} else
+	} else {
 		notebook_=notebook;
+		
+		//Rebind the function pointers of the context menu
+		for(auto w:notebook->get_children()) {
+			GTK_View* buffer=dynamic_cast<GTK_View*>(w);
+			buffer->setViewContainer(this);
+			buffer->createContextMenu();
+		}
+		
+	}
 
 	add(*notebook_);
 
@@ -40,6 +51,8 @@ GTK_ViewContainer::GTK_ViewContainer(
 	popupMenu_->show_all();
 
 	show_all_children();
+	
+	isSplit_=false;
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
@@ -51,15 +64,22 @@ bool GTK_ViewContainer::isEmpty() {
 	return notebook_==nullptr||notebook_->get_n_pages()==0;
 }
 
+
 void GTK_ViewContainer::on_context_menu_split_view_horizontal_click() {
+	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
+	
 	presenter_->on_context_menu_split_view_horizontal_click();
 }
 
 void GTK_ViewContainer::on_context_menu_split_view_vertical_click() {
+	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
+	
 	presenter_->on_context_menu_split_view_vertical_click();
 }
 
 void GTK_ViewContainer::showContextMenu() {
+	assert( popupMenu_!=nullptr && "No popup menu set for GTK_ViewContainer");
+	
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
@@ -88,7 +108,11 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	menu->append(*add_view);
 
 }
+
+
 void GTK_ViewContainer::on_context_menu_add_view_empty_view_click() {
+	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
+	
 	presenter_->on_context_menu_add_view_click(ViewType::EMPTY_VIEW);
 }
 
@@ -97,6 +121,8 @@ void GTK_ViewContainer::setPresenter(IViewContainerPresenter* presenter) {
 }
 
 bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
+	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
+	
 	bool return_value = false;
 	return_value = Viewport::on_button_press_event(ev);
 
@@ -121,10 +147,14 @@ bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 }
 
 bool GTK_ViewContainer::isTopLevel() {
-	return notebook_!=nullptr;
+	return !isSplit_;
 }
 
 void GTK_ViewContainer::split() {
+	if(isSplit_)
+		return;
+	isSplit_=true;
+	
 	Gtk::Container::remove(*notebook_);
 
 	GTK_ViewContainer* vc1=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_);
@@ -133,8 +163,8 @@ void GTK_ViewContainer::split() {
 	ViewContainerPresenter* vcp1=new ViewContainerPresenter;
 	ViewContainerPresenter* vcp2=new ViewContainerPresenter;
 
-	vcp1->setView(vc1);
-	vcp2->setView(vc2);
+	vcp1->setViewContainer(vc1);
+	vcp2->setViewContainer(vc2);
 
 	vc1->setPresenter(vcp1);
 	vc2->setPresenter(vcp2);
@@ -156,7 +186,9 @@ void GTK_ViewContainer::split() {
 }
 
 void GTK_ViewContainer::splitHorizontal() {
-
+	if(isSplit_)
+		return;
+	
 	paned_=new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL);
 	Gdk::Rectangle rec=get_allocation();
 	paned_->set_position(rec.get_width()/2);
@@ -164,7 +196,9 @@ void GTK_ViewContainer::splitHorizontal() {
 	split();
 }
 void GTK_ViewContainer::splitVertical() {
-
+	if(isSplit_)
+		return;
+	
 	paned_=new Gtk::Paned( Gtk::ORIENTATION_VERTICAL);
 	Gdk::Rectangle rec=get_allocation();
 	paned_->set_position(rec.get_height()/2);
@@ -183,6 +217,9 @@ void GTK_ViewContainer::addView(ViewType type) {
 	}
 }
 void GTK_ViewContainer::addView(IView* view) {
+	assert(isTopLevel() && "GTK_ViewContainer must be toplevel to add a view");
+	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");
+	
 	if(notebook_->get_n_pages()>=1)
 		showTabs(true);
 	notebook_->append_page(*(dynamic_cast<GTK_View*>(view)),view->getTitle());

@@ -28,6 +28,8 @@ class GTK_EmptyView:public GTK_View  {
 	 * Destructor.
 	 */
 	~GTK_EmptyView();
+	
+	void createContextMenu() override;
 
 
 };

@@ -55,4 +55,4 @@ class GUIManager {
 	void runGUI();
 };
 
-}
+}//namespace erbus

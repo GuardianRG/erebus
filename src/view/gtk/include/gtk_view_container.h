@@ -12,20 +12,23 @@ namespace erebus {
  * This class containes the different views of the different areas on the screen.
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
-	Gtk::Notebook*	notebook_;
-	Gtk::Paned*	paned_;
+	Gtk::Notebook*			notebook_;
+	Gtk::Paned*			paned_;
 
-	IViewContainerPresenter* presenter_;
+	IViewContainerPresenter* 	presenter_;
 
-	Gtk::Menu* 	popupMenu_;
+	Gtk::Menu* 			popupMenu_;
 
-	Glib::RefPtr<Gtk::Adjustment> h_adjustment_;
-	Glib::RefPtr<Gtk::Adjustment> v_adjustment_;
+	Glib::RefPtr<Gtk::Adjustment> 	h_adjustment_;
+	Glib::RefPtr<Gtk::Adjustment>	v_adjustment_;
+	
+	bool				isSplit_;
 
-	int timeBuffer_;
-	int clickBuffer_;
+	int 				timeBuffer_;
+	int 				clickBuffer_;
 
 	void split();
+	void sanityCheck();
 
 	void on_context_menu_split_view_horizontal_click();
 	void on_context_menu_split_view_vertical_click();
