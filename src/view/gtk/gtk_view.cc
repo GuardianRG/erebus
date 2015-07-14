@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 
 #include <assert.h>
+#include <iostream>
 
 #include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_presenter.h>
@@ -31,11 +32,22 @@ void GTK_View::init() {
 #ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
 	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_View::on_button_press_event), false);
 #endif
+	signal_parent_changed().connect(sigc::mem_fun(*this, &GTK_View::on_my_parent_changed), false);
+
 
 	title_="";
 	presenter_=nullptr;
 	container_=nullptr;
 	popupMenu_=nullptr;
+}
+
+void GTK_View::on_my_parent_changed(Gtk::Widget* previous_parent) {
+	if(get_parent()!=nullptr) {
+		if(get_parent()->get_parent()!=nullptr) {
+			setViewContainer(dynamic_cast<GTK_ViewContainer*>(get_parent()->get_parent()));
+			createContextMenu();
+		}
+	}
 }
 
 void GTK_View::setPresenter(IPresenter* presenter) {
@@ -49,17 +61,13 @@ std::string GTK_View::getTitle() {
 	return title_;
 }
 
-void GTK_View::sanityCheck() {
-	assert( presenter_!=nullptr && "No presenter set for GTK_View");
-	assert( container_!=nullptr && "No view container set for GTK_View");
-}
 
 void GTK_View::setViewContainer(IViewContainer* container) {
 	container_=static_cast<GTK_ViewContainer*>(container);
 }
 
 bool GTK_View::on_button_press_event(GdkEventButton *ev) {
-	sanityCheck();
+	assert( presenter_!=nullptr && "No presenter set for GTK_View");
 
 	bool return_value = false;
 
@@ -91,7 +99,7 @@ IViewContainer* GTK_View::getViewContainer() {
 
 
 void GTK_View::createContextMenu() {
-	sanityCheck();
+	assert( container_!=nullptr && "No view container set for GTK_View");
 
 	delete popupMenu_;
 	popupMenu_=new Gtk::Menu;

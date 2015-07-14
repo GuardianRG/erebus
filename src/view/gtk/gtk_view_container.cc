@@ -23,7 +23,8 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	if(notebook==nullptr) {
 		notebook_=new Gtk::Notebook;
-		showTabs(false);
+		notebook_->set_group_name("notebooks");
+		showTabs(true);
 	} else {
 		notebook_=notebook;
 
@@ -35,6 +36,8 @@ GTK_ViewContainer::GTK_ViewContainer(
 		}
 
 	}
+
+	notebook_->set_scrollable(true);
 
 	add(*notebook_);
 
@@ -140,6 +143,7 @@ void GTK_ViewContainer::joinContainer() {
 	}
 
 	notebook_=new Gtk::Notebook;
+	notebook_->set_group_name("notebooks");
 
 	auto children=container1->notebook_->get_children();
 	auto it=std::begin(children);
@@ -153,6 +157,8 @@ void GTK_ViewContainer::joinContainer() {
 		buffer->setViewContainer(this);
 		buffer->createContextMenu();
 		notebook_->append_page(*buffer,buffer->getTitle());
+		notebook_->set_tab_reorderable(*buffer);
+		notebook_->set_tab_detachable(*buffer);
 
 		++it;
 	}
@@ -170,6 +176,8 @@ void GTK_ViewContainer::joinContainer() {
 		buffer->setViewContainer(this);
 		buffer->createContextMenu();
 		notebook_->append_page(*buffer,buffer->getTitle());
+		notebook_->set_tab_reorderable(*buffer);
+		notebook_->set_tab_detachable(*buffer);
 
 		++it;
 	}
@@ -179,10 +187,9 @@ void GTK_ViewContainer::joinContainer() {
 	delete paned_;
 	paned_=nullptr;
 
-	if(notebook_->get_n_pages()>1)
-		showTabs(true);
-	else
-		showTabs(false);
+
+	showTabs(true);
+
 
 	add(*notebook_);
 
@@ -259,13 +266,13 @@ void GTK_ViewContainer::split() {
 	vc1->setPresenter(vcp1);
 	vc2->setPresenter(vcp2);
 
+	vc1->set_shadow_type(Gtk::SHADOW_OUT);
+	vc2->set_shadow_type(Gtk::SHADOW_OUT);
 
-	paned_->add1(*vc1);
-	paned_->add2(*vc2);
 
+	paned_->pack1(*vc1,true,false);
+	paned_->pack2(*vc2,true,false);
 
-	//if set to -1 the whole system will crash.
-	paned_->set_border_width(0);
 
 	add(*paned_);
 
@@ -312,7 +319,11 @@ void GTK_ViewContainer::addView(IView* view) {
 
 	if(notebook_->get_n_pages()>=1)
 		showTabs(true);
-	notebook_->append_page(*(dynamic_cast<GTK_View*>(view)),view->getTitle());
+
+	GTK_View* buffer=dynamic_cast<GTK_View*>(view);
+	notebook_->append_page(*buffer,view->getTitle());
+	notebook_->set_tab_reorderable(*buffer);
+	notebook_->set_tab_detachable(*buffer);
 
 	show_all_children();
 }

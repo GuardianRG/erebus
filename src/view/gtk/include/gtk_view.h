@@ -31,7 +31,6 @@ class GTK_View:public Gtk::Viewport,public IView {
 
 	void init();
 
-	void sanityCheck();
 
   protected:
 	/**
@@ -144,9 +143,14 @@ class GTK_View:public Gtk::Viewport,public IView {
 
 
 	/**
-	 * Gets by a click on the view.
+	 * Gets called by a click on the view.
 	 */
 	bool on_button_press_event(GdkEventButton *ev) override;
+
+	/**
+	 * Gets called hen the parent has changed (it was dragged)
+	 */
+	void on_my_parent_changed(Gtk::Widget* previous_parent);
 
 };
 
