@@ -19,5 +19,13 @@ GTK_EmptyView::~GTK_EmptyView() {
 
 void GTK_EmptyView::createContextMenu() {
 	GTK_View::createContextMenu();
+
+	Gtk::MenuItem* empty = Gtk::manage(new Gtk::MenuItem("Empty Entry"));
+	empty->set_sensitive(false);
+
+	popupMenu_->prepend(*empty);
+
+	popupMenu_->accelerate(*this);
+	popupMenu_->show_all();
 }
 }//namespace erebus

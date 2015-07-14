@@ -114,10 +114,31 @@ class GTK_View:public Gtk::Viewport,public IView {
 	/**
 	 * Builds the custom context menu.
 	 *
-	 * This method should bew overwritten by the derived class.
-	 * Only Gtk::MenuItems should be added. Noothing else.
-	 * After that the createContextMenu from the super class
-	 * should be called. It does the rest of the initilization.
+	 * This method should be overwritten by the derived class.
+	 *
+	 * In this method custom items can be added to the popup menu.
+	 * In order to do so you have to call the super createContextMenu method first,
+	 * e.g. GTK_View::createContextMenu.
+	 *
+	 * If you want to create a context menu like this:
+	 * -------
+	 * |Copy |
+	 * -------
+	 * |Paste|
+	 * ------------------
+	 * |standard entries|
+	 * ------------------
+	 *
+	 * The methode should look like this:
+	 *
+	 * GTK_View::createContextMenu()
+	 *
+	 * popupMenu_->prepend(paste)
+	 * popupMenu_->prepend(copy)
+	 *
+	 * popupMenu_->accelerate(*this)
+	 * popupMenu_->show_all()
+	 *
 	 */
 	virtual void createContextMenu();
 
