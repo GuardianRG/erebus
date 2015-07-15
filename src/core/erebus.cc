@@ -4,8 +4,8 @@
 int main(int argc, char *argv[]) {
 
 	erebus::Model* model=new erebus::Model;
-	erebus::GUIManager m(model,argc,argv);
-	m.runGUI();
+	erebus::GUIManager* m=erebus::GUIManager::create(model,argc,argv);
+	m->runGUI();
 
 	delete model;
 

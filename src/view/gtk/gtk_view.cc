@@ -8,7 +8,7 @@
 #include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
-
+#include <view/gui_manager.h>
 
 namespace erebus {
 
@@ -105,6 +105,11 @@ void GTK_View::on_context_menu_close_click() {
 	presenter_->on_context_menu_close_click();
 }
 
+void GTK_View::on_context_menu_pop_out_click() {
+	container_->removeView(this);
+	GUIManager::getInstance()->moveViewToNewWindow(this);
+}
+
 void GTK_View::createContextMenu() {
 	assert( container_!=nullptr && "No view container set for GTK_View");
 
@@ -112,11 +117,14 @@ void GTK_View::createContextMenu() {
 	popupMenu_=new Gtk::Menu;
 
 	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
+	Gtk::MenuItem* pop_out = Gtk::manage(new Gtk::MenuItem("Pop out"));
 	Gtk::MenuItem* close = Gtk::manage(new Gtk::MenuItem("Close view"));
 
 	close->signal_activate().connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_close_click) );
+	pop_out->signal_activate().connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_pop_out_click) );
 
 	popupMenu_->append(*sep);
+	popupMenu_->append(*pop_out);
 	popupMenu_->append(*close);
 
 	container_->buildContextMenu(popupMenu_);

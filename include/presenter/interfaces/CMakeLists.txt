@@ -9,5 +9,6 @@ set(PRESENTER_HEADERS
 	${CMAKE_CURRENT_SOURCE_DIR}/i_view_presenter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/i_view_container_presenter.h
 	${CMAKE_CURRENT_SOURCE_DIR}/i_window_presenter.h
+	${CMAKE_CURRENT_SOURCE_DIR}/i_view_window_presenter.h
 	PARENT_SCOPE
 )

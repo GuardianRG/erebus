@@ -8,6 +8,8 @@
 
 namespace erebus {
 
+class GTK_View;
+
 /**
  * This class containes the different views of the different areas on the screen.
  */
@@ -121,6 +123,13 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * See IViewContainer::isTopLevel
 	 */
 	bool isTopLevel()override;
+
+	/**
+	 * Removes the view.
+	 *
+	 * @param view the view to remove.
+	 */
+	void removeView(GTK_View* view);
 
 	/**
 	 * Adds the standard menu items to the given menu.

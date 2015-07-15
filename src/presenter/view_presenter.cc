@@ -24,5 +24,7 @@ void ViewPresenter::on_left_button_click() {
 void ViewPresenter::on_context_menu_close_click() {
 	view_->close();
 }
+void ViewPresenter::on_context_menu_pop_out_click() {
 
+}
 }//namespace erbus

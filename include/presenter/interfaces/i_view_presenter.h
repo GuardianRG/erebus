@@ -37,6 +37,11 @@ class IViewPresenter:public IPresenter {
 	 * @param view view to operate on
 	 */
 	virtual void setView(IView* view)=0;
+
+	/**
+	 * Handels the pop out in the context menu.
+	 */
+	virtual void on_context_menu_pop_out_click()=0;
 };
 
 }//namespace erbus

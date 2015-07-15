@@ -31,6 +31,7 @@ class GTK_View:public Gtk::Viewport,public IView {
 
 	void init();
 
+	void on_context_menu_pop_out_click();
 	void on_context_menu_close_click();
 
   protected:

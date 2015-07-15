@@ -11,6 +11,7 @@
 #include <presenter/view_container_presenter.h>
 #include <view/view_type.h>
 #include <gtk_view_builder.h>
+#include <gtk_view.h>
 
 namespace erebus {
 
@@ -95,6 +96,11 @@ void GTK_ViewContainer::closeView(IView* view) {
 
 	notebook_->remove(*buffer);
 	delete buffer;
+}
+
+void GTK_ViewContainer::removeView(GTK_View* view) {
+	notebook_->remove(*view);
+	show_all_children();
 }
 
 void GTK_ViewContainer::setParent(IViewContainer* parent) {
@@ -338,7 +344,7 @@ void GTK_ViewContainer::addView(ViewType type) {
 }
 void GTK_ViewContainer::addView(IView* view) {
 	assert(isTopLevel() && "GTK_ViewContainer must be toplevel to add a view");
-	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");
+	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");//Sollte besser eine exception sein
 
 	if(notebook_->get_n_pages()>=1)
 		showTabs(true);

@@ -24,4 +24,8 @@ void EmptyViewPresenter::on_context_menu_close_click() {
 	view_->close();
 }
 
+void EmptyViewPresenter::on_context_menu_pop_out_click() {
+
+}
+
 }//namespace erbus
