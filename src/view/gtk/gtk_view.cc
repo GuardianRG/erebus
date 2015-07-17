@@ -125,6 +125,10 @@ void GTK_View::createContextMenu() {
 	delete popupMenu_;
 	popupMenu_=new Gtk::Menu;
 
+	Gtk::MenuItem* view=Gtk::manage(new Gtk::MenuItem("View"));
+	Gtk::Menu* view_menu=Gtk::manage(new Gtk::Menu);
+	view->set_submenu(*view_menu);
+
 	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
 	Gtk::MenuItem* pop_out = Gtk::manage(new Gtk::MenuItem("Pop out"));
 	Gtk::MenuItem* close = Gtk::manage(new Gtk::MenuItem("Close view"));
@@ -133,8 +137,10 @@ void GTK_View::createContextMenu() {
 	pop_out->signal_activate().connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_pop_out_click) );
 
 	popupMenu_->append(*sep);
-	popupMenu_->append(*pop_out);
-	popupMenu_->append(*close);
+	view_menu->append(*pop_out);
+	view_menu->append(*close);
+	view_menu->accelerate(*this);
+	popupMenu_->append(*view);
 
 	static_cast<GTK_ViewContainer*>(container_)->buildContextMenu(popupMenu_);
 

@@ -113,6 +113,10 @@ void GTK_ViewContainer::setParent(IViewContainer* parent) {
 void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
 
+	Gtk::MenuItem* control=Gtk::manage(new Gtk::MenuItem("Control"));
+	Gtk::Menu* control_menu=Gtk::manage(new Gtk::Menu);
+	control->set_submenu(*control_menu);
+
 	Gtk::MenuItem* join=Gtk::manage(new Gtk::MenuItem("Join"));
 	join->set_sensitive(false);
 	if(parent_!=nullptr) {
@@ -154,10 +158,12 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	add_view->set_submenu(*view_menu);
 
 
+
 	menu->append(*sep);
-	menu->append(*join);
-	menu->append(*split);
-	menu->append(*add_view);
+	control_menu->append(*join);
+	control_menu->append(*split);
+	control_menu->append(*add_view);
+	menu->append(*control);
 
 }
 
