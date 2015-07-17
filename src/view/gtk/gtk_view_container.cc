@@ -150,10 +150,13 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	Gtk::Menu* view_menu=Gtk::manage(new Gtk::Menu);
 
 	Gtk::MenuItem* empty_view = Gtk::manage(new Gtk::MenuItem("Empty View"));
-
 	empty_view->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_add_view_empty_view_click) );
-
 	view_menu->append(*empty_view);
+
+	Gtk::MenuItem* hex_view = Gtk::manage(new Gtk::MenuItem("Hex View"));
+	hex_view->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_add_view_hex_view_click) );
+	view_menu->append(*hex_view);
+
 
 	add_view->set_submenu(*view_menu);
 
@@ -239,6 +242,12 @@ void GTK_ViewContainer::on_context_menu_add_view_empty_view_click() {
 	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
 
 	presenter_->on_context_menu_add_view_click(ViewType::EMPTY_VIEW);
+}
+
+void GTK_ViewContainer::on_context_menu_add_view_hex_view_click() {
+	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
+
+	presenter_->on_context_menu_add_view_click(ViewType::HEX_VIEW);
 }
 
 void GTK_ViewContainer::on_context_menu_join_click() {
@@ -357,14 +366,17 @@ void GTK_ViewContainer::addView(ViewType type) {
 	case ViewType::EMPTY_VIEW: {
 		addView(GTK_ViewBuilder::buildEmptyView(this,"Empty View"));
 		break;
-	}
+		case ViewType::HEX_VIEW:
+			addView(GTK_ViewBuilder::buildHexView(this,"Hex View"));
+			break;
+		}
 	default:
 		;
 	}
 }
 void GTK_ViewContainer::addView(IView* view) {
 	assert(isTopLevel() && "GTK_ViewContainer must be toplevel to add a view");
-	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");//Sollte besser eine exception sein
+	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");
 
 	if(notebook_->get_n_pages()>=1)
 		showTabs(true);

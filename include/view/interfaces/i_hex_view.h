@@ -1,21 +1,16 @@
 #pragma once
 
+
 #include <string>
 
-#include <presenter/interfaces/i_empty_view_presenter.h>
+#include <presenter/interfaces/i_hex_view_presenter.h>
 #include <view/interfaces/i_view_container.h>
 
 namespace erebus {
 
-/**
- * This class is the interface for a empty view.
- */
-class IEmptyView {
+class IHexView {
   public:
-	/**
-	 * Destructor.
-	 */
-	virtual ~IEmptyView() {}
+	virtual ~IHexView() {}
 
 
 
@@ -23,7 +18,7 @@ class IEmptyView {
 	/**
 	 * See IView::setPresenter
 	 */
-	virtual void setPresenter(IEmptyViewPresenter* presenter)=0;
+	virtual void setPresenter(IHexViewPresenter* presenter)=0;
 
 	/**
 	 * See IView::getTitle
@@ -61,4 +56,4 @@ class IEmptyView {
 	virtual void popOut()=0;
 };
 
-}//namespace erbus
+}//namespace erebus

@@ -37,6 +37,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void on_context_menu_split_horizontal_click();
 	void on_context_menu_split_vertical_click();
 	void on_context_menu_add_view_empty_view_click();
+	void on_context_menu_add_view_hex_view_click();
 
   public:
 	/**

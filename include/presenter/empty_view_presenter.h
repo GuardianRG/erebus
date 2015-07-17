@@ -31,12 +31,12 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	/**
 	 * See IEmptyViewPresenter::setView
 	 */
-	virtual void setView(IView* view) override;
+	virtual void setView(IEmptyView* view) override;
 
 	/**
 	 * See IEmptyViewPresenter::getView
 	 */
-	virtual IView* getView() override;
+	virtual IEmptyView* getView() override;
 
 	/**
 	 * See IEmptyViewPresenter::on_right_button_click

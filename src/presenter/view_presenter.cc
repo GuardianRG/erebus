@@ -12,14 +12,6 @@ ViewPresenter::~ViewPresenter() {
 
 }
 
-void ViewPresenter::setView(IView* view) {
-	view_=view;
-}
-
-IView* ViewPresenter::getView() {
-	return view_;
-}
-
 void ViewPresenter::on_right_button_click() {
 	view_->showContextMenu();
 }

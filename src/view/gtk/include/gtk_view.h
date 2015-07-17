@@ -78,14 +78,14 @@ class GTK_View:public Gtk::Viewport,public IView {
 	 *
 	 * Needs to be called before every other method!
 	 */
-	void setPresenter(IViewPresenter* presenter) override;
+	virtual void setPresenter(IViewPresenter* presenter) override;
 
 	/**
 	 * See IView::setViewContainer
 	 *
 	 * Needs to be called before every other method!
 	 */
-	void setParent(IViewContainer* container) override;
+	virtual void setParent(IViewContainer* container) override;
 
 	/**
 	 * See IView::close
@@ -95,27 +95,27 @@ class GTK_View:public Gtk::Viewport,public IView {
 	/**
 	 * See IView::popOut
 	 */
-	void popOut() override;
+	virtual void popOut() override;
 
 	/**
 	 * See IView::setTitle
 	 */
-	void setTitle(std::string title)override;
+	virtual void setTitle(std::string title)override;
 
 	/**
 	 * See IView::getTitle
 	 */
-	std::string getTitle() override;
+	virtual std::string getTitle() override;
 
 	/**
 	 * See IView::getViewContainer
 	 */
-	IViewContainer* getParent() override;
+	virtual IViewContainer* getParent() override;
 
 	/**
 	 * See IView::showContextMenu
 	 */
-	void showContextMenu()override;
+	virtual void showContextMenu()override;
 
 
 	/**

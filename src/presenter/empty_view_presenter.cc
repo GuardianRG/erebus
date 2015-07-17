@@ -11,11 +11,11 @@ EmptyViewPresenter::EmptyViewPresenter() {
 EmptyViewPresenter::~EmptyViewPresenter() {
 }
 
-void EmptyViewPresenter::setView(IView* view) {
-	view_=static_cast<IEmptyView*>(view);
+void EmptyViewPresenter::setView(IEmptyView* view) {
+	view_=view;
 }
 
-IView* EmptyViewPresenter::getView() {
+IEmptyView* EmptyViewPresenter::getView() {
 	return view_;
 }
 void EmptyViewPresenter::on_right_button_click() {

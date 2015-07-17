@@ -30,16 +30,6 @@ class ViewPresenter :public IViewPresenter {
 	virtual ~ViewPresenter();
 
 	/**
-	 * See IViewPresenter::setView
-	 */
-	virtual void setView(IView* view) override;
-
-	/**
-	 * See IViewPresenter::getView
-	 */
-	virtual IView* getView()override;
-
-	/**
 	 * See IViewPresenter::on_right_button_click
 	 */
 	virtual void on_right_button_click() override;

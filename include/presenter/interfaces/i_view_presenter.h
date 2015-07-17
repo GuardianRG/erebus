@@ -17,21 +17,6 @@ class IViewPresenter:public IPresenter {
 	virtual ~IViewPresenter() {}
 
 	/**
-	 * Sets the view to operate on.
-	 *
-	 * @param view view to operate on
-	 */
-	virtual void setView(IView* view)=0;
-
-	/**
-	 * Returns the view this presenter operates on.
-	 *
-	 * @return the view this presenter operates on
-	 */
-	virtual IView* getView()=0;
-
-
-	/**
 	 * Handels a click on the right mouse button.
 	 */
 	virtual void on_right_button_click()=0;
