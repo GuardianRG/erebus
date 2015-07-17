@@ -5,7 +5,7 @@
 namespace erebus {
 
 ViewWindowPresenter::ViewWindowPresenter() {
-
+	viewWindow_=nullptr;
 }
 
 ViewWindowPresenter::~ViewWindowPresenter() {
@@ -13,8 +13,11 @@ ViewWindowPresenter::~ViewWindowPresenter() {
 }
 
 void ViewWindowPresenter::setWindow(IWindow* window) {
-	mainWindow_=static_cast<IViewWindow*>(window);
+	viewWindow_=static_cast<IViewWindow*>(window);
 }
 
+IWindow* ViewWindowPresenter::getWindow() {
+	return viewWindow_;
+}
 
 }//namespace erebus

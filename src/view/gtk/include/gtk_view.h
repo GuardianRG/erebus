@@ -5,7 +5,6 @@
 #include <string>
 
 #include <view/interfaces/i_view.h>
-#include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
 #include <view/interfaces/i_view_container.h>
 
@@ -21,7 +20,7 @@ namespace erebus {
 class GTK_View:public Gtk::Viewport,public IView {
 	IViewPresenter*		presenter_;
 
-	GTK_ViewContainer*	container_;
+	IViewContainer*	container_;
 
 	std::string 		title_;
 
@@ -37,8 +36,6 @@ class GTK_View:public Gtk::Viewport,public IView {
   protected:
 	/**
 	 * The context menu to show.
-	 *
-	 * Doesnt need to be deleted by the derived class.
 	 */
 	Gtk::Menu*	popupMenu_;
 
@@ -81,19 +78,24 @@ class GTK_View:public Gtk::Viewport,public IView {
 	 *
 	 * Needs to be called before every other method!
 	 */
-	void setPresenter(IPresenter* presenter) override;
+	void setPresenter(IViewPresenter* presenter) override;
 
 	/**
 	 * See IView::setViewContainer
 	 *
 	 * Needs to be called before every other method!
 	 */
-	void setViewContainer(IViewContainer* container) override;
+	void setParent(IViewContainer* container) override;
 
 	/**
 	 * See IView::close
 	 */
 	virtual void close() override;
+
+	/**
+	 * See IView::popOut
+	 */
+	void popOut() override;
 
 	/**
 	 * See IView::setTitle
@@ -108,7 +110,7 @@ class GTK_View:public Gtk::Viewport,public IView {
 	/**
 	 * See IView::getViewContainer
 	 */
-	IViewContainer* getViewContainer() override;
+	IViewContainer* getParent() override;
 
 	/**
 	 * See IView::showContextMenu
@@ -154,7 +156,7 @@ class GTK_View:public Gtk::Viewport,public IView {
 	bool on_button_press_event(GdkEventButton *ev) override;
 
 	/**
-	 * Gets called hen the parent has changed (it was dragged)
+	 * Gets called when the parent has changed (it was dragged)
 	 */
 	void on_my_parent_changed(Gtk::Widget* previous_parent);
 

@@ -81,6 +81,7 @@ add_subdirectory(test)
 #create executable
 add_executable(erebus ${SOURCE} ${HEADER_FILES})
 
+#add resources o build directory
 add_subdirectory(resources)
 
 if(GTKMM_FOUND)

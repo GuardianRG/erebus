@@ -34,6 +34,11 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	virtual void setView(IView* view) override;
 
 	/**
+	 * See IEmptyViewPresenter::getView
+	 */
+	virtual IView* getView() override;
+
+	/**
 	 * See IEmptyViewPresenter::on_right_button_click
 	 */
 	virtual void on_right_button_click() override;

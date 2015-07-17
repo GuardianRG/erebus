@@ -65,6 +65,11 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void setPresenter(IViewContainerPresenter* presenter)override;
 
 	/**
+	 * See IViewContainer::getParent
+	 */
+	IViewContainer* getParent()override;
+
+	/**
 	 * See IViewContainer::setParent
 	 */
 	void setParent(IViewContainer* parent)override;
@@ -92,7 +97,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::isSplittet
 	 */
-	bool isSplittet()override;
+	bool isSplit()override;
 
 	/**
 	 * See IViewContainer::showTabs
@@ -120,6 +125,11 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	bool isEmpty()override;
 
 	/**
+	 * See IViewContainer::popOutView
+	 */
+	void popOutView(IView* view)override;
+
+	/**
 	 * See IViewContainer::isTopLevel
 	 */
 	bool isTopLevel()override;
@@ -129,7 +139,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 *
 	 * @param view the view to remove.
 	 */
-	void removeView(GTK_View* view);
+	void removeView(IView* view)override;
 
 	/**
 	 * Adds the standard menu items to the given menu.

@@ -32,6 +32,13 @@ class IWindow {
 	virtual void setTitle(std::string title)=0;
 
 	/**
+	 * Returns the title of the window.
+	 *
+	 * @return the title of the window
+	 */
+	virtual std::string getTitle()=0;
+
+	/**
 	 * Sets the preferred size of the window.
 	 *
 	 * @param width preferred width

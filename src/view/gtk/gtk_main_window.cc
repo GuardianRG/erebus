@@ -17,22 +17,26 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	refBuilder->get_widget("base_view",base);
 
 	ViewContainerPresenter* presenter=new ViewContainerPresenter;
-	GTK_ViewContainer *vc=new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr,nullptr);
+	basicView_=new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr,nullptr);
 
-	presenter->setViewContainer(vc);
-	vc->setPresenter(presenter);
+	presenter->setViewContainer(basicView_);
+	basicView_->setPresenter(presenter);
 
-	base->add(*vc);
+	base->add(*basicView_);
 
 	show_all_children();
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
-
+	delete basicView_;
 }
 
 void GTK_MainWindow::setTitle(std::string title) {
 	set_title(title);
+}
+
+std::string GTK_MainWindow::getTitle() {
+	return get_title();
 }
 
 void GTK_MainWindow::setPreferredSize(int width,int height) {

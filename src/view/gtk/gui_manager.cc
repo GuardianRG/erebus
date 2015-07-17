@@ -8,8 +8,6 @@
 #include <view/interfaces/i_window.h>
 #include <presenter/interfaces/i_view_window_presenter.h>
 
-#include <model.h>
-
 #include <gtk_builder_factory.h>
 #include <gtk_main_window.h>
 #include <gtk_gui_state_object.h>
@@ -75,9 +73,9 @@ void GUIManager::runGUI() {
 }
 
 void GUIManager::addWindow(IWindow* window) {
-	//GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_);
-	//GTK_Window* window_c=static_cast<GTK_Window*>(window);
-	//stateObject->application_->add_window(*window_c);
+	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_);
+	GTK_Window* window_c=static_cast<GTK_Window*>(window);
+	stateObject->application_->add_window(*window_c);
 }
 
 void GUIManager::moveViewToNewWindow(IView* view) {

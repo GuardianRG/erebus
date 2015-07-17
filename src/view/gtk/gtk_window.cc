@@ -11,7 +11,7 @@ GTK_Window::GTK_Window() {
 }
 
 GTK_Window::~GTK_Window() {
-
+	delete presenter_;
 }
 
 void GTK_Window::setTitle(std::string title) {

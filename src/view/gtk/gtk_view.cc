@@ -6,7 +6,6 @@
 #include <iostream>
 
 #include <view/interfaces/i_view.h>
-#include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
 #include <view/gui_manager.h>
 
@@ -21,7 +20,7 @@ GTK_View::GTK_View(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& re
 }
 
 GTK_View::~GTK_View() {
-	delete popupMenu_;
+	delete presenter_;
 }
 
 
@@ -44,13 +43,13 @@ void GTK_View::init() {
 void GTK_View::on_my_parent_changed(Gtk::Widget* previous_parent) {
 	if(get_parent()!=nullptr) {
 		if(get_parent()->get_parent()!=nullptr) {
-			setViewContainer(dynamic_cast<GTK_ViewContainer*>(get_parent()->get_parent()));
+			setParent(dynamic_cast<GTK_ViewContainer*>(get_parent()->get_parent()));
 			createContextMenu();
 		}
 	}
 }
 
-void GTK_View::setPresenter(IPresenter* presenter) {
+void GTK_View::setPresenter(IViewPresenter* presenter) {
 	presenter_=static_cast<IViewPresenter*>(presenter);
 }
 void GTK_View::setTitle(std::string title) {
@@ -61,9 +60,12 @@ std::string GTK_View::getTitle() {
 	return title_;
 }
 
+void GTK_View::setParent(IViewContainer* container) {
+	container_=container;
+}
 
-void GTK_View::setViewContainer(IViewContainer* container) {
-	container_=static_cast<GTK_ViewContainer*>(container);
+IViewContainer* GTK_View::getParent() {
+	return container_;
 }
 
 bool GTK_View::on_button_press_event(GdkEventButton *ev) {
@@ -94,20 +96,27 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 }
 
 void GTK_View::close() {
+	assert( container_!=nullptr && "No view container set for GTK_View");
+
 	container_->closeView(this);
 }
 
-IViewContainer* GTK_View::getViewContainer() {
-	return container_;
+void GTK_View::popOut() {
+	assert( container_!=nullptr && "No view container set for GTK_View");
+
+	container_->popOutView(this);
 }
 
 void GTK_View::on_context_menu_close_click() {
+	assert( presenter_!=nullptr && "No presenter set for GTK_View");
+
 	presenter_->on_context_menu_close_click();
 }
 
 void GTK_View::on_context_menu_pop_out_click() {
-	container_->removeView(this);
-	GUIManager::getInstance()->moveViewToNewWindow(this);
+	assert( presenter_!=nullptr && "No presenter set for GTK_View");
+
+	presenter_->on_context_menu_pop_out_click();
 }
 
 void GTK_View::createContextMenu() {
@@ -127,14 +136,15 @@ void GTK_View::createContextMenu() {
 	popupMenu_->append(*pop_out);
 	popupMenu_->append(*close);
 
-	container_->buildContextMenu(popupMenu_);
+	static_cast<GTK_ViewContainer*>(container_)->buildContextMenu(popupMenu_);
 
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();
 }
 void GTK_View::showContextMenu() {
-	assert(popupMenu_!=nullptr&&"No popup menus et for GTK_View");
+	assert(popupMenu_!=nullptr&&"No popup menu set for GTK_View");
 
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
+
 }//namespace erebus

@@ -22,8 +22,9 @@ GTK_EmptyView* GTK_ViewBuilder::buildEmptyView(GTK_ViewContainer* container,IEmp
 	presenter->setView(ev);
 	ev->setPresenter(presenter);
 	ev->setTitle(title);
-	ev->setViewContainer(container);
+	ev->setParent(container);
 	ev->createContextMenu();
 	return ev;
 }
+
 }//namespace erebus

@@ -32,6 +32,13 @@ class IViewContainer {
 	virtual void setParent(IViewContainer* parent)=0;
 
 	/**
+	 * Returns the container that this container contains.
+	 *
+	 * @return the parent of this container
+	 */
+	virtual IViewContainer* getParent()=0;
+
+	/**
 	 * Splits the container horizontal.
 	 *
 	 * Is the container is already splitted nothings happens.
@@ -53,19 +60,23 @@ class IViewContainer {
 	virtual void showTabs(bool showTabs)=0;
 
 	/**
-	 * @return is true when this container contains no views.
+	 * Wether this container contains views.
+	 *
+	 * @return is false when this container contains views or is split. If this container is not split and contains no views it returns true.
 	 */
 	virtual bool isEmpty()=0;
 
 	/**
-	 * Wether the container is splittet or not.
+	 * Wether the container is split or not.
 	 *
-	 * @return true, when the container is splitte
+	 * @return true, when the container is split
 	 */
-	virtual bool isSplittet()=0;
+	virtual bool isSplit()=0;
 
 	/**
-	 * @return is true when this container has not yet been split.
+	 * Wether this container contains container.
+	 *
+	 * @return is true when this container contains no containers
 	 */
 	virtual bool isTopLevel()=0;
 
@@ -77,7 +88,7 @@ class IViewContainer {
 	virtual void joinContainer()=0;
 
 	/**
-	 * Shows the context menu.
+	 * Shows the standard context menu.
 	 */
 	virtual void showContextMenu()=0;
 
@@ -89,11 +100,25 @@ class IViewContainer {
 	virtual void addView(IView* view)=0;
 
 	/**
+	 * Removs a view.
+	 *
+	 * @param view the view to remove
+	 */
+	virtual void removeView(IView* view)=0;
+
+	/**
 	 * Adds a view.
 	 *
 	 * @param type type of the view to add
 	 */
 	virtual void addView(ViewType type)=0;
+
+	/**
+	 * Pops the view out to a new window.
+	 *
+	 * @param view the view to pop out
+	 */
+	virtual void popOutView(IView* view)=0;
 
 	/**
 	 * Closes a view.

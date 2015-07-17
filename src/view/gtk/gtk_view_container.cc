@@ -12,6 +12,7 @@
 #include <view/view_type.h>
 #include <gtk_view_builder.h>
 #include <gtk_view.h>
+#include <view/gui_manager.h>
 
 namespace erebus {
 
@@ -34,7 +35,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 		//Rebind the function pointers of the context menu
 		for(auto w:notebook->get_children()) {
 			GTK_View* buffer=dynamic_cast<GTK_View*>(w);
-			buffer->setViewContainer(this);
+			buffer->setParent(this);
 			buffer->createContextMenu();
 		}
 
@@ -50,7 +51,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
 #endif
 
-	popupMenu_=new Gtk::Menu;
+	popupMenu_=Gtk::manage(new Gtk::Menu);
 
 	buildContextMenu(popupMenu_);
 
@@ -61,15 +62,18 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	isSplit_=false;
 	paned_=nullptr;
+	parent_=nullptr;
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
 	delete notebook_;
-	delete paned_;
-	delete popupMenu_;
 }
+
 bool GTK_ViewContainer::isEmpty() {
-	return notebook_==nullptr||notebook_->get_n_pages()==0;
+	if(isSplit_)
+		return false;
+	assert(notebook_!=nullptr&&"notebook must not be nullptr");
+	return notebook_->get_n_pages()==0;
 }
 
 
@@ -95,11 +99,10 @@ void GTK_ViewContainer::closeView(IView* view) {
 	GTK_View* buffer=static_cast<GTK_View*>(view);
 
 	notebook_->remove(*buffer);
-	delete buffer;
 }
 
-void GTK_ViewContainer::removeView(GTK_View* view) {
-	notebook_->remove(*view);
+void GTK_ViewContainer::removeView(IView* view) {
+	notebook_->remove(*(dynamic_cast<Gtk::Viewport*>(view)));
 	show_all_children();
 }
 
@@ -113,15 +116,19 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	Gtk::MenuItem* join=Gtk::manage(new Gtk::MenuItem("Join"));
 	join->set_sensitive(false);
 	if(parent_!=nullptr) {
-		if(parent_->isSplittet())
+		if(parent_->isSplit()) {
 			join->set_sensitive(true);
-	}
 
+		}
+	}
+	join->signal_activate().
+	connect(
+	    sigc::mem_fun(*this,
+	                  &GTK_ViewContainer::on_context_menu_join_click)
+	);
 
 	Gtk::MenuItem* split=Gtk::manage(new Gtk::MenuItem("Split"));
 	Gtk::MenuItem* add_view = Gtk::manage(new Gtk::MenuItem("Add View"));
-
-	join->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_join_click) );
 
 	Gtk::Menu* split_menu=Gtk::manage(new Gtk::Menu);
 
@@ -181,7 +188,7 @@ void GTK_ViewContainer::joinContainer() {
 
 		container1->notebook_->remove_page(**it);
 
-		buffer->setViewContainer(this);
+		buffer->setParent(this);
 		buffer->createContextMenu();
 		notebook_->append_page(*buffer,buffer->getTitle());
 		notebook_->set_tab_reorderable(*buffer);
@@ -189,7 +196,6 @@ void GTK_ViewContainer::joinContainer() {
 
 		++it;
 	}
-
 
 
 	children=container2->notebook_->get_children();
@@ -200,7 +206,7 @@ void GTK_ViewContainer::joinContainer() {
 
 		container2->notebook_->remove(**it);
 
-		buffer->setViewContainer(this);
+		buffer->setParent(this);
 		buffer->createContextMenu();
 		notebook_->append_page(*buffer,buffer->getTitle());
 		notebook_->set_tab_reorderable(*buffer);
@@ -239,6 +245,10 @@ void GTK_ViewContainer::setPresenter(IViewContainerPresenter* presenter) {
 	presenter_=presenter;
 }
 
+IViewContainer* GTK_ViewContainer::getParent() {
+	return parent_;
+}
+
 bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 	assert( presenter_!=nullptr && "No presenter set for GTK_ViewContainer");
 
@@ -269,7 +279,7 @@ bool GTK_ViewContainer::isTopLevel() {
 	return !isSplit_;
 }
 
-bool GTK_ViewContainer::isSplittet() {
+bool GTK_ViewContainer::isSplit() {
 	return isSplit_;
 }
 
@@ -280,17 +290,14 @@ void GTK_ViewContainer::split() {
 
 	Gtk::Container::remove(*notebook_);
 
-	GTK_ViewContainer* vc1=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_,this);
-	GTK_ViewContainer* vc2=new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),nullptr,this);
+	GTK_ViewContainer* vc1=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_,this));
+	GTK_ViewContainer* vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),nullptr,this));
 
 	ViewContainerPresenter* vcp1=new ViewContainerPresenter;
 	ViewContainerPresenter* vcp2=new ViewContainerPresenter;
 
 	vcp1->setViewContainer(vc1);
 	vcp2->setViewContainer(vc2);
-
-	vcp1->setParent(presenter_);
-	vcp2->setParent(presenter_);
 
 	vc1->setPresenter(vcp1);
 	vc2->setPresenter(vcp2);
@@ -309,6 +316,13 @@ void GTK_ViewContainer::split() {
 
 
 	show_all_children();
+}
+
+void GTK_ViewContainer::popOutView(IView* view) {
+	if(!isTopLevel())
+		return;
+	removeView(view);
+	GUIManager::getInstance()->moveViewToNewWindow(view);
 }
 
 void GTK_ViewContainer::splitHorizontal() {
@@ -349,7 +363,7 @@ void GTK_ViewContainer::addView(IView* view) {
 	if(notebook_->get_n_pages()>=1)
 		showTabs(true);
 
-	GTK_View* buffer=dynamic_cast<GTK_View*>(view);
+	GTK_View* buffer=static_cast<GTK_View*>(view);
 	notebook_->append_page(*buffer,view->getTitle());
 	notebook_->set_tab_reorderable(*buffer);
 	notebook_->set_tab_detachable(*buffer);
@@ -358,6 +372,8 @@ void GTK_ViewContainer::addView(IView* view) {
 }
 
 void GTK_ViewContainer::showTabs(bool showTabs) {
+	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");
+
 	notebook_->set_show_tabs(showTabs);
 }
 

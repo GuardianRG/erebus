@@ -8,8 +8,8 @@ namespace erebus {
  * This class is a concrete view window presenter.
  */
 class ViewWindowPresenter:public IViewWindowPresenter {
+	IViewWindow*	viewWindow_;
 
-	IViewWindow*	mainWindow_;
   public:
 	/**
 	 * Constructor.
@@ -29,9 +29,15 @@ class ViewWindowPresenter:public IViewWindowPresenter {
 	virtual ~ViewWindowPresenter();
 
 	/**
-	 * See IMainWindowPresenter::setWindow
+	 * See IViewWindowPresenter::setWindow
 	 */
 	virtual void setWindow(IWindow* window) override;
 
+	/**
+	 * See IViewWindowPresenter::getWindow
+	 */
+	virtual IWindow* getWindow() override;
+
 };
+
 }//namespace erebus

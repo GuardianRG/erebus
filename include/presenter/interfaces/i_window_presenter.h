@@ -21,5 +21,12 @@ class IWindowPresenter:public IPresenter {
 	 * @param window to operate on
 	 */
 	virtual void setWindow(IWindow* window) =0;
+
+	/**
+	 * Returns the window this presenter operates on.
+	 *
+	 * @return the window this presenter operates on
+	 */
+	virtual IWindow* getWindow()=0;
 };
 }//namespace erbus

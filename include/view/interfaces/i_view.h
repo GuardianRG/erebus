@@ -8,6 +8,7 @@
 namespace erebus {
 
 class IPresenter;
+class IViewPresenter;
 
 /**
  * This class is the interface for every view.
@@ -24,7 +25,7 @@ class IView {
 	 *
 	 * @param presenter presenter for the view
 	 */
-	virtual void setPresenter(IPresenter* presenter)=0;
+	virtual void setPresenter(IViewPresenter* presenter)=0;
 
 	/**
 	 * Returns the title of the view.
@@ -44,6 +45,9 @@ class IView {
 
 	/**
 	 * Shows the context menu.
+	 *
+	 * The context menu contains the special entries for the view
+	 * as well as the standard entries.
 	 */
 	virtual void showContextMenu()=0;
 
@@ -57,14 +61,19 @@ class IView {
 	 *
 	 * @param container container of the view
 	 */
-	virtual void setViewContainer(IViewContainer* container)=0;
+	virtual void setParent(IViewContainer* container)=0;
 
 	/**
 	 * Returns the container in which the view is contained.
 	 *
 	 * @return container in which the view is contained.
 	 */
-	virtual IViewContainer* getViewContainer()=0;
+	virtual IViewContainer* getParent()=0;
+
+	/**
+	 * Moves the view to a new window.
+	 */
+	virtual void popOut()=0;
 };
 
 }//namespace erbus

@@ -3,7 +3,6 @@
 
 namespace erebus {
 ViewContainerPresenter::ViewContainerPresenter() {
-	parent_=nullptr;
 	container_=nullptr;
 }
 
@@ -12,7 +11,7 @@ ViewContainerPresenter::~ViewContainerPresenter() {
 }
 
 void ViewContainerPresenter::on_right_button_click() {
-	if(container_->isTopLevel()&&container_->isEmpty())
+	if(container_->isEmpty())
 		container_->showContextMenu();
 }
 void ViewContainerPresenter::on_left_button_click() {
@@ -39,12 +38,7 @@ void ViewContainerPresenter::setViewContainer(IViewContainer* container) {
 }
 
 void ViewContainerPresenter::on_context_menu_join_click() {
-	if(container_->isTopLevel()&&parent_!=nullptr)
-		parent_->getViewContainer()->joinContainer();
-	//if(container_->isTopLevel())
-	//container_->joinContainer();
-}
-void ViewContainerPresenter::setParent(IViewContainerPresenter* parent) {
-	parent_=parent;
+	if(container_->getParent()!=nullptr)
+		container_->getParent()->joinContainer();
 }
 }//namespace erbus

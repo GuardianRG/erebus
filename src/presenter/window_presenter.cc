@@ -15,4 +15,8 @@ void WindowPresenter::setWindow(IWindow* window) {
 	window_=static_cast<IWindow*>(window);
 }
 
+IWindow* WindowPresenter::getWindow() {
+	return window_;
+}
+
 }//namespace erebus

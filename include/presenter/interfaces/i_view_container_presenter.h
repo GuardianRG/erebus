@@ -23,18 +23,12 @@ class IViewContainerPresenter {
 	virtual void setViewContainer(IViewContainer* container)=0;
 
 	/**
-	 * Sets the parent of this presenter.
-	 *
-	 * @param parent parent
-	 */
-	virtual void setParent(IViewContainerPresenter* parent)=0;
-
-	/**
-	 * Return the view container this presenter operates on.
+	 * Returns the view container this presenter operates on.
 	 *
 	 * @return the view container this presenter operates on
 	 */
 	virtual IViewContainer* getViewContainer()=0;
+
 
 	/**
 	 * Handels a right mouse button click.
@@ -62,12 +56,11 @@ class IViewContainerPresenter {
 	virtual void on_context_menu_split_vertical_click()=0;
 
 	/**
-	 * Handels a click on a wie to add in the context menu.
+	 * Handels a click on a view to add in the context menu.
 	 *
 	 * @param type the type of the view to add
 	 */
 	virtual void on_context_menu_add_view_click(ViewType type)=0;
-
 
 };
 }//namespace erbus

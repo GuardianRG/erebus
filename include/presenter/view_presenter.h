@@ -11,7 +11,6 @@ namespace erebus {
 class ViewPresenter :public IViewPresenter {
 	IView* view_;
 
-	IViewPresenter*	parent_;
   public:
 	/**
 	 * Constructor.
@@ -34,6 +33,11 @@ class ViewPresenter :public IViewPresenter {
 	 * See IViewPresenter::setView
 	 */
 	virtual void setView(IView* view) override;
+
+	/**
+	 * See IViewPresenter::getView
+	 */
+	virtual IView* getView()override;
 
 	/**
 	 * See IViewPresenter::on_right_button_click

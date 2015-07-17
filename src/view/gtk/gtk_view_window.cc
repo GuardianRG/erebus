@@ -42,6 +42,10 @@ void GTK_ViewWindow::setTitle(std::string title) {
 	set_title(title);
 }
 
+std::string GTK_ViewWindow::getTitle() {
+	return get_title();
+}
+
 void GTK_ViewWindow::setPreferredSize(int width,int height) {
 	set_default_size(width,height);
 }

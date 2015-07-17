@@ -32,5 +32,10 @@ class WindowPresenter:public IWindowPresenter {
 	 * See IWindowPresenter::setWindow
 	 */
 	virtual void setWindow(IWindow* window) override;
+
+	/**
+	 * See IWindowPresenter::getWindow
+	 */
+	virtual IWindow* getWindow() override;
 };
 }//namespace erebus

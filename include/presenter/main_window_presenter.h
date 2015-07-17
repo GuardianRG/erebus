@@ -33,6 +33,11 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	 * See IMainWindowPresenter::setWindow
 	 */
 	virtual void setWindow(IWindow* window) override;
+
+	/**
+	 * See IMainWindowPresenter::getWindow
+	 */
+	virtual IWindow* getWindow()override;
 };
 
 }//namespace erbus
