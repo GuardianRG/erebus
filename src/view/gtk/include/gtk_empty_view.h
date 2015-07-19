@@ -4,6 +4,7 @@
 #include <gtkmm.h>
 
 #include <presenter/interfaces/i_empty_view_presenter.h>
+#include <presenter/interfaces/i_view_presenter.h>
 #include <view/interfaces/i_empty_view.h>
 
 #include <gtk_view.h>
@@ -47,7 +48,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	/**
 	 * See IEmptyView::setPresenter
 	 */
-	void setPresenter(IEmptyViewPresenter* presenter)override;
+	void setPresenter(IViewPresenter* presenter)override;
 
 	/**
 	 * See IEmptyView::getTitle

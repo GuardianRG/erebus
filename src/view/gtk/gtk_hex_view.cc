@@ -1,6 +1,7 @@
 #include <gtk_hex_view.h>
 
 #include <presenter/interfaces/i_hex_view_presenter.h>
+#include <presenter/interfaces/i_view_presenter.h>
 
 #include <gtk_view.h>
 
@@ -13,8 +14,8 @@ GTK_HexView::~GTK_HexView() {
 
 }
 
-void GTK_HexView::setPresenter(IHexViewPresenter* presenter) {
-	presenter_=presenter;
+void GTK_HexView::setPresenter(IViewPresenter* presenter) {
+	presenter_=static_cast<IHexViewPresenter*>(presenter);
 	GTK_View::setPresenter(presenter);
 }
 

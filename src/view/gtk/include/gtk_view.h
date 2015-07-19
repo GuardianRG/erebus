@@ -17,7 +17,7 @@ namespace erebus {
  * Every widget that derives from this class should at least have a constructor
  * that allows it to be created by a builder.
  */
-class GTK_View:public Gtk::Viewport,public IView {
+class GTK_View:public Gtk::Viewport,virtual public IView {
 	IViewPresenter*		presenter_;
 
 	IViewContainer*	container_;
@@ -78,44 +78,44 @@ class GTK_View:public Gtk::Viewport,public IView {
 	 *
 	 * Needs to be called before every other method!
 	 */
-	virtual void setPresenter(IViewPresenter* presenter) override;
+	virtual void setPresenter(IViewPresenter* presenter);
 
 	/**
 	 * See IView::setViewContainer
 	 *
 	 * Needs to be called before every other method!
 	 */
-	virtual void setParent(IViewContainer* container) override;
+	virtual void setParent(IViewContainer* container);
 
 	/**
 	 * See IView::close
 	 */
-	virtual void close() override;
+	virtual void close();
 
 	/**
 	 * See IView::popOut
 	 */
-	virtual void popOut() override;
+	virtual void popOut();
 
 	/**
 	 * See IView::setTitle
 	 */
-	virtual void setTitle(std::string title)override;
+	virtual void setTitle(std::string title);
 
 	/**
 	 * See IView::getTitle
 	 */
-	virtual std::string getTitle() override;
+	virtual std::string getTitle();
 
 	/**
 	 * See IView::getViewContainer
 	 */
-	virtual IViewContainer* getParent() override;
+	virtual IViewContainer* getParent();
 
 	/**
 	 * See IView::showContextMenu
 	 */
-	virtual void showContextMenu()override;
+	virtual void showContextMenu();
 
 
 	/**
@@ -153,7 +153,7 @@ class GTK_View:public Gtk::Viewport,public IView {
 	/**
 	 * Gets called by a click on the view.
 	 */
-	bool on_button_press_event(GdkEventButton *ev) override;
+	bool on_button_press_event(GdkEventButton *ev);
 
 	/**
 	 * Gets called when the parent has changed (it was dragged)

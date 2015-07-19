@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 
 #include <presenter/interfaces/i_empty_view_presenter.h>
+#include <presenter/interfaces/i_view_presenter.h>
 
 #include <gtk_view.h>
 
@@ -19,8 +20,8 @@ GTK_EmptyView::~GTK_EmptyView() {
 
 }
 
-void GTK_EmptyView::setPresenter(IEmptyViewPresenter* presenter) {
-	presenter_=presenter;
+void GTK_EmptyView::setPresenter(IViewPresenter* presenter) {
+	presenter_=static_cast<IEmptyViewPresenter*>(presenter);
 	GTK_View::setPresenter(presenter);
 }
 

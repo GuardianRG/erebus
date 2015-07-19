@@ -96,7 +96,7 @@ void GTK_ViewContainer::showContextMenu() {
 }
 
 void GTK_ViewContainer::closeView(IView* view) {
-	GTK_View* buffer=static_cast<GTK_View*>(view);
+	GTK_View* buffer=dynamic_cast<GTK_View*>(view);
 
 	notebook_->remove(*buffer);
 }
@@ -381,7 +381,7 @@ void GTK_ViewContainer::addView(IView* view) {
 	if(notebook_->get_n_pages()>=1)
 		showTabs(true);
 
-	GTK_View* buffer=static_cast<GTK_View*>(view);
+	GTK_View* buffer=dynamic_cast<GTK_View*>(view);
 	notebook_->append_page(*buffer,view->getTitle());
 	notebook_->set_tab_reorderable(*buffer);
 	notebook_->set_tab_detachable(*buffer);

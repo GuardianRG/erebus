@@ -1,6 +1,7 @@
 #pragma once
 
 #include <presenter/interfaces/i_hex_view_presenter.h>
+#include <presenter/interfaces/i_view_presenter.h>
 #include <view/interfaces/i_hex_view.h>
 
 #include <gtk_view.h>
@@ -19,7 +20,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	/**
 	 * See IHexView::setPresenter
 	 */
-	void setPresenter(IHexViewPresenter* presenter)override;
+	void setPresenter(IViewPresenter* presenter)override;
 
 	/**
 	 * See IHexView::getTitle
