@@ -94,6 +94,14 @@ target_link_libraries(erebus ${Boost_LIBRARIES})
 #Add command to automatically format the code when building
 add_custom_command(
 	TARGET erebus POST_BUILD
+    	COMMAND ${PROJECT_SOURCE_DIR}/insert-new-lines.sh
+    	DEPENDS "${PROJECT_SOURCE_DIR}/insert-new-lines.sh"
+    	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    	COMMENT "Adds new lines to the end of the files if thex dont have one")
+
+#Add command to automatically format the code when building
+add_custom_command(
+	TARGET erebus POST_BUILD
     	COMMAND ${PROJECT_SOURCE_DIR}/format-code.sh
     	DEPENDS "${PROJECT_SOURCE_DIR}/format-code.sh"
     	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}

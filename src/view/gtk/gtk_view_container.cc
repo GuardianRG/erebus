@@ -324,11 +324,9 @@ void GTK_ViewContainer::split() {
 	paned_->pack1(*vc1,true,false);
 	paned_->pack2(*vc2,true,false);
 
-
 	add(*paned_);
 
 	notebook_=nullptr;
-
 
 	show_all_children();
 }
