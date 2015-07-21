@@ -1,8 +1,10 @@
 #include <exception>
+#include <stdexcept>
 #include <iostream>
 #include <string>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <memory>
 
 #include <boost/log/core.hpp>
 #include <boost/log/expressions.hpp>
@@ -33,9 +35,9 @@
 void createDirectory_Linux(std::string path) {
 	if(!opendir(path.c_str())) {
 		const int dir_err = mkdir(path.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
-		if (dir_err==-1) {
-			std::cout<<"dir was not created"<<std::endl;
-			exit(1);
+		if (dir_err<0) {
+			std::string errorMessage="Directory '"+path+"'could not be created!";
+			throw std::runtime_error(errorMessage);
 		}
 	}
 }
@@ -46,7 +48,7 @@ void createDirectory_Linux(std::string path) {
 void initLogging() {
 	createDirectory_Linux("logs");
 
-	boost::log::add_console_log(std::clog, boost::log::keywords::format = "[%Channel%]: %Message%");
+	boost::log::add_console_log(std::clog, boost::log::keywords::format = "%LineID%: [%Channel%]: %Message%");
 
 	boost::log::add_file_log
 	(
@@ -54,7 +56,8 @@ void initLogging() {
 	    boost::log::keywords::auto_flush = true ,
 	    boost::log::keywords::filter = boost::log::expressions::attr< severity_level >("Severity") >= warning,
 	    boost::log::keywords::format = boost::log::expressions::stream
-	                                   << boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
+	                                   <<boost::log::expressions::attr<unsigned int>("LineID")
+	                                   << ": "<<boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
 	                                   << " [" << boost::log::expressions::format_date_time< boost::log::attributes::timer::value_type >("Uptime", "%O:%M:%S")
 	                                   << "] [" << boost::log::expressions::attr<std::string>("Channel")
 	                                   << "] <" << boost::log::expressions::attr< severity_level >("Severity")
@@ -73,13 +76,18 @@ int main(int argc, char *argv[]) {
 	try {
 		initLogging();
 	} catch(std::exception const& e) {
-		std::cout<<"Something went wronge while building the logger!"<<std::endl<<"Exiting...";
+		std::cout<<e.what()
+		         <<std::endl
+		         <<"Something went wronge while building the logger!"
+		         <<std::endl
+		         <<"Exiting..."
+		         <<std::endl;
 		return 1;
 	}
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Boost logger initialized";
 
-	erebus::Model* model=new erebus::Model;
-	erebus::GUIManager* m=erebus::GUIManager::create(model,argc,argv);
+	erebus::Model* model(new erebus::Model);
+	auto m=erebus::GUIManager::create(model,argc,argv);
 	m->runGUI();
 
 	delete model;
