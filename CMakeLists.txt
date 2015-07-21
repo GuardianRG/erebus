@@ -62,8 +62,9 @@ if(UNIX)
 endif()
 
 #provide boost headers
-#find_package(Boost REQUIRED )
-#include_directories( ${Boost_INCLUDE_DIR} )
+ADD_DEFINITIONS(-DBOOST_LOG_DYN_LINK)
+find_package(Boost COMPONENTS log log_setup thread date_time filesystem system REQUIRED )
+include_directories( ${Boost_INCLUDE_DIR} )
 
 #include header files
 include_directories(include)
@@ -89,7 +90,7 @@ if(GTKMM_FOUND)
 endif()
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
-target_link_libraries(erebus ${Boost_LIBRARIES})
+target_link_libraries(erebus ${Boost_LIBRARIES} -pthread)
 
 #Add command to automatically format the code when building
 add_custom_command(

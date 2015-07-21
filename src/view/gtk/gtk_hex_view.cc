@@ -4,6 +4,7 @@
 #include <presenter/interfaces/i_view_presenter.h>
 
 #include <gtk_view.h>
+#include <gtk_logger.h>
 
 namespace erebus {
 GTK_HexView::GTK_HexView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment):GTK_View(h_adjustment,v_adjustment) {
