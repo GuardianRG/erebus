@@ -2,6 +2,8 @@
 
 #include <gtkmm.h>
 
+#include <memory>
+
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <view/interfaces/i_main_window.h>
 #include <view/interfaces/i_view.h>
@@ -18,9 +20,10 @@
 
 
 namespace erebus {
-GUIManager* GUIManager::guiManager_=nullptr;
 
-GUIManager::GUIManager(Model* model,int& argc, char**& argv):argc_(argc),argv_(argv),model_(model) {
+std::unique_ptr<GUIManager>	GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
+
+GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):argc_(argc),argv_(argv),model_(model) {
 	stateObject_=new GTK_GUIStateObject;
 
 	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_);
@@ -47,20 +50,20 @@ GUIManager::GUIManager(Model* model,int& argc, char**& argv):argc_(argc),argv_(a
 }
 
 GUIManager::~GUIManager() {
-	delete stateObject_;
+
 }
 
-GUIManager* GUIManager::create(Model* model,int& argc, char**& argv) {
-	if(guiManager_==nullptr) {
-		guiManager_=new GUIManager(model,argc,argv);
-		return guiManager_;
+GUIManager* GUIManager::create(std::shared_ptr<Model> model,int& argc, char**& argv) {
+	if(guiManager_.get()==nullptr) {
+		guiManager_=std::unique_ptr<GUIManager>(new GUIManager(model,argc,argv));
+		return guiManager_.get();
 	}
-	return guiManager_;
+	return guiManager_.get();
 }
 
 
 GUIManager* GUIManager::getInstance() {
-	return guiManager_;
+	return guiManager_.get();
 }
 
 void GUIManager::runGUI() {

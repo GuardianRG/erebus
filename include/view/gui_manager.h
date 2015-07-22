@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <view/interfaces/i_main_window.h>
 #include <view/interfaces/i_gui_state_object.h>
 #include <view/interfaces/i_view.h>
@@ -15,18 +17,18 @@ namespace erebus {
  * gets statically linked on compile time.
  */
 class GUIManager {
-	static GUIManager*	guiManager_;
+	static std::unique_ptr<GUIManager>	guiManager_;
 
-	int&			argc_;
-	char**& 		argv_;
+	int&					argc_;
+	char**& 				argv_;
 
-	Model*			model_;
+	std::shared_ptr<Model>			model_;
 
-	IMainWindow*		mainWindow_;
+	IMainWindow*				mainWindow_;
 
-	IGUIStateObject*	stateObject_;
+	IGUIStateObject*			stateObject_;
 
-	GUIManager(Model* model,int& argc, char**& argv);
+	GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv);
 
   public:
 	/**
@@ -39,7 +41,7 @@ class GUIManager {
 	 * @param argc number of console arguments
 	 * @param argv console arguments
 	 */
-	static GUIManager* create(Model* model,int& argc, char**& argv);
+	static GUIManager* create(std::shared_ptr<Model> model,int& argc, char**& argv);
 
 	/**
 	 * Returns the singleton of this class.
@@ -51,9 +53,26 @@ class GUIManager {
 	/**
 	 * Copy Constructor.
 	 *
-	 * Deleted until needed.
+	 * Copying the whole gui has no sense.
 	 */
 	GUIManager(const GUIManager &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 */
+	GUIManager( GUIManager&& ) = default;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Copying the whole gui has no sense.
+	 */
+	GUIManager& operator=( const GUIManager& )=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	GUIManager& operator=(GUIManager&&) = default;
 
 	/**
 	 * Destructor.

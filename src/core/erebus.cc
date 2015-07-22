@@ -86,12 +86,9 @@ int main(int argc, char *argv[]) {
 	}
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Boost logger initialized";
 
-	erebus::Model* model(new erebus::Model);
-	auto m=erebus::GUIManager::create(model,argc,argv);
-	m->runGUI();
-
-	delete model;
-	delete m;
+	auto model(std::make_shared<erebus::Model>());
+	erebus::GUIManager* gui=erebus::GUIManager::create(model,argc,argv);
+	gui->runGUI();
 
 	return 0;
 }

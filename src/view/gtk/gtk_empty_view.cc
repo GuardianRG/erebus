@@ -14,6 +14,8 @@ GTK_EmptyView::GTK_EmptyView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::Re
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
+
+	set_shadow_type(Gtk::SHADOW_NONE);
 }
 
 GTK_EmptyView::~GTK_EmptyView() {

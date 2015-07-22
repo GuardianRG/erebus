@@ -41,6 +41,8 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	}
 
+	set_shadow_type(Gtk::SHADOW_NONE);
+
 	notebook_->set_scrollable(true);
 
 	add(*notebook_);

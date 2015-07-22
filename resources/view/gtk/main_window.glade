@@ -115,7 +115,7 @@
           <object class="GtkViewport" id="base_view">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="shadow_type">none</property>
+            <property name="shadow_type">etched-out</property>
             <child>
               <placeholder/>
             </child>
