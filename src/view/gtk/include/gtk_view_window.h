@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 
 #include <string>
+#include <memory>
 
 #include <view/interfaces/i_view_window.h>
 #include <view/interfaces/i_view.h>
@@ -13,7 +14,7 @@
 namespace erebus {
 
 class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
-	IViewWindowPresenter*	presenter_;
+	std::unique_ptr<IViewWindowPresenter>	presenter_;
 
 	GTK_ViewContainer*	container_;
   public:
@@ -42,7 +43,7 @@ class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
 	/**
 	 * See IViewWindow::setPresenter
 	 */
-	void setPresenter(IPresenter* presenter) override;
+	void setPresenter(std::unique_ptr<IViewWindowPresenter> presenter);
 
 	/**
 	 * See IViewWindow::setTitle

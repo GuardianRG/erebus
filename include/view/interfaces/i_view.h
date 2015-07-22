@@ -21,13 +21,6 @@ class IView {
 	virtual ~IView() {}
 
 	/**
-	 * Sets the presenter for the view.
-	 *
-	 * @param presenter presenter for the view
-	 */
-	virtual void setPresenter(IViewPresenter* presenter)=0;
-
-	/**
 	 * Returns the title of the view.
 	 *
 	 * The title is the string that gets show e.g. in the tab's head

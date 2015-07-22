@@ -1,7 +1,8 @@
 #pragma once
-#pragma once
 
 #include <gtkmm.h>
+
+#include <memory>
 
 #include <presenter/interfaces/i_empty_view_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
@@ -21,7 +22,11 @@ namespace erebus {
  * See GTK_View
  */
 class GTK_EmptyView:public GTK_View,public IEmptyView  {
-	IEmptyViewPresenter*	presenter_;
+	std::unique_ptr<IEmptyViewPresenter>	presenter_;
+
+  protected:
+	IViewPresenter& getPresenter()override;
+
   public:
 	/**
 	 * Constructor.
@@ -42,13 +47,17 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	 */
 	~GTK_EmptyView();
 
-
+	/**
+	 * See GTK_View::createContextMenu
+	 */
 	void createContextMenu() override;
 
 	/**
-	 * See IEmptyView::setPresenter
+	 * Sets the presenter.
+	 *
+	 * @param presenter the presenter of this view.
 	 */
-	void setPresenter(IViewPresenter* presenter)override;
+	void setPresenter(std::unique_ptr<IEmptyViewPresenter> presenter);
 
 	/**
 	 * See IEmptyView::getTitle

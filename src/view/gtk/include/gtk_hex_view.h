@@ -8,7 +8,9 @@
 
 namespace erebus {
 class GTK_HexView:public GTK_View,public IHexView {
-	IHexViewPresenter*	presenter_;
+	std::unique_ptr<IHexViewPresenter>	presenter_;
+  protected:
+	IViewPresenter& getPresenter()override;
   public:
 	GTK_HexView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
 
@@ -20,7 +22,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	/**
 	 * See IHexView::setPresenter
 	 */
-	void setPresenter(IViewPresenter* presenter)override;
+	void setPresenter(std::unique_ptr<IHexViewPresenter> presenter);
 
 	/**
 	 * See IHexView::getTitle

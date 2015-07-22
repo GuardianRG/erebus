@@ -18,13 +18,6 @@ class IWindow {
 	virtual ~IWindow() {};
 
 	/**
-	 * Sets the presenter of the window.
-	 *
-	 * @param presenter presenter of the window
-	 */
-	virtual void setPresenter(IPresenter* presenter)=0;
-
-	/**
 	 * Sets the title of the window.
 	 *
 	 * @param title title of the window

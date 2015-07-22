@@ -11,7 +11,7 @@ GTK_Window::GTK_Window() {
 }
 
 GTK_Window::~GTK_Window() {
-	delete presenter_;
+
 }
 
 void GTK_Window::setTitle(std::string title) {
@@ -28,9 +28,5 @@ void GTK_Window::maximize() {
 
 void GTK_Window::unmaximize() {
 	Gtk::Window::unmaximize();
-}
-
-void GTK_Window::setPresenter(IPresenter* presenter) {
-	presenter_=static_cast<IWindowPresenter*>(presenter);
 }
 }//namespace erebus

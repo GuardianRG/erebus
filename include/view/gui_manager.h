@@ -24,8 +24,6 @@ class GUIManager {
 
 	std::shared_ptr<Model>			model_;
 
-	IMainWindow*				mainWindow_;
-
 	IGUIStateObject*			stateObject_;
 
 	GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv);
@@ -67,7 +65,7 @@ class GUIManager {
 	 *
 	 * Copying the whole gui has no sense.
 	 */
-	GUIManager& operator=( const GUIManager& )=delete;
+	GUIManager& operator=(const GUIManager&)=delete;
 
 	/**
 	 * Move assignment operator.

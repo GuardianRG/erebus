@@ -18,9 +18,7 @@ namespace erebus {
  * that allows it to be created by a builder.
  */
 class GTK_View:public Gtk::Viewport,virtual public IView {
-	IViewPresenter*		presenter_;
-
-	IViewContainer*	container_;
+	IViewContainer*		container_;
 
 	std::string 		title_;
 
@@ -38,6 +36,11 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 * The context menu to show.
 	 */
 	Gtk::Menu*	popupMenu_;
+
+	/**
+	 * Returns the presenter.
+	 */
+	virtual IViewPresenter& getPresenter()=0;
 
   public:
 	/**
@@ -73,39 +76,34 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 */
 	virtual ~GTK_View();
 
-	/**
-	 * See IView::setPresenter
-	 *
-	 * Needs to be called before every other method!
-	 */
-	virtual void setPresenter(IViewPresenter* presenter);
+
 
 	/**
 	 * See IView::setViewContainer
 	 *
 	 * Needs to be called before every other method!
 	 */
-	virtual void setParent(IViewContainer* container);
+	virtual void setParent(IViewContainer* container) override;
 
 	/**
 	 * See IView::close
 	 */
-	virtual void close();
+	virtual void close() override;
 
 	/**
 	 * See IView::popOut
 	 */
-	virtual void popOut();
+	virtual void popOut() override;
 
 	/**
 	 * See IView::setTitle
 	 */
-	virtual void setTitle(std::string title);
+	virtual void setTitle(std::string title) override;
 
 	/**
 	 * See IView::getTitle
 	 */
-	virtual std::string getTitle();
+	virtual std::string getTitle() override;
 
 	/**
 	 * See IView::getViewContainer
@@ -115,7 +113,7 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	/**
 	 * See IView::showContextMenu
 	 */
-	virtual void showContextMenu();
+	virtual void showContextMenu()override;
 
 
 	/**

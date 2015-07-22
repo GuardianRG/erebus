@@ -15,9 +15,12 @@ GTK_HexView::~GTK_HexView() {
 
 }
 
-void GTK_HexView::setPresenter(IViewPresenter* presenter) {
-	presenter_=static_cast<IHexViewPresenter*>(presenter);
-	GTK_View::setPresenter(presenter);
+void GTK_HexView::setPresenter(std::unique_ptr<IHexViewPresenter> presenter) {
+	presenter_=std::move(presenter);
+}
+
+IViewPresenter& GTK_HexView::getPresenter() {
+	return *(presenter_.get());
 }
 
 std::string GTK_HexView::getTitle() {

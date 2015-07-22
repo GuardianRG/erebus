@@ -20,7 +20,7 @@ GTK_View::GTK_View(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& re
 }
 
 GTK_View::~GTK_View() {
-	delete presenter_;
+
 }
 
 
@@ -35,7 +35,6 @@ void GTK_View::init() {
 
 
 	title_="";
-	presenter_=nullptr;
 	container_=nullptr;
 	popupMenu_=nullptr;
 }
@@ -47,10 +46,6 @@ void GTK_View::on_my_parent_changed(Gtk::Widget* previous_parent) {
 			createContextMenu();
 		}
 	}
-}
-
-void GTK_View::setPresenter(IViewPresenter* presenter) {
-	presenter_=static_cast<IViewPresenter*>(presenter);
 }
 void GTK_View::setTitle(std::string title) {
 	title_=title;
@@ -69,8 +64,6 @@ IViewContainer* GTK_View::getParent() {
 }
 
 bool GTK_View::on_button_press_event(GdkEventButton *ev) {
-	assert( presenter_!=nullptr && "No presenter set for GTK_View");
-
 	bool return_value = false;
 
 	return_value = Viewport::on_button_press_event(ev);
@@ -80,12 +73,12 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 		case 3:
 			timeBuffer_=ev->time;
 			clickBuffer_=3;
-			presenter_->on_right_button_click();
+			getPresenter().on_right_button_click();
 			break;
 		case 1:
 			timeBuffer_=ev->time;
 			clickBuffer_=1;
-			presenter_->on_left_button_click();
+			getPresenter().on_left_button_click();
 			break;
 		default:
 			;
@@ -108,15 +101,11 @@ void GTK_View::popOut() {
 }
 
 void GTK_View::on_context_menu_close_click() {
-	assert( presenter_!=nullptr && "No presenter set for GTK_View");
-
-	presenter_->on_context_menu_close_click();
+	getPresenter().on_context_menu_close_click();
 }
 
 void GTK_View::on_context_menu_pop_out_click() {
-	assert( presenter_!=nullptr && "No presenter set for GTK_View");
-
-	presenter_->on_context_menu_pop_out_click();
+	getPresenter().on_context_menu_pop_out_click();
 }
 
 void GTK_View::createContextMenu() {

@@ -2,6 +2,10 @@
 
 #include <gtkmm.h>
 
+#include <memory>
+
+#include <gtk_main_window.h>
+
 namespace erebus {
 
 /**
@@ -21,7 +25,12 @@ class GTK_GUIStateObject: public IGUIStateObject {
 	/**
 	 * Saves the pointer to the application.
 	 */
-	Glib::RefPtr<Gtk::Application> application_;
+	Glib::RefPtr<Gtk::Application>	application_;
+
+	/**
+	 * Saves the pointer to the main window.
+	 */
+	std::unique_ptr<GTK_MainWindow>	mainWindow_;
 
 
 	/**

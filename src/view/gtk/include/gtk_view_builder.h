@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include <presenter/interfaces/i_empty_view_presenter.h>
 #include <presenter/interfaces/i_hex_view_presenter.h>
@@ -41,7 +42,7 @@ class GTK_ViewBuilder {
 	 * @param presenter the presneter the view shall use
 	 * @param title the title of the view.
 	 */
-	static GTK_EmptyView* buildEmptyView(GTK_ViewContainer* container,IEmptyViewPresenter* presenter, std::string title);
+	static GTK_EmptyView* buildEmptyView(GTK_ViewContainer* container,std::unique_ptr<IEmptyViewPresenter> presenter, std::string title);
 
 	/**
 	 * Builds an hex view.
@@ -60,7 +61,7 @@ class GTK_ViewBuilder {
 	 * @param presenter the presneter the view shall use
 	 * @param title the title of the view.
 	 */
-	static GTK_HexView* buildHexView(GTK_ViewContainer* container,IHexViewPresenter* presenter, std::string title);
+	static GTK_HexView* buildHexView(GTK_ViewContainer* container,std::unique_ptr<IHexViewPresenter> presenter, std::string title);
 
 };
 

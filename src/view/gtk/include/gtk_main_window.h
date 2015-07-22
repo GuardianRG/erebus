@@ -2,6 +2,8 @@
 
 #include <gtkmm.h>
 
+#include <memory>
+
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <presenter/interfaces/i_presenter.h>
 #include <view/interfaces/i_main_window.h>
@@ -14,7 +16,7 @@ namespace erebus {
  * This class is the main window.
  */
 class GTK_MainWindow : public Gtk::Window, public IMainWindow {
-	IMainWindowPresenter*	presenter_;
+	std::unique_ptr<IMainWindowPresenter>	presenter_;
 
 
 	GTK_ViewContainer*	basicView_;
@@ -48,7 +50,7 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	/**
 	 * See IMainWindow::setPresenter
 	 */
-	void setPresenter(IPresenter* presenter) override;
+	void setPresenter(std::unique_ptr<IMainWindowPresenter> presenter);
 
 	/**
 	 * See IMainWindow::setTitle

@@ -36,15 +36,14 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):arg
 	//load the main window
 	builder=GTK_BuilderFactory::getBuilder("resources/main_window.glade");
 
-	GTK_MainWindow* mw;
-	builder->get_widget_derived("main_window", mw);
+	GTK_MainWindow* window;
+	builder->get_widget_derived("main_window", window);
 
-	mainWindow_=static_cast<IMainWindow*>(mw);
+	auto presenter=std::unique_ptr<IMainWindowPresenter>(new MainWindowPresenter);
+	presenter->setWindow(stateObject->mainWindow_.get());
 
-	IMainWindowPresenter* presenter=new MainWindowPresenter;
-	presenter->setWindow(mainWindow_);
-
-	mainWindow_->setPresenter(presenter);
+	window->setPresenter(std::move(presenter));
+	stateObject->mainWindow_=std::unique_ptr<GTK_MainWindow>(window);
 	//end of loading main window
 
 }
@@ -69,10 +68,10 @@ GUIManager* GUIManager::getInstance() {
 void GUIManager::runGUI() {
 	GTK_GUIStateObject* guido=GTK_GUIStateObject::getState(stateObject_);
 
-	mainWindow_->setPreferredSize(800,600);
-	mainWindow_->maximize();
+	guido->mainWindow_->setPreferredSize(800,600);
+	guido->mainWindow_->maximize();
 
-	guido->application_->run(*(static_cast<GTK_MainWindow*>(mainWindow_)));
+	guido->application_->run(*(static_cast<GTK_MainWindow*>(guido->mainWindow_.get())));
 }
 
 void GUIManager::addWindow(IWindow* window) {
@@ -89,10 +88,10 @@ void GUIManager::moveViewToNewWindow(IView* view) {
 	GTK_ViewWindow* viewWindow;
 	builder->get_widget_derived("view_window", viewWindow);
 
-	IViewWindowPresenter* presenter=new ViewWindowPresenter;
+	auto presenter=std::unique_ptr<IViewWindowPresenter>(new ViewWindowPresenter);
 	presenter->setWindow(viewWindow);
 
-	viewWindow->setPresenter(presenter);
+	viewWindow->setPresenter(std::move(presenter));
 
 	viewWindow->addView(view);
 

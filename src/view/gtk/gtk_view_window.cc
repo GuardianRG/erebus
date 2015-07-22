@@ -1,6 +1,7 @@
 #include <gtk_view_window.h>
 
 #include <string>
+#include <memory>
 
 #include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_view_window_presenter.h>
@@ -59,8 +60,8 @@ void GTK_ViewWindow::unmaximize() {
 	Gtk::Window::unmaximize();
 }
 
-void GTK_ViewWindow::setPresenter(IPresenter* presenter) {
-	presenter_=static_cast<IViewWindowPresenter*>(presenter);
+void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter> presenter) {
+	presenter_=std::move(presenter);
 }
 
 void GTK_ViewWindow::addView(IView* view) {

@@ -33,11 +33,6 @@ class GTK_Window:public Gtk::Window,public IWindow {
 	virtual ~GTK_Window();
 
 	/**
-	 * See IWindow::setPresenter
-	 */
-	void setPresenter(IPresenter* presenter) override;
-
-	/**
 	 * See IWindow::setTitle
 	 */
 	void setTitle(std::string title) override;
