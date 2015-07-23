@@ -13,6 +13,17 @@ MainWindowPresenter::~MainWindowPresenter() {
 
 }
 
+MainWindowPresenter::MainWindowPresenter( MainWindowPresenter&& obj): mainWindow_(obj.mainWindow_) {
+
+}
+
+MainWindowPresenter& MainWindowPresenter::operator=(MainWindowPresenter&& obj) {
+	if(this != &obj) {
+		mainWindow_=obj.mainWindow_;
+	}
+	return *this;
+}
+
 void MainWindowPresenter::setWindow(IWindow* window) {
 	mainWindow_=static_cast<IMainWindow*>(window);
 }

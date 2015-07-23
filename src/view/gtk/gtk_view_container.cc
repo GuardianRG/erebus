@@ -35,9 +35,7 @@ GTK_ViewContainer::GTK_ViewContainer(
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
     std::unique_ptr<Gtk::Notebook> notebook,IViewContainer* parent):
 	Gtk::Viewport(h_adjustment,v_adjustment),
-	parent_(parent),
-	h_adjustment_(h_adjustment),
-	v_adjustment_(v_adjustment) {
+	parent_(parent) {
 
 	if(notebook.get()==nullptr) {
 		notebook_=std::unique_ptr<Gtk::Notebook>(new Gtk::Notebook);
@@ -404,11 +402,11 @@ void GTK_ViewContainer::showTabs(bool showTabs) {
 }
 
 Glib::RefPtr<Gtk::Adjustment> GTK_ViewContainer::getHAdjustment() {
-	return h_adjustment_;
+	return get_hadjustment();
 }
 
 Glib::RefPtr<Gtk::Adjustment> GTK_ViewContainer::getVAdjustment() {
-	return v_adjustment_;
+	return get_vadjustment();
 }
 
 }//namespace erebus

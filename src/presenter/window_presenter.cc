@@ -4,12 +4,24 @@
 
 namespace erebus {
 WindowPresenter::WindowPresenter() {
-
+	window_=nullptr;
 }
 
 WindowPresenter::~WindowPresenter() {
 
 }
+
+WindowPresenter::WindowPresenter( WindowPresenter&& obj): window_(obj.window_) {
+
+}
+
+WindowPresenter& WindowPresenter::operator=(WindowPresenter&& obj) {
+	if(this != &obj) {
+		window_=obj.window_;
+	}
+	return *this;
+}
+
 
 void WindowPresenter::setWindow(IWindow* window) {
 	window_=static_cast<IWindow*>(window);

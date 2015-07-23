@@ -24,9 +24,6 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 
 	std::unique_ptr<Gtk::Menu>			popupMenu_;
 
-	Glib::RefPtr<Gtk::Adjustment> 			h_adjustment_;
-	Glib::RefPtr<Gtk::Adjustment>			v_adjustment_;
-
 	bool						isSplit_;
 
 	int 						timeBuffer_;
@@ -71,11 +68,32 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	    IViewContainer* parent);
 
 	/**
-	 * Cop constructor.
+	 * Copy constructor.
 	 *
-	 * Copying the whole container makes no sense.
+	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
-	GTK_ViewContainer(const GTK_ViewContainer& obj)=delete;
+	GTK_ViewContainer(const GTK_ViewContainer &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_ViewContainer( GTK_ViewContainer&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_ViewContainer& operator=(const GTK_ViewContainer&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_ViewContainer& operator=(GTK_ViewContainer&&)=delete;
 
 	/**
 	 * Destructor.

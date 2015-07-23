@@ -6,9 +6,22 @@
 namespace erebus {
 
 EmptyViewPresenter::EmptyViewPresenter() {
+	view_=nullptr;
+}
+
+EmptyViewPresenter::~EmptyViewPresenter() {
 
 }
-EmptyViewPresenter::~EmptyViewPresenter() {
+
+EmptyViewPresenter::EmptyViewPresenter( EmptyViewPresenter&& obj): view_(obj.view_) {
+
+}
+
+EmptyViewPresenter& EmptyViewPresenter::operator=(EmptyViewPresenter&& obj) {
+	if(this != &obj) {
+		view_=obj.view_;
+	}
+	return *this;
 }
 
 void EmptyViewPresenter::setView(IEmptyView* view) {

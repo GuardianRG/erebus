@@ -29,12 +29,32 @@ class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
 	GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
 	/**
-	 * Copy Constructor.
+	 * Copy constructor.
 	 *
-	 * Deleted until needed.
+	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_ViewWindow(const GTK_ViewWindow &obj)=delete;
 
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_ViewWindow( GTK_ViewWindow&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_ViewWindow& operator=(const GTK_ViewWindow&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_ViewWindow& operator=(GTK_ViewWindow&&)=delete;
 	/**
 	 * Destructor.
 	 */

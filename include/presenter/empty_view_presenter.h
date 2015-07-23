@@ -19,9 +19,27 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	/**
 	 * Copy constructor.
 	 *
-	 * Deleted until needed.
 	 */
 	EmptyViewPresenter(const EmptyViewPresenter &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied. Must be constructed.
+	 */
+	EmptyViewPresenter( EmptyViewPresenter&& );
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied.
+	 */
+	EmptyViewPresenter& operator=(const EmptyViewPresenter&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	EmptyViewPresenter& operator=(EmptyViewPresenter&&);
 
 	/**
 	 * Destructor.

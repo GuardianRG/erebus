@@ -38,9 +38,30 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	/**
 	 * Copy constructor.
 	 *
-	 * Deleted until needed.
+	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_EmptyView(const GTK_EmptyView &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_EmptyView( GTK_EmptyView&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_EmptyView& operator=(const GTK_EmptyView&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_EmptyView& operator=(GTK_EmptyView&&)=delete;
 
 	/**
 	 * Destructor.

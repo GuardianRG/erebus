@@ -24,6 +24,25 @@ class ViewWindowPresenter:public IViewWindowPresenter {
 	ViewWindowPresenter(const ViewWindowPresenter &obj)=delete;
 
 	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied. Must be constructed.
+	 */
+	ViewWindowPresenter( ViewWindowPresenter&& );
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied.
+	 */
+	ViewWindowPresenter& operator=(const ViewWindowPresenter&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	ViewWindowPresenter& operator=(ViewWindowPresenter&&);
+
+	/**
 	 * Destructor.
 	 */
 	virtual ~ViewWindowPresenter();

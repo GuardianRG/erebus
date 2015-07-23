@@ -2,8 +2,12 @@
 
 #include <gtkmm.h>
 
+#include <memory>
+
 #include <presenter/interfaces/i_empty_view_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
+
+#include <presenter/empty_view_presenter.h>
 
 #include <gtk_view.h>
 
@@ -17,6 +21,7 @@ GTK_EmptyView::GTK_EmptyView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::Re
 
 	set_shadow_type(Gtk::SHADOW_NONE);
 }
+
 
 GTK_EmptyView::~GTK_EmptyView() {
 

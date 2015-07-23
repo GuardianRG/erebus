@@ -25,6 +25,25 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	MainWindowPresenter(const MainWindowPresenter &obj)=delete;
 
 	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied. Must be constructed.
+	 */
+	MainWindowPresenter( MainWindowPresenter&& );
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied.
+	 */
+	MainWindowPresenter& operator=(const MainWindowPresenter&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	MainWindowPresenter& operator=(MainWindowPresenter&&);
+
+	/**
 	 * Destructor.
 	 */
 	virtual ~MainWindowPresenter();

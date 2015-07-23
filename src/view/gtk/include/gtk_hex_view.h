@@ -14,7 +14,33 @@ class GTK_HexView:public GTK_View,public IHexView {
   public:
 	GTK_HexView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
 
+	/**
+	 * Copy constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
 	GTK_HexView(const GTK_HexView &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_HexView( GTK_HexView&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_HexView& operator=(const GTK_HexView&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_HexView& operator=(GTK_HexView&&)=delete;
 
 	~GTK_HexView();
 

@@ -22,6 +22,38 @@ namespace erebus {
  */
 class GTK_GUIStateObject: public IGUIStateObject {
   public:
+	GTK_GUIStateObject()   {}
+
+	~GTK_GUIStateObject() {}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_GUIStateObject(const GTK_GUIStateObject &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_GUIStateObject( GTK_GUIStateObject&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_GUIStateObject& operator=(const GTK_GUIStateObject&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_GUIStateObject& operator=(GTK_GUIStateObject&&)=delete;
+
 	/**
 	 * Saves the pointer to the application.
 	 */
@@ -32,11 +64,6 @@ class GTK_GUIStateObject: public IGUIStateObject {
 	 */
 	std::unique_ptr<GTK_MainWindow>	mainWindow_;
 
-
-	/**
-	 * Destructor.
-	 */
-	~GTK_GUIStateObject() {}
 
 	/**
 	 * Casts the given IGUIStateObject to the concrete GTK_GUIStateObject.

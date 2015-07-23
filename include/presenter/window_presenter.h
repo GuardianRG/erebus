@@ -24,6 +24,25 @@ class WindowPresenter:public IWindowPresenter {
 	WindowPresenter(const WindowPresenter &obj)=delete;
 
 	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied. Must be constructed.
+	 */
+	WindowPresenter( WindowPresenter&& );
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied.
+	 */
+	WindowPresenter& operator=(const WindowPresenter&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	WindowPresenter& operator=(WindowPresenter&&);
+
+	/**
 	 * Destructor.
 	 */
 	virtual ~WindowPresenter();

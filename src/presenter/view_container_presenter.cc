@@ -10,6 +10,17 @@ ViewContainerPresenter::~ViewContainerPresenter() {
 
 }
 
+ViewContainerPresenter::ViewContainerPresenter( ViewContainerPresenter&& obj): container_(obj.container_) {
+
+}
+
+ViewContainerPresenter& ViewContainerPresenter::operator=(ViewContainerPresenter&& obj) {
+	if(this != &obj) {
+		container_=obj.container_;
+	}
+	return *this;
+}
+
 void ViewContainerPresenter::on_right_button_click() {
 	if(container_->isEmpty())
 		container_->showContextMenu();

@@ -142,4 +142,13 @@ void GTK_View::showContextMenu() {
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
+
+Glib::RefPtr<Gtk::Adjustment> GTK_View::getVAdjustment() {
+	return get_vadjustment();
+}
+
+Glib::RefPtr<Gtk::Adjustment> GTK_View::getHAdjustment() {
+	return get_hadjustment();
+}
+
 }//namespace erebus

@@ -67,9 +67,31 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	/**
 	 * Copy constructor.
 	 *
-	 * Deleted until needed.
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_View(const GTK_View &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied.
+	 */
+	GTK_View( GTK_View&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied.
+	 */
+	GTK_View& operator=(const GTK_View&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied.
+	 */
+	GTK_View& operator=(GTK_View&&)=delete;
+
 
 	/**
 	 * Destructor.
@@ -147,6 +169,9 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 */
 	virtual void createContextMenu();
 
+	Glib::RefPtr<Gtk::Adjustment> getVAdjustment();
+
+	Glib::RefPtr<Gtk::Adjustment> getHAdjustment();
 
 	/**
 	 * Gets called by a click on the view.

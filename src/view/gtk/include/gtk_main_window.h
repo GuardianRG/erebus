@@ -37,9 +37,30 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	/**
 	 * Copy constructor.
 	 *
-	 * Deleted until needed.
+	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_MainWindow(const GTK_MainWindow &obj)=delete;
+
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_MainWindow( GTK_MainWindow&& )=delete;
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_MainWindow& operator=(const GTK_MainWindow&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 *
+	 * Cant be copied since Gtk::Viewport cant be copied-
+	 */
+	GTK_MainWindow& operator=(GTK_MainWindow&&)=delete;
 
 	/**
 	 * Destructor.

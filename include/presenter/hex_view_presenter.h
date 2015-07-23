@@ -11,6 +11,28 @@ class HexViewPresenter:public IHexViewPresenter {
 
 	HexViewPresenter(const HexViewPresenter &obj)=delete;
 
+	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied. Must be constructed.
+	 */
+	HexViewPresenter( HexViewPresenter&& );
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied.
+	 */
+	HexViewPresenter& operator=(const HexViewPresenter&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	HexViewPresenter& operator=(HexViewPresenter&&);
+
+	/**
+	 * Destructor.
+	 */
 	virtual ~HexViewPresenter();
 
 	/**

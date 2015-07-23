@@ -5,12 +5,24 @@
 namespace erebus {
 
 HexViewPresenter::HexViewPresenter() {
-
+	view_=nullptr;
 }
 
 HexViewPresenter::~HexViewPresenter() {
 
 }
+
+HexViewPresenter::HexViewPresenter( HexViewPresenter&& obj): view_(obj.view_) {
+
+}
+
+HexViewPresenter& HexViewPresenter::operator=(HexViewPresenter&& obj) {
+	if(this != &obj) {
+		view_=obj.view_;
+	}
+	return *this;
+}
+
 
 void HexViewPresenter::setView(IHexView* view)  {
 	view_=view;

@@ -27,6 +27,25 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	ViewContainerPresenter(const ViewContainerPresenter &obj)=delete;
 
 	/**
+	 * Move Constructor.
+	 *
+	 * Cant be copied. Must be constructed.
+	 */
+	ViewContainerPresenter( ViewContainerPresenter&& );
+
+	/**
+	 * Copy assignment operator.
+	 *
+	 * Cant be copied.
+	 */
+	ViewContainerPresenter& operator=(const ViewContainerPresenter&)=delete;
+
+	/**
+	 * Move assignment operator.
+	 */
+	ViewContainerPresenter& operator=(ViewContainerPresenter&&);
+
+	/**
 	 * Destructor.
 	 */
 	virtual ~ViewContainerPresenter();
