@@ -13,5 +13,6 @@ class IViewWindowPresenter:public IWindowPresenter {
 	 * Destructor.
 	 */
 	virtual ~IViewWindowPresenter() {}
+
 };
 }//namespace erebus

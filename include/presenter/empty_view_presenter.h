@@ -1,5 +1,6 @@
 #pragma once
 
+#include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_empty_view_presenter.h>
 #include <view/interfaces/i_empty_view.h>
 
@@ -19,13 +20,12 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	/**
 	 * Copy constructor.
 	 *
+	 * Cant be copied.
 	 */
 	EmptyViewPresenter(const EmptyViewPresenter &obj)=delete;
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied. Must be constructed.
 	 */
 	EmptyViewPresenter( EmptyViewPresenter&& );
 
@@ -46,15 +46,12 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	 */
 	virtual ~EmptyViewPresenter();
 
+
+
 	/**
 	 * See IEmptyViewPresenter::setView
 	 */
-	virtual void setView(IEmptyView* view) override;
-
-	/**
-	 * See IEmptyViewPresenter::getView
-	 */
-	virtual IEmptyView* getView() const override;
+	virtual void setView(IView* view) override;
 
 	/**
 	 * See IEmptyViewPresenter::on_right_button_click

@@ -19,14 +19,12 @@ class ViewWindowPresenter:public IViewWindowPresenter {
 	/**
 	 * Copy constructor.
 	 *
-	 * Deleted until needed.
+	 * Cant be copied.
 	 */
 	ViewWindowPresenter(const ViewWindowPresenter &obj)=delete;
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied. Must be constructed.
 	 */
 	ViewWindowPresenter( ViewWindowPresenter&& );
 
@@ -47,15 +45,12 @@ class ViewWindowPresenter:public IViewWindowPresenter {
 	 */
 	virtual ~ViewWindowPresenter();
 
+
+
 	/**
 	 * See IViewWindowPresenter::setWindow
 	 */
 	virtual void setWindow(IWindow* window) override;
-
-	/**
-	 * See IViewWindowPresenter::getWindow
-	 */
-	virtual IWindow* getWindow() const override;
 
 };
 

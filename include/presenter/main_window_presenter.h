@@ -26,8 +26,6 @@ class MainWindowPresenter:public IMainWindowPresenter {
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied. Must be constructed.
 	 */
 	MainWindowPresenter( MainWindowPresenter&& );
 
@@ -48,15 +46,12 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	 */
 	virtual ~MainWindowPresenter();
 
+
+
 	/**
 	 * See IMainWindowPresenter::setWindow
 	 */
 	virtual void setWindow(IWindow* window) override;
-
-	/**
-	 * See IMainWindowPresenter::getWindow
-	 */
-	virtual IWindow* getWindow() const override;
 };
 
 }//namespace erbus

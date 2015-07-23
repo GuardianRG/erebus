@@ -1,5 +1,8 @@
 #include <presenter/hex_view_presenter.h>
 
+#include <assert.h>
+
+#include <view/interfaces/i_view.h>
 #include <view/interfaces/i_hex_view.h>
 
 namespace erebus {
@@ -24,12 +27,8 @@ HexViewPresenter& HexViewPresenter::operator=(HexViewPresenter&& obj) {
 }
 
 
-void HexViewPresenter::setView(IHexView* view)  {
-	view_=view;
-}
-
-IHexView* HexViewPresenter::getView() const {
-	return view_;
+void HexViewPresenter::setView(IView* view)  {
+	assert((view_=dynamic_cast<IHexView*>(view))!=0);
 }
 
 void HexViewPresenter::on_right_button_click() {

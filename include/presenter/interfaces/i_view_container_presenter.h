@@ -23,14 +23,6 @@ class IViewContainerPresenter {
 	virtual void setViewContainer(IViewContainer* container)=0;
 
 	/**
-	 * Returns the view container this presenter operates on.
-	 *
-	 * @return the view container this presenter operates on
-	 */
-	virtual IViewContainer* getViewContainer() const=0;
-
-
-	/**
 	 * Handels a right mouse button click.
 	 */
 	virtual void on_right_button_click()=0;

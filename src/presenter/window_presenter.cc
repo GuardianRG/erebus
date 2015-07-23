@@ -24,11 +24,6 @@ WindowPresenter& WindowPresenter::operator=(WindowPresenter&& obj) {
 
 
 void WindowPresenter::setWindow(IWindow* window) {
-	window_=static_cast<IWindow*>(window);
+	window_=window;
 }
-
-IWindow* WindowPresenter::getWindow() const {
-	return window_;
-}
-
 }//namespace erebus

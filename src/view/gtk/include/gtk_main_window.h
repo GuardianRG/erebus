@@ -5,7 +5,6 @@
 #include <memory>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
-#include <presenter/interfaces/i_presenter.h>
 #include <view/interfaces/i_main_window.h>
 
 #include <gtk_view_container.h>

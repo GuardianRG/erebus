@@ -1,5 +1,7 @@
 #include <presenter/empty_view_presenter.h>
 
+#include <assert.h>
+
 #include <view/interfaces/i_view.h>
 #include <view/interfaces/i_empty_view.h>
 
@@ -24,13 +26,10 @@ EmptyViewPresenter& EmptyViewPresenter::operator=(EmptyViewPresenter&& obj) {
 	return *this;
 }
 
-void EmptyViewPresenter::setView(IEmptyView* view) {
-	view_=view;
+void EmptyViewPresenter::setView(IView* view) {
+	assert((view_=dynamic_cast<IEmptyView*>(view))!=0);
 }
 
-IEmptyView* EmptyViewPresenter::getView() const {
-	return view_;
-}
 void EmptyViewPresenter::on_right_button_click() {
 	view_->showContextMenu();
 }

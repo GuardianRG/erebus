@@ -3,15 +3,15 @@
 #include <presenter/interfaces/i_view_presenter.h>
 
 namespace erebus {
-class IHexView;
-
+/**
+ * This class is the interface for a hex view presenter.
+ */
 class IHexViewPresenter:public IViewPresenter {
   public:
+	/**
+	 * Destructor.
+	 */
 	~IHexViewPresenter() {}
-
-	virtual void setView(IHexView* view)=0;
-
-	virtual IHexView* getView() const=0;
 };
 
 }//namespace erebus

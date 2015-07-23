@@ -1,5 +1,8 @@
+#pragma once
+
 #include <presenter/interfaces/i_hex_view_presenter.h>
 
+#include <view/interfaces/i_view.h>
 #include <view/interfaces/i_hex_view.h>
 
 namespace erebus {
@@ -7,14 +10,18 @@ namespace erebus {
 class HexViewPresenter:public IHexViewPresenter {
 	IHexView*	view_;
   public:
+	/**
+	 * Constructor.
+	 */
 	HexViewPresenter();
 
+	/**
+	 * Copy constructor.
+	 */
 	HexViewPresenter(const HexViewPresenter &obj)=delete;
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied. Must be constructed.
 	 */
 	HexViewPresenter( HexViewPresenter&& );
 
@@ -35,16 +42,12 @@ class HexViewPresenter:public IHexViewPresenter {
 	 */
 	virtual ~HexViewPresenter();
 
+
+
 	/**
 	 * See IHexViewPresenter::setView
 	 */
-	virtual void setView(IHexView* view)override;
-
-	/**
-	 * See IHexViewPresenter::getView
-	 */
-	virtual IHexView* getView() const override;
-
+	virtual void setView(IView* view)override;
 
 	/**
 	 * See IHexViewPresenter::on_right_button_click

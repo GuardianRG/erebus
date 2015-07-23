@@ -3,7 +3,6 @@
 #include <string>
 #include <memory>
 
-#include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_view_window_presenter.h>
 
 #include <gtk_view_container.h>

@@ -2,7 +2,6 @@
 
 #include <string>
 
-#include <presenter/interfaces/i_presenter.h>
 #include <presenter/interfaces/i_window_presenter.h>
 
 namespace erebus {

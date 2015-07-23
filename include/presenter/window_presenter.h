@@ -19,14 +19,12 @@ class WindowPresenter:public IWindowPresenter {
 	/**
 	 * Copy constructor.
 	 *
-	 * Deleted until needed.
+	 * Cant be copied.
 	 */
 	WindowPresenter(const WindowPresenter &obj)=delete;
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied. Must be constructed.
 	 */
 	WindowPresenter( WindowPresenter&& );
 
@@ -47,14 +45,11 @@ class WindowPresenter:public IWindowPresenter {
 	 */
 	virtual ~WindowPresenter();
 
+
+
 	/**
 	 * See IWindowPresenter::setWindow
 	 */
 	virtual void setWindow(IWindow* window) override;
-
-	/**
-	 * See IWindowPresenter::getWindow
-	 */
-	virtual IWindow* getWindow() const override;
 };
 }//namespace erebus

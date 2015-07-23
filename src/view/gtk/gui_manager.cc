@@ -40,7 +40,7 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):arg
 	builder->get_widget_derived("main_window", window);
 
 	auto presenter=std::unique_ptr<IMainWindowPresenter>(new MainWindowPresenter);
-	presenter->setWindow(stateObject->mainWindow_.get());
+	presenter->setWindow(window);
 
 	window->setPresenter(std::move(presenter));
 	stateObject->mainWindow_=std::unique_ptr<GTK_MainWindow>(window);

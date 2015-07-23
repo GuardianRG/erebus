@@ -1,6 +1,5 @@
 #pragma once
 
-#include <presenter/interfaces/i_presenter.h>
 #include <view/interfaces/i_view.h>
 
 
@@ -9,12 +8,19 @@ namespace erebus {
 /**
  * This class is the interface for a view presenter.
  */
-class IViewPresenter:public IPresenter {
+class IViewPresenter {
   public:
 	/**
 	 * Destructor.
 	 */
 	virtual ~IViewPresenter() {}
+
+	/**
+	 * Sets the view of the presenter.
+	 *
+	 * @param click view the view of the presenter.
+	 */
+	virtual void setView(IView* view)=0;
 
 	/**
 	 * Handels a click on the right mouse button.

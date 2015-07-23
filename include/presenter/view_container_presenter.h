@@ -28,8 +28,6 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied. Must be constructed.
 	 */
 	ViewContainerPresenter( ViewContainerPresenter&& );
 
@@ -51,15 +49,11 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	virtual ~ViewContainerPresenter();
 
 
+
 	/**
 	 * See IViewContainerPresenter::setViewContainer
 	 */
 	virtual void setViewContainer(IViewContainer* container) override;
-
-	/**
-	 * See IViewContainerPresenter::getViewContainer
-	 */
-	virtual IViewContainer* getViewContainer()const override;
 
 	/**
 	 * See IViewContainerPresenter::on_context_menu_join_click

@@ -5,8 +5,6 @@
 
 namespace erebus {
 
-class IPresenter;
-
 /**
  * This class is the interface for very window.
  */

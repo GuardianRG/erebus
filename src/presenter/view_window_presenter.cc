@@ -1,5 +1,7 @@
 #include <presenter/view_window_presenter.h>
 
+#include <assert.h>
+
 #include <view/interfaces/i_view_window.h>
 
 namespace erebus {
@@ -24,11 +26,8 @@ ViewWindowPresenter& ViewWindowPresenter::operator=(ViewWindowPresenter&& obj) {
 }
 
 void ViewWindowPresenter::setWindow(IWindow* window) {
-	viewWindow_=static_cast<IViewWindow*>(window);
+	assert((viewWindow_=dynamic_cast<IViewWindow*>(window))!=0);
 }
 
-IWindow* ViewWindowPresenter::getWindow() const {
-	return viewWindow_;
-}
 
 }//namespace erebus

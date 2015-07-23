@@ -1,6 +1,7 @@
 #pragma once
 
 #include <view/interfaces/i_window.h>
+#include <presenter/interfaces/i_view_window_presenter.h>
 #include <view/interfaces/i_view.h>
 
 namespace erebus {
