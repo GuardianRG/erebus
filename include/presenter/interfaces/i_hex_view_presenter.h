@@ -11,7 +11,7 @@ class IHexViewPresenter:public IViewPresenter {
 
 	virtual void setView(IHexView* view)=0;
 
-	virtual IHexView* getView()=0;
+	virtual IHexView* getView() const=0;
 };
 
 }//namespace erebus

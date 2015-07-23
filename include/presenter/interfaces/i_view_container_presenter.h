@@ -27,7 +27,7 @@ class IViewContainerPresenter {
 	 *
 	 * @return the view container this presenter operates on
 	 */
-	virtual IViewContainer* getViewContainer()=0;
+	virtual IViewContainer* getViewContainer() const=0;
 
 
 	/**

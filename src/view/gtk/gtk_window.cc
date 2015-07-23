@@ -18,6 +18,10 @@ void GTK_Window::setTitle(std::string title) {
 	set_title(title);
 }
 
+std::string GTK_Window::getTitle() const {
+	return get_title();
+}
+
 void GTK_Window::setPreferredSize(int width,int height) {
 	set_default_size(width,height);
 }

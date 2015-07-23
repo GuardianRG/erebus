@@ -25,7 +25,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	std::unique_ptr<IEmptyViewPresenter>	presenter_;
 
   protected:
-	IViewPresenter& getPresenter()override;
+	IViewPresenter& getPresenter() const override;
 
   public:
 	/**
@@ -62,7 +62,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	/**
 	 * See IEmptyView::getTitle
 	 */
-	std::string getTitle()override;
+	std::string getTitle()const override;
 
 	/**
 	 * See IEmptyView::setTitle
@@ -87,7 +87,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	/**
 	 * See IEmptyView::getParent
 	 */
-	IViewContainer* getParent()override;
+	IViewContainer* getParent() const override;
 
 	/**
 	 * See IEmptyView::popOut

@@ -53,7 +53,7 @@ class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
 	/**
 	 * IViewWindow::getTitle
 	 */
-	std::string getTitle() override;
+	std::string getTitle() const override;
 
 	/**
 	 * See IViewWindow::setPreferredSize

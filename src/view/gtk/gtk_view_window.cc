@@ -11,7 +11,6 @@
 
 #include <view/view_type.h>
 
-#include <iostream>
 
 namespace erebus  {
 
@@ -22,11 +21,11 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	Gtk::Viewport *base;
 	refBuilder->get_widget("basic_viewport",base);
 
-	ViewContainerPresenter* presenter=new ViewContainerPresenter;
-	container_=new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr,nullptr);
+	auto presenter=std::unique_ptr<ViewContainerPresenter>(new ViewContainerPresenter);
+	container_=new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr);
 
 	presenter->setViewContainer(container_);
-	container_->setPresenter(presenter);
+	container_->setPresenter(std::move(presenter));
 
 	base->add(*container_);
 
@@ -43,7 +42,7 @@ void GTK_ViewWindow::setTitle(std::string title) {
 	set_title(title);
 }
 
-std::string GTK_ViewWindow::getTitle() {
+std::string GTK_ViewWindow::getTitle() const {
 	return get_title();
 }
 

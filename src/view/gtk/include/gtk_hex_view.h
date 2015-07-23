@@ -10,7 +10,7 @@ namespace erebus {
 class GTK_HexView:public GTK_View,public IHexView {
 	std::unique_ptr<IHexViewPresenter>	presenter_;
   protected:
-	IViewPresenter& getPresenter()override;
+	IViewPresenter& getPresenter() const override;
   public:
 	GTK_HexView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
 
@@ -27,7 +27,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	/**
 	 * See IHexView::getTitle
 	 */
-	std::string getTitle()override;
+	std::string getTitle()const override;
 
 	/**
 	 * See IHexView::setTitle
@@ -52,7 +52,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	/**
 	 * See IHexView::getParent
 	 */
-	IViewContainer* getParent()override;
+	IViewContainer* getParent()const override;
 
 	/**
 	 * See IHexView::popOut

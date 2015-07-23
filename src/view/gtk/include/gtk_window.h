@@ -37,6 +37,8 @@ class GTK_Window:public Gtk::Window,public IWindow {
 	 */
 	void setTitle(std::string title) override;
 
+	std::string getTitle() const override;
+
 	/**
 	 * See IWindow::setPreferredSize
 	 */

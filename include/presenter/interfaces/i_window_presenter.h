@@ -27,6 +27,6 @@ class IWindowPresenter:public IPresenter {
 	 *
 	 * @return the window this presenter operates on
 	 */
-	virtual IWindow* getWindow()=0;
+	virtual IWindow* getWindow() const=0;
 };
 }//namespace erbus

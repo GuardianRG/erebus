@@ -2,6 +2,8 @@
 
 #include <gtkmm.h>
 
+#include <memory>
+
 #include <view/interfaces/i_view_container.h>
 #include <presenter/interfaces/i_view_container_presenter.h>
 #include <view/interfaces/i_view.h>
@@ -14,21 +16,21 @@ class GTK_View;
  * This class containes the different views of the different areas on the screen.
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
-	Gtk::Notebook*			notebook_;
-	Gtk::Paned*			paned_;
+	std::unique_ptr<Gtk::Notebook>			notebook_;
+	std::unique_ptr<Gtk::Paned>			paned_;
 
-	IViewContainerPresenter* 	presenter_;
-	IViewContainer*			parent_;
+	std::unique_ptr<IViewContainerPresenter> 	presenter_;
+	IViewContainer*					parent_;
 
-	Gtk::Menu* 			popupMenu_;
+	std::unique_ptr<Gtk::Menu>			popupMenu_;
 
-	Glib::RefPtr<Gtk::Adjustment> 	h_adjustment_;
-	Glib::RefPtr<Gtk::Adjustment>	v_adjustment_;
+	Glib::RefPtr<Gtk::Adjustment> 			h_adjustment_;
+	Glib::RefPtr<Gtk::Adjustment>			v_adjustment_;
 
-	bool				isSplit_;
+	bool						isSplit_;
 
-	int 				timeBuffer_;
-	int 				clickBuffer_;
+	int 						timeBuffer_;
+	int 						clickBuffer_;
 
 	void split();
 	void sanityCheck();
@@ -45,13 +47,33 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 *
 	 * @param h_adjustment horizontal adjustment for the child views.
 	 * @param v_adjustment vertical adjustment for the child views.
+	 * @param notebook the notebook to use
+	 * @param parent the parent view container
 	 */
-	GTK_ViewContainer(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment,Gtk::Notebook* notebook,IViewContainer* parent);
+	GTK_ViewContainer(
+	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
+	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
+	    std::unique_ptr<Gtk::Notebook> notebook,
+	    IViewContainer* parent);
+
+	/**
+	 * Constructor.
+	 *
+	 * Creates an empty notebook
+	 *
+	 * @param h_adjustment horizontal adjustment for the child views.
+	 * @param v_adjustment vertical adjustment for the child views.
+	 * @param parent the parent view container
+	 */
+	GTK_ViewContainer(
+	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
+	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
+	    IViewContainer* parent);
 
 	/**
 	 * Cop constructor.
 	 *
-	 * Deleted until needed.
+	 * Copying the whole container makes no sense.
 	 */
 	GTK_ViewContainer(const GTK_ViewContainer& obj)=delete;
 
@@ -61,14 +83,14 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	~GTK_ViewContainer();
 
 	/**
-	 * See IViewContainer::setPresenter
+	 * Sets the presenter.
 	 */
-	void setPresenter(IViewContainerPresenter* presenter)override;
+	void setPresenter(std::unique_ptr<IViewContainerPresenter> presenter);
 
 	/**
 	 * See IViewContainer::getParent
 	 */
-	IViewContainer* getParent()override;
+	IViewContainer* getParent()const override;
 
 	/**
 	 * See IViewContainer::setParent
@@ -98,7 +120,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::isSplittet
 	 */
-	bool isSplit()override;
+	bool isSplit()const override;
 
 	/**
 	 * See IViewContainer::showTabs
@@ -123,7 +145,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::isEmpty
 	 */
-	bool isEmpty()override;
+	bool isEmpty()const override;
 
 	/**
 	 * See IViewContainer::popOutView
@@ -133,7 +155,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::isTopLevel
 	 */
-	bool isTopLevel()override;
+	bool isTopLevel()const override;
 
 	/**
 	 * Removes the view.

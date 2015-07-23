@@ -18,7 +18,7 @@ class IEmptyViewPresenter:public IViewPresenter {
 
 	virtual void setView(IEmptyView* view)=0;
 
-	virtual IEmptyView* getView()=0;
+	virtual IEmptyView* getView() const=0;
 };
 
 }//namespace erbus

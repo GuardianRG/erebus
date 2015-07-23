@@ -26,11 +26,11 @@ void GTK_EmptyView::setPresenter(std::unique_ptr<IEmptyViewPresenter> presenter)
 	presenter_=std::move(presenter);
 }
 
-IViewPresenter& GTK_EmptyView::getPresenter() {
+IViewPresenter& GTK_EmptyView::getPresenter() const {
 	return *(presenter_.get());
 }
 
-std::string GTK_EmptyView::getTitle() {
+std::string GTK_EmptyView::getTitle() const {
 	return GTK_View::getTitle();
 }
 
@@ -53,7 +53,7 @@ void GTK_EmptyView::setParent(IViewContainer* container) {
 }
 
 
-IViewContainer* GTK_EmptyView::getParent() {
+IViewContainer* GTK_EmptyView::getParent() const {
 	return GTK_View::getParent();
 }
 

@@ -15,7 +15,7 @@ void WindowPresenter::setWindow(IWindow* window) {
 	window_=static_cast<IWindow*>(window);
 }
 
-IWindow* WindowPresenter::getWindow() {
+IWindow* WindowPresenter::getWindow() const {
 	return window_;
 }
 

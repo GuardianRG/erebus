@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <iterator>
+#include <memory>
 
 #include <presenter/interfaces/i_view_container_presenter.h>
 #include <view/interfaces/i_view_container.h>
@@ -13,34 +14,46 @@
 #include <gtk_view_builder.h>
 #include <gtk_view.h>
 #include <view/gui_manager.h>
+#include <gtk_logger.h>
 
 namespace erebus {
 
 GTK_ViewContainer::GTK_ViewContainer(
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-    Gtk::Notebook* notebook,IViewContainer* parent):
+    IViewContainer* parent):
+	GTK_ViewContainer(
+	    h_adjustment,
+	    v_adjustment,
+	    std::unique_ptr<Gtk::Notebook>(nullptr),
+	    parent) {
+
+}
+
+GTK_ViewContainer::GTK_ViewContainer(
+    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
+    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
+    std::unique_ptr<Gtk::Notebook> notebook,IViewContainer* parent):
 	Gtk::Viewport(h_adjustment,v_adjustment),
 	parent_(parent),
 	h_adjustment_(h_adjustment),
 	v_adjustment_(v_adjustment) {
 
-	if(notebook==nullptr) {
-		notebook_=new Gtk::Notebook;
+	if(notebook.get()==nullptr) {
+		notebook_=std::unique_ptr<Gtk::Notebook>(new Gtk::Notebook);
 		notebook_->set_group_name("notebooks");
 		showTabs(true);
 	} else {
-		notebook_=notebook;
-
+		notebook_=std::move(notebook);
 		//Rebind the function pointers of the context menu
-		for(auto w:notebook->get_children()) {
+		for(auto w:notebook_->get_children()) {
 			GTK_View* buffer=dynamic_cast<GTK_View*>(w);
+
 			buffer->setParent(this);
 			buffer->createContextMenu();
 		}
 
 	}
-
 	set_shadow_type(Gtk::SHADOW_NONE);
 
 	notebook_->set_scrollable(true);
@@ -53,9 +66,9 @@ GTK_ViewContainer::GTK_ViewContainer(
 	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
 #endif
 
-	popupMenu_=Gtk::manage(new Gtk::Menu);
+	popupMenu_=std::unique_ptr<Gtk::Menu>(new Gtk::Menu);
 
-	buildContextMenu(popupMenu_);
+	buildContextMenu(popupMenu_.get());
 
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();
@@ -63,15 +76,14 @@ GTK_ViewContainer::GTK_ViewContainer(
 	show_all_children();
 
 	isSplit_=false;
-	paned_=nullptr;
 	parent_=nullptr;
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
-	delete notebook_;
+
 }
 
-bool GTK_ViewContainer::isEmpty() {
+bool GTK_ViewContainer::isEmpty() const {
 	if(isSplit_)
 		return false;
 	assert(notebook_!=nullptr&&"notebook must not be nullptr");
@@ -92,7 +104,7 @@ void GTK_ViewContainer::on_context_menu_split_vertical_click() {
 }
 
 void GTK_ViewContainer::showContextMenu() {
-	assert( popupMenu_!=nullptr && "No popup menu set for GTK_ViewContainer");
+	assert( popupMenu_.get()!=nullptr && "No popup menu set for GTK_ViewContainer");
 
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
@@ -169,7 +181,6 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu* menu) {
 	control_menu->append(*split);
 	control_menu->append(*add_view);
 	menu->append(*control);
-
 }
 
 void GTK_ViewContainer::joinContainer() {
@@ -187,7 +198,7 @@ void GTK_ViewContainer::joinContainer() {
 		container2->joinContainer();
 	}
 
-	notebook_=new Gtk::Notebook;
+	notebook_=std::unique_ptr<Gtk::Notebook>(new Gtk::Notebook);
 	notebook_->set_group_name("notebooks");
 
 	auto children=container1->notebook_->get_children();
@@ -228,8 +239,7 @@ void GTK_ViewContainer::joinContainer() {
 
 
 	Gtk::Container::remove(*paned_);
-	delete paned_;
-	paned_=nullptr;
+	paned_=std::unique_ptr<Gtk::Paned>(nullptr);
 
 
 	showTabs(true);
@@ -258,11 +268,11 @@ void GTK_ViewContainer::on_context_menu_join_click() {
 	presenter_->on_context_menu_join_click();
 }
 
-void GTK_ViewContainer::setPresenter(IViewContainerPresenter* presenter) {
-	presenter_=presenter;
+void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter> presenter) {
+	presenter_=std::move(presenter);
 }
 
-IViewContainer* GTK_ViewContainer::getParent() {
+IViewContainer* GTK_ViewContainer::getParent() const {
 	return parent_;
 }
 
@@ -292,11 +302,11 @@ bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 	return return_value;
 }
 
-bool GTK_ViewContainer::isTopLevel() {
+bool GTK_ViewContainer::isTopLevel() const {
 	return !isSplit_;
 }
 
-bool GTK_ViewContainer::isSplit() {
+bool GTK_ViewContainer::isSplit() const {
 	return isSplit_;
 }
 
@@ -307,17 +317,17 @@ void GTK_ViewContainer::split() {
 
 	Gtk::Container::remove(*notebook_);
 
-	GTK_ViewContainer* vc1=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),notebook_,this));
-	GTK_ViewContainer* vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),nullptr,this));
+	GTK_ViewContainer* vc1=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),std::move(notebook_),this));
+	GTK_ViewContainer* vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),this));
 
-	ViewContainerPresenter* vcp1=new ViewContainerPresenter;
-	ViewContainerPresenter* vcp2=new ViewContainerPresenter;
+	auto vcp1=std::unique_ptr<IViewContainerPresenter>(new ViewContainerPresenter);
+	auto vcp2=std::unique_ptr<IViewContainerPresenter>(new ViewContainerPresenter);
 
 	vcp1->setViewContainer(vc1);
 	vcp2->setViewContainer(vc2);
 
-	vc1->setPresenter(vcp1);
-	vc2->setPresenter(vcp2);
+	vc1->setPresenter(std::move(vcp1));
+	vc2->setPresenter(std::move(vcp2));
 
 	vc1->setParent(this);
 	vc2->setParent(this);
@@ -327,8 +337,6 @@ void GTK_ViewContainer::split() {
 	paned_->pack2(*vc2,true,false);
 
 	add(*paned_);
-
-	notebook_=nullptr;
 
 	show_all_children();
 }
@@ -344,7 +352,7 @@ void GTK_ViewContainer::splitHorizontal() {
 	if(isSplit_)
 		return;
 
-	paned_=new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL);
+	paned_=std::unique_ptr<Gtk::Paned>(new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL));
 	Gdk::Rectangle rec=get_allocation();
 	paned_->set_position(rec.get_width()/2);
 
@@ -354,7 +362,7 @@ void GTK_ViewContainer::splitVertical() {
 	if(isSplit_)
 		return;
 
-	paned_=new Gtk::Paned( Gtk::ORIENTATION_VERTICAL);
+	paned_=std::unique_ptr<Gtk::Paned>(new Gtk::Paned( Gtk::ORIENTATION_VERTICAL));
 	Gdk::Rectangle rec=get_allocation();
 	paned_->set_position(rec.get_height()/2);
 

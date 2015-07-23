@@ -29,7 +29,7 @@ class IWindow {
 	 *
 	 * @return the title of the window
 	 */
-	virtual std::string getTitle()=0;
+	virtual std::string getTitle() const=0;
 
 	/**
 	 * Sets the preferred size of the window.

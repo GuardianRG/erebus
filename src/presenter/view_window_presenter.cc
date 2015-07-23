@@ -16,7 +16,7 @@ void ViewWindowPresenter::setWindow(IWindow* window) {
 	viewWindow_=static_cast<IViewWindow*>(window);
 }
 
-IWindow* ViewWindowPresenter::getWindow() {
+IWindow* ViewWindowPresenter::getWindow() const {
 	return viewWindow_;
 }
 

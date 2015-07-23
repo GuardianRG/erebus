@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 
 #include <assert.h>
+#include <memory>
 #include <iostream>
 
 #include <view/interfaces/i_view.h>
@@ -51,7 +52,7 @@ void GTK_View::setTitle(std::string title) {
 	title_=title;
 }
 
-std::string GTK_View::getTitle() {
+std::string GTK_View::getTitle() const {
 	return title_;
 }
 
@@ -59,7 +60,7 @@ void GTK_View::setParent(IViewContainer* container) {
 	container_=container;
 }
 
-IViewContainer* GTK_View::getParent() {
+IViewContainer* GTK_View::getParent() const {
 	return container_;
 }
 
@@ -111,8 +112,7 @@ void GTK_View::on_context_menu_pop_out_click() {
 void GTK_View::createContextMenu() {
 	assert( container_!=nullptr && "No view container set for GTK_View");
 
-	delete popupMenu_;
-	popupMenu_=new Gtk::Menu;
+	popupMenu_=std::unique_ptr<Gtk::Menu>(new Gtk::Menu);
 
 	Gtk::MenuItem* view=Gtk::manage(new Gtk::MenuItem("View"));
 	Gtk::Menu* view_menu=Gtk::manage(new Gtk::Menu);
@@ -131,7 +131,7 @@ void GTK_View::createContextMenu() {
 	view_menu->accelerate(*this);
 	popupMenu_->append(*view);
 
-	static_cast<GTK_ViewContainer*>(container_)->buildContextMenu(popupMenu_);
+	static_cast<GTK_ViewContainer*>(container_)->buildContextMenu(popupMenu_.get());
 
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();

@@ -60,7 +60,7 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	/**
 	 * See IMainWindow::getTitle
 	 */
-	std::string getTitle() override;
+	std::string getTitle() const override;
 
 	/**
 	 * See IMainWindow::setPreferredSize

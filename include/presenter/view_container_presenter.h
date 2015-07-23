@@ -40,7 +40,7 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * See IViewContainerPresenter::getViewContainer
 	 */
-	virtual IViewContainer* getViewContainer()override;
+	virtual IViewContainer* getViewContainer()const override;
 
 	/**
 	 * See IViewContainerPresenter::on_context_menu_join_click

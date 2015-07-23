@@ -18,12 +18,12 @@ namespace erebus {
  * that allows it to be created by a builder.
  */
 class GTK_View:public Gtk::Viewport,virtual public IView {
-	IViewContainer*		container_;
+	IViewContainer*			container_;
 
-	std::string 		title_;
+	std::string 			title_;
 
-	int 			timeBuffer_;
-	int			clickBuffer_;
+	int 				timeBuffer_;
+	int				clickBuffer_;
 
 
 	void init();
@@ -35,12 +35,12 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	/**
 	 * The context menu to show.
 	 */
-	Gtk::Menu*	popupMenu_;
+	std::unique_ptr<Gtk::Menu>	popupMenu_;
 
 	/**
 	 * Returns the presenter.
 	 */
-	virtual IViewPresenter& getPresenter()=0;
+	virtual IViewPresenter& getPresenter() const=0;
 
   public:
 	/**
@@ -103,12 +103,12 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	/**
 	 * See IView::getTitle
 	 */
-	virtual std::string getTitle() override;
+	virtual std::string getTitle() const override;
 
 	/**
 	 * See IView::getViewContainer
 	 */
-	virtual IViewContainer* getParent();
+	virtual IViewContainer* getParent() const;
 
 	/**
 	 * See IView::showContextMenu

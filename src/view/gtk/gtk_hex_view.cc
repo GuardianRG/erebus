@@ -19,11 +19,11 @@ void GTK_HexView::setPresenter(std::unique_ptr<IHexViewPresenter> presenter) {
 	presenter_=std::move(presenter);
 }
 
-IViewPresenter& GTK_HexView::getPresenter() {
+IViewPresenter& GTK_HexView::getPresenter() const {
 	return *(presenter_.get());
 }
 
-std::string GTK_HexView::getTitle() {
+std::string GTK_HexView::getTitle() const {
 	return GTK_View::getTitle();
 }
 
@@ -46,7 +46,7 @@ void GTK_HexView::setParent(IViewContainer* container) {
 }
 
 
-IViewContainer* GTK_HexView::getParent() {
+IViewContainer* GTK_HexView::getParent() const {
 	return GTK_View::getParent();
 }
 

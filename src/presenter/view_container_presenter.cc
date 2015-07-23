@@ -29,7 +29,7 @@ void ViewContainerPresenter::on_context_menu_add_view_click(ViewType type) {
 	container_->addView(type);
 }
 
-IViewContainer* ViewContainerPresenter::getViewContainer() {
+IViewContainer* ViewContainerPresenter::getViewContainer() const {
 	return container_;
 }
 

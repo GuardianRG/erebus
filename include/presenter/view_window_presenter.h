@@ -36,7 +36,7 @@ class ViewWindowPresenter:public IViewWindowPresenter {
 	/**
 	 * See IViewWindowPresenter::getWindow
 	 */
-	virtual IWindow* getWindow() override;
+	virtual IWindow* getWindow() const override;
 
 };
 

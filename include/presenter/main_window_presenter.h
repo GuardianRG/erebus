@@ -37,7 +37,7 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	/**
 	 * See IMainWindowPresenter::getWindow
 	 */
-	virtual IWindow* getWindow()override;
+	virtual IWindow* getWindow() const override;
 };
 
 }//namespace erbus

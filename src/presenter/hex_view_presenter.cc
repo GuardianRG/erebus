@@ -16,7 +16,7 @@ void HexViewPresenter::setView(IHexView* view)  {
 	view_=view;
 }
 
-IHexView* HexViewPresenter::getView() {
+IHexView* HexViewPresenter::getView() const {
 	return view_;
 }
 

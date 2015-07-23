@@ -36,6 +36,6 @@ class WindowPresenter:public IWindowPresenter {
 	/**
 	 * See IWindowPresenter::getWindow
 	 */
-	virtual IWindow* getWindow() override;
+	virtual IWindow* getWindow() const override;
 };
 }//namespace erebus

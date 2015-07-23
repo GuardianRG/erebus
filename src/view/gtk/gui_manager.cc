@@ -24,9 +24,9 @@ namespace erebus {
 std::unique_ptr<GUIManager>	GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
 
 GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):argc_(argc),argv_(argv),model_(model) {
-	stateObject_=new GTK_GUIStateObject;
+	stateObject_=std::unique_ptr<GTK_GUIStateObject>(new GTK_GUIStateObject);
 
-	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_);
+	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
 
 	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc_, argv_,"org.werner.erebus");
 	stateObject->application_=app;
@@ -66,7 +66,7 @@ GUIManager* GUIManager::getInstance() {
 }
 
 void GUIManager::runGUI() {
-	GTK_GUIStateObject* guido=GTK_GUIStateObject::getState(stateObject_);
+	GTK_GUIStateObject* guido=GTK_GUIStateObject::getState(stateObject_.get());
 
 	guido->mainWindow_->setPreferredSize(800,600);
 	guido->mainWindow_->maximize();
@@ -75,7 +75,7 @@ void GUIManager::runGUI() {
 }
 
 void GUIManager::addWindow(IWindow* window) {
-	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_);
+	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
 	GTK_Window* window_c=static_cast<GTK_Window*>(window);
 	stateObject->application_->add_window(*window_c);
 }

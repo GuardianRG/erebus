@@ -21,7 +21,7 @@ class HexViewPresenter:public IHexViewPresenter {
 	/**
 	 * See IHexViewPresenter::getView
 	 */
-	virtual IHexView* getView()override;
+	virtual IHexView* getView() const override;
 
 
 	/**

@@ -24,7 +24,7 @@ class GUIManager {
 
 	std::shared_ptr<Model>			model_;
 
-	IGUIStateObject*			stateObject_;
+	std::unique_ptr<IGUIStateObject>	stateObject_;
 
 	GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv);
 

@@ -18,13 +18,6 @@ class IViewContainer {
 	virtual ~IViewContainer() {}
 
 	/**
-	 * Sets the presenter for this container.
-	 *
-	 * @param presenter presenter for this container
-	 */
-	virtual void setPresenter(IViewContainerPresenter* presenter)=0;
-
-	/**
 	 * Sets the container that this container contains.
 	 *
 	 * @parent parent of this container
@@ -36,7 +29,7 @@ class IViewContainer {
 	 *
 	 * @return the parent of this container
 	 */
-	virtual IViewContainer* getParent()=0;
+	virtual IViewContainer* getParent() const=0;
 
 	/**
 	 * Splits the container horizontal.
@@ -64,21 +57,21 @@ class IViewContainer {
 	 *
 	 * @return is false when this container contains views or is split. If this container is not split and contains no views it returns true.
 	 */
-	virtual bool isEmpty()=0;
+	virtual bool isEmpty() const=0;
 
 	/**
 	 * Wether the container is split or not.
 	 *
 	 * @return true, when the container is split
 	 */
-	virtual bool isSplit()=0;
+	virtual bool isSplit() const=0;
 
 	/**
 	 * Wether this container contains container.
 	 *
 	 * @return is true when this container contains no containers
 	 */
-	virtual bool isTopLevel()=0;
+	virtual bool isTopLevel() const=0;
 
 	/**
 	 * Joins the container if it was split.

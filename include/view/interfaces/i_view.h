@@ -1,13 +1,13 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include <view/interfaces/i_view.h>
 #include <view/interfaces/i_view_container.h>
 
 namespace erebus {
 
-class IPresenter;
 class IViewPresenter;
 
 /**
@@ -27,7 +27,7 @@ class IView {
 	 *
 	 * @return title of the view
 	 */
-	virtual std::string getTitle()=0;
+	virtual std::string getTitle() const=0;
 
 	/**
 	 * Sets the title of the view.
@@ -61,7 +61,7 @@ class IView {
 	 *
 	 * @return container in which the view is contained.
 	 */
-	virtual IViewContainer* getParent()=0;
+	virtual IViewContainer* getParent() const=0;
 
 	/**
 	 * Moves the view to a new window.

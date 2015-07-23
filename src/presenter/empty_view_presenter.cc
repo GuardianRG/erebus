@@ -15,7 +15,7 @@ void EmptyViewPresenter::setView(IEmptyView* view) {
 	view_=view;
 }
 
-IEmptyView* EmptyViewPresenter::getView() {
+IEmptyView* EmptyViewPresenter::getView() const {
 	return view_;
 }
 void EmptyViewPresenter::on_right_button_click() {
