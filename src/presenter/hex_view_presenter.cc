@@ -28,7 +28,8 @@ HexViewPresenter& HexViewPresenter::operator=(HexViewPresenter&& obj) {
 
 
 void HexViewPresenter::setView(IView* view)  {
-	assert((view_=dynamic_cast<IHexView*>(view))!=0);
+	view_=dynamic_cast<IHexView*>(view);
+	assert(view_!=0);
 }
 
 void HexViewPresenter::on_right_button_click() {

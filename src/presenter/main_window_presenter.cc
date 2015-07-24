@@ -27,7 +27,8 @@ MainWindowPresenter& MainWindowPresenter::operator=(MainWindowPresenter&& obj) {
 }
 
 void MainWindowPresenter::setWindow(IWindow* window) {
-	assert((mainWindow_=dynamic_cast<IMainWindow*>(window))!=0);
+	mainWindow_=dynamic_cast<IMainWindow*>(window);
+	assert(mainWindow_!=0);
 }
 
 

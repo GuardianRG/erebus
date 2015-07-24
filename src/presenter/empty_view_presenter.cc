@@ -27,7 +27,8 @@ EmptyViewPresenter& EmptyViewPresenter::operator=(EmptyViewPresenter&& obj) {
 }
 
 void EmptyViewPresenter::setView(IView* view) {
-	assert((view_=dynamic_cast<IEmptyView*>(view))!=0);
+	view_=dynamic_cast<IEmptyView*>(view);
+	assert(view_!=0);
 }
 
 void EmptyViewPresenter::on_right_button_click() {
