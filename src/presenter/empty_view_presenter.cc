@@ -32,16 +32,19 @@ void EmptyViewPresenter::setView(IView* view) {
 }
 
 void EmptyViewPresenter::on_right_button_click() {
+	assert(view_!=nullptr);
 	view_->showContextMenu();
 }
 void EmptyViewPresenter::on_left_button_click() {
 
 }
 void EmptyViewPresenter::on_context_menu_close_click() {
+	assert(view_!=nullptr);
 	view_->close();
 }
 
 void EmptyViewPresenter::on_context_menu_pop_out_click() {
+	assert(view_!=nullptr);
 	view_->popOut();
 }
 

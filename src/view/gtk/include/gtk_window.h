@@ -12,13 +12,15 @@ namespace erebus {
 /**
  * This class is a simple gtk window.
  */
-class GTK_Window:public Gtk::Window,public IWindow {
-	IWindowPresenter*	presenter_;
+class GTK_Window:public Gtk::Window,virtual public IWindow {
+
+  protected:
+	virtual IWindowPresenter& getPresenter()=0;
   public:
 	/**
 	 * Construcctor.
 	 */
-	GTK_Window();
+	GTK_Window(BaseObjectType* cobject);
 
 	/**
 	 * Copy constructor.
@@ -56,23 +58,25 @@ class GTK_Window:public Gtk::Window,public IWindow {
 	/**
 	 * See IWindow::setTitle
 	 */
-	void setTitle(std::string title) override;
+	virtual void setTitle(std::string title) override;
 
-	std::string getTitle() const override;
+	virtual std::string getTitle() const override;
 
 	/**
 	 * See IWindow::setPreferredSize
 	 */
-	void setPreferredSize(int width,int height) override;
+	virtual void setPreferredSize(int width,int height) override;
 
 	/**
 	 * See IWindow::maximize
 	 */
-	void maximize() override;
+	virtual void maximize() override;
 
 	/**
 	 * See IWindow::unmaximize
 	 */
-	void unmaximize() override;
+	virtual void unmaximize() override;
+
+	virtual void close() override;
 };
 }//namespace erebus

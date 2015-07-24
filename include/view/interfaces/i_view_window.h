@@ -9,7 +9,7 @@ namespace erebus {
 /**
  * This class is the interface for a view window.
  */
-class IViewWindow:public IWindow {
+class IViewWindow:virtual public IWindow {
   public:
 	/**
 	 * Destructor.
@@ -17,12 +17,17 @@ class IViewWindow:public IWindow {
 	virtual ~IViewWindow() {}
 
 	/**
-	 * Add the view to the window.
+	 * Returns the basic view container.
 	 *
-	 * The view gets added to the deepest view container.
-	 *
-	 * @param view view to add
+	 * @return the basic view container
 	 */
-	virtual void addView(IView* view)=0;
+	virtual IViewContainer& getBasicViewContainer()=0;
+
+	/**
+	 * Whether the window contains any views.
+	 *
+	 * @return true if the window contains at least one view
+	 */
+	virtual bool isEmpty()const=0;
 };
 }//namespace erebus

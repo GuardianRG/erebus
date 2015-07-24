@@ -22,7 +22,7 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * Copy constructor.
 	 *
-	 * deleted until needed.
+	 * Cant be copied.
 	 */
 	ViewContainerPresenter(const ViewContainerPresenter &obj)=delete;
 

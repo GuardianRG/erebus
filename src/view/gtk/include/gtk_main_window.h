@@ -7,6 +7,7 @@
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <view/interfaces/i_main_window.h>
 
+#include <gtk_window.h>
 #include <gtk_view_container.h>
 
 namespace erebus {
@@ -14,18 +15,14 @@ namespace erebus {
 /**
  * This class is the main window.
  */
-class GTK_MainWindow : public Gtk::Window, public IMainWindow {
+class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	std::unique_ptr<IMainWindowPresenter>	presenter_;
 
 
 	GTK_ViewContainer*	basicView_;
-
+  protected:
+	IWindowPresenter& getPresenter();
   public:
-	/**
-	 * Constructor.
-	 */
-	GTK_MainWindow();
-
 	/**
 	 * Constructor.
 	 *
@@ -43,21 +40,21 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be moved since Gtk::Viewport cant be moved.
 	 */
 	GTK_MainWindow( GTK_MainWindow&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_MainWindow& operator=(const GTK_MainWindow&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be moved.
 	 */
 	GTK_MainWindow& operator=(GTK_MainWindow&&)=delete;
 
@@ -96,5 +93,7 @@ class GTK_MainWindow : public Gtk::Window, public IMainWindow {
 	 * See IMainWindow::unmaximize
 	 */
 	void unmaximize() override;
+
+	void close() override;
 };
 }//namespace erebus

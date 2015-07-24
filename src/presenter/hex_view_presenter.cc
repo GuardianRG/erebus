@@ -33,6 +33,7 @@ void HexViewPresenter::setView(IView* view)  {
 }
 
 void HexViewPresenter::on_right_button_click() {
+	assert(view_!=nullptr);
 	view_->showContextMenu();
 }
 
@@ -41,10 +42,12 @@ void HexViewPresenter::on_left_button_click() {
 }
 
 void HexViewPresenter::on_context_menu_close_click() {
+	assert(view_!=nullptr);
 	view_->close();
 }
 
 void HexViewPresenter::on_context_menu_pop_out_click() {
+	assert(view_!=nullptr);
 	view_->popOut();
 }
 

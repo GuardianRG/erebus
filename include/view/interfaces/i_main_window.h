@@ -8,7 +8,7 @@ namespace erebus {
 /**
  * This class is the interface for a main window.
  */
-class IMainWindow : public IWindow {
+class IMainWindow :virtual public IWindow {
   public:
 	/**
 	 * Destructor.

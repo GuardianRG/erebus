@@ -1,5 +1,7 @@
 #include <presenter/window_presenter.h>
 
+#include <assert.h>
+
 #include <view/interfaces/i_window.h>
 
 namespace erebus {
@@ -25,5 +27,6 @@ WindowPresenter& WindowPresenter::operator=(WindowPresenter&& obj) {
 
 void WindowPresenter::setWindow(IWindow* window) {
 	window_=window;
+	assert(window_!=nullptr);
 }
 }//namespace erebus

@@ -81,9 +81,19 @@ GTK_ViewContainer::~GTK_ViewContainer() {
 
 }
 
-bool GTK_ViewContainer::isEmpty() const {
-	if(isSplit_)
+bool GTK_ViewContainer::isEmpty(bool recursive) const {
+	if(isSplit_) {
+		if(recursive) {
+			auto ch1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
+			auto ch2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
+
+			assert(ch1!=0);
+			assert(ch2!=0);
+
+			return ch1->isEmpty(true)||ch2->isEmpty(true);
+		}
 		return false;
+	}
 	assert(notebook_!=nullptr&&"notebook must not be nullptr");
 	return notebook_->get_n_pages()==0;
 }
@@ -381,17 +391,27 @@ void GTK_ViewContainer::addView(ViewType type) {
 	}
 }
 void GTK_ViewContainer::addView(IView* view) {
-	assert(isTopLevel() && "GTK_ViewContainer must be toplevel to add a view");
-	assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");
+	//assert(isTopLevel() && "GTK_ViewContainer must be toplevel to add a view");
+	//assert( notebook_!=nullptr && "No notebook set for GTK_ViewContainer");
 
-	if(notebook_->get_n_pages()>=1)
-		showTabs(true);
+	if(!isTopLevel()) {
+		assert(paned_!=nullptr);
 
-	GTK_View* buffer=dynamic_cast<GTK_View*>(view);
-	notebook_->append_page(*buffer,view->getTitle());
-	notebook_->set_tab_reorderable(*buffer);
-	notebook_->set_tab_detachable(*buffer);
+		auto ch1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
 
+		assert(ch1!=0);
+
+		ch1->addView(view);
+	} else {
+
+		if(notebook_->get_n_pages()>=1)
+			showTabs(true);
+
+		GTK_View* buffer=dynamic_cast<GTK_View*>(view);
+		notebook_->append_page(*buffer,view->getTitle());
+		notebook_->set_tab_reorderable(*buffer);
+		notebook_->set_tab_detachable(*buffer);
+	}
 	show_all_children();
 }
 

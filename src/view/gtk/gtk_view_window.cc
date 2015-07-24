@@ -12,11 +12,7 @@
 
 
 namespace erebus  {
-
-GTK_ViewWindow::GTK_ViewWindow() {
-}
-
-GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):Gtk::Window(cobject) {
+GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_Window(cobject) {
 	Gtk::Viewport *base;
 	refBuilder->get_widget("basic_viewport",base);
 
@@ -38,33 +34,44 @@ GTK_ViewWindow::~GTK_ViewWindow() {
 }
 
 void GTK_ViewWindow::setTitle(std::string title) {
-	set_title(title);
+	GTK_Window::setTitle(title);
 }
 
 std::string GTK_ViewWindow::getTitle() const {
-	return get_title();
+	return GTK_Window::getTitle();
 }
 
 void GTK_ViewWindow::setPreferredSize(int width,int height) {
-	set_default_size(width,height);
+	GTK_Window::setPreferredSize(width,height);
 }
 
 void GTK_ViewWindow::maximize() {
-	Gtk::Window::maximize();
+	GTK_Window::maximize();
 }
 
 
 void GTK_ViewWindow::unmaximize() {
-	Gtk::Window::unmaximize();
+	GTK_Window::unmaximize();
 }
 
 void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter> presenter) {
 	presenter_=std::move(presenter);
 }
 
-void GTK_ViewWindow::addView(IView* view) {
-	container_->addView(view);
-	show_all_children();
+IViewContainer& GTK_ViewWindow::getBasicViewContainer() {
+	return *container_;
+}
+
+bool GTK_ViewWindow::isEmpty() const {
+	return container_->isEmpty(true);
+}
+
+void GTK_ViewWindow::close() {
+	GTK_Window::close();
+}
+
+IWindowPresenter& GTK_ViewWindow::getPresenter() {
+	return *presenter_;
 }
 
 }//namespace erebus

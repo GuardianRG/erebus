@@ -46,6 +46,11 @@ class IWindow {
 	 * unmaximizes the window.
 	 */
 	virtual void unmaximize()=0;
+
+	/**
+	 * Closes the window.
+	 */
+	virtual void close()=0;
 };
 
 }//namespace erbus

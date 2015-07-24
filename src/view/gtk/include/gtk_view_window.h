@@ -9,20 +9,18 @@
 #include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_view_window_presenter.h>
 
+#include <gtk_window.h>
 #include <gtk_view_container.h>
 
 namespace erebus {
 
-class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
+class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	std::unique_ptr<IViewWindowPresenter>	presenter_;
 
 	GTK_ViewContainer*	container_;
+  protected:
+	IWindowPresenter& getPresenter();
   public:
-	/**
-	 * Constructor.
-	 */
-	GTK_ViewWindow();
-
 	/**
 	 * Constructor.
 	 */
@@ -55,6 +53,7 @@ class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
 	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_ViewWindow& operator=(GTK_ViewWindow&&)=delete;
+
 	/**
 	 * Destructor.
 	 */
@@ -93,7 +92,19 @@ class GTK_ViewWindow:public Gtk::Window,public IViewWindow {
 	/**
 	 * See IViewWindow::addView
 	 */
-	void addView(IView* view);
+	IViewContainer& getBasicViewContainer()override;
+
+	/**
+	 * Whether the window contains any views.
+	 *
+	 * @return true if the window contains at least one view
+	 */
+	bool isEmpty()const override;
+
+	/**
+	 * Closes the window.
+	 */
+	void close()override;
 };
 
 

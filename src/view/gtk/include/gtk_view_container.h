@@ -163,7 +163,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::isEmpty
 	 */
-	bool isEmpty()const override;
+	bool isEmpty(bool recursive)const override;
 
 	/**
 	 * See IViewContainer::popOutView

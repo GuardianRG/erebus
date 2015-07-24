@@ -5,7 +5,7 @@
 #include <presenter/interfaces/i_window_presenter.h>
 
 namespace erebus {
-GTK_Window::GTK_Window() {
+GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
 
 }
 
@@ -31,5 +31,9 @@ void GTK_Window::maximize() {
 
 void GTK_Window::unmaximize() {
 	Gtk::Window::unmaximize();
+}
+
+void GTK_Window::close() {
+	Gtk::Window::close();
 }
 }//namespace erebus

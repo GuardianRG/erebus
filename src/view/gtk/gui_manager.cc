@@ -76,7 +76,7 @@ void GUIManager::runGUI() {
 
 void GUIManager::addWindow(IWindow* window) {
 	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
-	GTK_Window* window_c=static_cast<GTK_Window*>(window);
+	GTK_Window* window_c=dynamic_cast<GTK_Window*>(window);
 	stateObject->application_->add_window(*window_c);
 }
 
@@ -93,7 +93,7 @@ void GUIManager::moveViewToNewWindow(IView* view) {
 
 	viewWindow->setPresenter(std::move(presenter));
 
-	viewWindow->addView(view);
+	viewWindow->getBasicViewContainer().addView(view);
 
 	//addWindow(viewWindow);
 	viewWindow->show();

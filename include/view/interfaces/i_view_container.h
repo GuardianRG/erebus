@@ -8,7 +8,7 @@ class IView;
 class IViewContainerPresenter;
 
 /**
- * This class is the interface for view container.
+ * This class is the interface for a view container.
  */
 class IViewContainer {
   public:
@@ -34,14 +34,14 @@ class IViewContainer {
 	/**
 	 * Splits the container horizontal.
 	 *
-	 * Is the container is already splitted nothings happens.
+	 * If the container is already splitted nothings happens.
 	 */
 	virtual void splitHorizontal()=0;
 
 	/**
 	 * Splits the container vertically.
 	 *
-	 * Is the container is already splitted nothings happens.
+	 * If the container is already splitted nothings happens.
 	 */
 	virtual void splitVertical()=0;
 
@@ -53,11 +53,13 @@ class IViewContainer {
 	virtual void showTabs(bool showTabs)=0;
 
 	/**
-	 * Wether this container contains views.
+	 * Wether this container is empty.
 	 *
-	 * @return is false when this container contains views or is split. If this container is not split and contains no views it returns true.
+	 * @param recursive when true, this call will be forwarded if the container is split
+	 *
+	 * @return true if the container is empty
 	 */
-	virtual bool isEmpty() const=0;
+	virtual bool isEmpty(bool recursive) const=0;
 
 	/**
 	 * Wether the container is split or not.
