@@ -2,22 +2,33 @@
 
 #include <string>
 #include <memory>
+#include <iostream>
 
 #include <presenter/interfaces/i_view_window_presenter.h>
+#include <presenter/interfaces/i_view_container_presenter.h>
 
 #include <gtk_view_container.h>
 #include <presenter/view_container_presenter.h>
-
 #include <view/view_type.h>
+#include <gtk_logger.h>
 
 
 namespace erebus  {
-GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_Window(cobject) {
+GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
+                               const Glib::RefPtr<Gtk::Builder>& refBuilder
+                              ):GTK_Window(cobject) {
 	Gtk::Viewport *base;
 	refBuilder->get_widget("basic_viewport",base);
 
-	auto presenter=std::unique_ptr<ViewContainerPresenter>(new ViewContainerPresenter);
-	container_=Gtk::manage(new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr));
+	auto presenter=std::unique_ptr<IViewContainerPresenter>(
+	                   std::make_unique<ViewContainerPresenter>()
+	               );
+
+	container_=Gtk::manage(new GTK_ViewContainer(
+	                           base->get_hadjustment(),
+	                           base->get_vadjustment(),
+	                           nullptr)
+	                      );
 
 	presenter->setViewContainer(container_);
 	container_->setPresenter(std::move(presenter));
@@ -27,6 +38,8 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	setPreferredSize(300,200);
 
 	show_all_children();
+
+	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
 }
 
 GTK_ViewWindow::~GTK_ViewWindow() {
@@ -48,7 +61,6 @@ void GTK_ViewWindow::setPreferredSize(int width,int height) {
 void GTK_ViewWindow::maximize() {
 	GTK_Window::maximize();
 }
-
 
 void GTK_ViewWindow::unmaximize() {
 	GTK_Window::unmaximize();

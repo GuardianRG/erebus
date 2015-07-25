@@ -18,15 +18,12 @@ namespace erebus {
  * that allows it to be created by a builder.
  */
 class GTK_View:public Gtk::Viewport,virtual public IView {
-	IViewContainer*			container_;
+	IViewContainer*			parent_;
 
 	std::string 			title_;
 
 	int 				timeBuffer_;
 	int				clickBuffer_;
-
-
-	void init();
 
 	void on_context_menu_pop_out_click();
 	void on_context_menu_close_click();
@@ -43,14 +40,6 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	virtual IViewPresenter& getPresenter() const=0;
 
   public:
-	/**
-	 * Constructor.
-	 *
-	 * @param h_adjustment horizontal adjustment
-	 * @param v_adjustment vertical adjustment
-	 */
-	GTK_View(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
-
 	/**
 	 * Constructor.
 	 *
@@ -102,8 +91,6 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 
 	/**
 	 * See IView::setViewContainer
-	 *
-	 * Needs to be called before every other method!
 	 */
 	virtual void setParent(IViewContainer* container) override;
 
@@ -168,10 +155,6 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 *
 	 */
 	virtual void createContextMenu();
-
-	Glib::RefPtr<Gtk::Adjustment> getVAdjustment();
-
-	Glib::RefPtr<Gtk::Adjustment> getHAdjustment();
 
 	/**
 	 * Gets called by a click on the view.

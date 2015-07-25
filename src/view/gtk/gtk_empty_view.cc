@@ -15,7 +15,9 @@
 
 namespace erebus {
 
-GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject,refBuilder) {
+GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
+                             const Glib::RefPtr<Gtk::Builder>& refBuilder)
+	:GTK_View(cobject,refBuilder) {
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
@@ -70,7 +72,7 @@ void GTK_EmptyView::popOut() {
 void GTK_EmptyView::createContextMenu() {
 	GTK_View::createContextMenu();
 
-	Gtk::MenuItem* empty = Gtk::manage(new Gtk::MenuItem("Empty Entry"));
+	auto empty = Gtk::manage(new Gtk::MenuItem("Empty Entry"));
 	empty->set_sensitive(false);
 
 	popupMenu_->prepend(*empty);

@@ -10,11 +10,16 @@
 namespace erebus {
 
 /**
- * This class is a simple gtk window.
+ * This class is base gtk window.
  */
 class GTK_Window:public Gtk::Window,virtual public IWindow {
 
   protected:
+	/**
+	 * Returns the presenter.
+	 *
+	 * @return the presenter
+	 */
 	virtual IWindowPresenter& getPresenter()=0;
   public:
 	/**
@@ -25,28 +30,28 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	/**
 	 * Copy constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_Window(const GTK_Window &obj)=delete;
 
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_Window( GTK_Window&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_Window& operator=(const GTK_Window&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_Window& operator=(GTK_Window&&)=delete;
 
@@ -60,6 +65,9 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 */
 	virtual void setTitle(std::string title) override;
 
+	/**
+	 * See IWindow::getTitle
+	 */
 	virtual std::string getTitle() const override;
 
 	/**
@@ -77,6 +85,9 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 */
 	virtual void unmaximize() override;
 
+	/**
+	 * See IWindow::close
+	 */
 	virtual void close() override;
 };
 }//namespace erebus

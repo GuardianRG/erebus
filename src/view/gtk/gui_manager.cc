@@ -24,20 +24,22 @@
 
 namespace erebus {
 
-std::unique_ptr<GUIManager>	GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
+std::unique_ptr<GUIManager> GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
 
-GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):argc_(argc),argv_(argv),model_(model) {
-	stateObject_=std::unique_ptr<GTK_GUIStateObject>(new GTK_GUIStateObject);
 
-	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
+GUIManager::GUIManager(std::shared_ptr<Model> model,
+                       int& argc,
+                       char**& argv
+                      ):argc_(argc),argv_(argv),model_(model) {
+	stateObject_=std::make_unique<GTK_GUIStateObject>();
 
-	Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc_, argv_,"org.werner.erebus");
+	auto stateObject=GTK_GUIStateObject::getState(stateObject_.get());
+
+	auto app = Gtk::Application::create(argc_, argv_,"org.werner.erebus");
+
 	stateObject->application_=app;
 
-	Glib::RefPtr<Gtk::Builder> builder;
-
-	//load the main window
-	builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
+	auto builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
 
 	GTK_MainWindow* window;
 	builder->get_widget_derived("main_window", window);
@@ -47,7 +49,6 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):arg
 
 	window->setPresenter(std::move(presenter));
 	stateObject->mainWindow_=std::unique_ptr<GTK_MainWindow>(window);
-	//end of loading main window
 
 }
 
@@ -69,7 +70,7 @@ GUIManager* GUIManager::getInstance() {
 }
 
 void GUIManager::runGUI() {
-	GTK_GUIStateObject* guido=GTK_GUIStateObject::getState(stateObject_.get());
+	auto guido=GTK_GUIStateObject::getState(stateObject_.get());
 
 	guido->mainWindow_->setPreferredSize(800,600);
 	guido->mainWindow_->maximize();
@@ -77,7 +78,7 @@ void GUIManager::runGUI() {
 	guido->application_->run(*(static_cast<GTK_MainWindow*>(guido->mainWindow_.get())));
 }
 
-void GUIManager::addWindow(IWindow* window) {
+/*void GUIManager::addWindow(IWindow* window) {
 	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
 
 	try {
@@ -87,12 +88,18 @@ void GUIManager::addWindow(IWindow* window) {
 		BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"Cast failed.";
 		return;
 	}
+}*/
+
+void GUIManager::deleteWindow(IWindow* window) {
+	windows_.erase(std::remove_if(windows_.begin(), windows_.end(),
+	[window](const std::unique_ptr<IWindow>& iwindow) {
+		return iwindow.get()==window;
+	}),
+	windows_.end());
 }
 
 void GUIManager::moveViewToNewWindow(IView& view) {
-	Glib::RefPtr<Gtk::Builder> builder;
-
-	builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
+	auto builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
 
 	GTK_ViewWindow* viewWindow;
 	builder->get_widget_derived("view_window", viewWindow);
@@ -104,8 +111,9 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 
 	viewWindow->getBasicViewContainer().addView(view);
 
-	//addWindow(viewWindow);
 	viewWindow->show();
+
+	windows_.push_back(std::unique_ptr<IWindow>(viewWindow));
 }
 
 }//namespace erebus

@@ -3,17 +3,27 @@
 #include <memory>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
+#include <presenter/interfaces/i_view_container_presenter.h>
 
 #include <gtk_view_container.h>
 #include <presenter/view_container_presenter.h>
 
 namespace erebus {
-GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): GTK_Window(cobject) {
+GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
+                               const Glib::RefPtr<Gtk::Builder>& refBuilder)
+	: GTK_Window(cobject) {
+
 	Gtk::Viewport *base;
 	refBuilder->get_widget("base_view",base);
 
-	auto presenter=std::unique_ptr<ViewContainerPresenter>(new ViewContainerPresenter);
-	basicView_=Gtk::manage(new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr,nullptr));
+	auto presenter=std::unique_ptr<IViewContainerPresenter>(
+	                   std::make_unique<ViewContainerPresenter>());
+
+	basicView_=Gtk::manage(new GTK_ViewContainer(
+	                           base->get_hadjustment(),
+	                           base->get_vadjustment(),
+	                           nullptr,
+	                           nullptr));
 
 	presenter->setViewContainer(basicView_);
 	basicView_->setPresenter(std::move(presenter));
@@ -21,10 +31,12 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	base->add(*basicView_);
 
 	show_all_children();
+
+	signal_hide().connect(sigc::mem_fun(*this,&GTK_MainWindow::close) );
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
-	delete basicView_;
+
 }
 
 void GTK_MainWindow::setTitle(std::string title) {

@@ -28,29 +28,21 @@ class GTK_GUIStateObject: public IGUIStateObject {
 
 	/**
 	 * Copy constructor.
-	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_GUIStateObject(const GTK_GUIStateObject &obj)=delete;
 
 	/**
 	 * Move Constructor.
-	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_GUIStateObject( GTK_GUIStateObject&& )=delete;
 
 	/**
 	 * Copy assignment operator.
-	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_GUIStateObject& operator=(const GTK_GUIStateObject&)=delete;
 
 	/**
 	 * Move assignment operator.
-	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
 	 */
 	GTK_GUIStateObject& operator=(GTK_GUIStateObject&&)=delete;
 
@@ -58,6 +50,8 @@ class GTK_GUIStateObject: public IGUIStateObject {
 	 * Saves the pointer to the application.
 	 */
 	Glib::RefPtr<Gtk::Application>	application_;
+
+
 
 	/**
 	 * Saves the pointer to the main window.

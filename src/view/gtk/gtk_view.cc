@@ -4,7 +4,6 @@
 
 #include <assert.h>
 #include <memory>
-#include <iostream>
 
 #include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_view_presenter.h>
@@ -12,38 +11,34 @@
 
 namespace erebus {
 
-GTK_View::GTK_View(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment):Gtk::Viewport(h_adjustment,v_adjustment) {
-	init();
-}
+GTK_View::GTK_View(BaseObjectType* cobject,
+                   const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Viewport(cobject) {
 
-GTK_View::GTK_View(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Viewport(cobject) {
-	init();
+	add_events(Gdk::BUTTON_PRESS_MASK );
+
+#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
+	signal_button_press_event().
+	connect(sigc::mem_fun(*this, &GTK_View::on_button_press_event), false);
+#endif
+	signal_parent_changed().
+	connect(sigc::mem_fun(*this, &GTK_View::on_my_parent_changed), false);
+
+
+	title_="";
+	parent_=nullptr;
+	popupMenu_=std::make_unique<Gtk::Menu>();
 }
 
 GTK_View::~GTK_View() {
 
 }
 
-
-void GTK_View::init() {
-
-	add_events(Gdk::BUTTON_PRESS_MASK );
-
-#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
-	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_View::on_button_press_event), false);
-#endif
-	signal_parent_changed().connect(sigc::mem_fun(*this, &GTK_View::on_my_parent_changed), false);
-
-
-	title_="";
-	container_=nullptr;
-	popupMenu_=nullptr;
-}
-
 void GTK_View::on_my_parent_changed(Gtk::Widget* previous_parent) {
 	if(get_parent()!=nullptr) {
 		if(get_parent()->get_parent()!=nullptr) {
-			setParent(dynamic_cast<GTK_ViewContainer*>(get_parent()->get_parent()));
+			auto buffer=dynamic_cast<GTK_ViewContainer*>(get_parent()->get_parent());
+			assert(buffer!=0);
+			setParent(buffer);
 			createContextMenu();
 		}
 	}
@@ -57,11 +52,11 @@ std::string GTK_View::getTitle() const {
 }
 
 void GTK_View::setParent(IViewContainer* container) {
-	container_=container;
+	parent_=container;
 }
 
 IViewContainer* GTK_View::getParent() const {
-	return container_;
+	return parent_;
 }
 
 bool GTK_View::on_button_press_event(GdkEventButton *ev) {
@@ -90,15 +85,15 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 }
 
 void GTK_View::close() {
-	assert( container_!=nullptr && "No view container set for GTK_View");
+	assert( parent_!=nullptr);
 
-	container_->closeView(*this);
+	parent_->closeView(*this);
 }
 
 void GTK_View::popOut() {
-	assert( container_!=nullptr && "No view container set for GTK_View");
+	assert( parent_!=nullptr);
 
-	container_->popOutView(*this);
+	parent_->popOutView(*this);
 }
 
 void GTK_View::on_context_menu_close_click() {
@@ -110,20 +105,22 @@ void GTK_View::on_context_menu_pop_out_click() {
 }
 
 void GTK_View::createContextMenu() {
-	assert( container_!=nullptr && "No view container set for GTK_View");
+	assert( parent_!=nullptr);
 
 	popupMenu_=std::unique_ptr<Gtk::Menu>(new Gtk::Menu);
 
-	Gtk::MenuItem* view=Gtk::manage(new Gtk::MenuItem("View"));
-	Gtk::Menu* view_menu=Gtk::manage(new Gtk::Menu);
+	auto view=Gtk::manage(new Gtk::MenuItem("View"));
+	auto view_menu=Gtk::manage(new Gtk::Menu);
 	view->set_submenu(*view_menu);
 
-	Gtk::SeparatorMenuItem* sep=Gtk::manage(new Gtk::SeparatorMenuItem);
-	Gtk::MenuItem* pop_out = Gtk::manage(new Gtk::MenuItem("Pop out"));
-	Gtk::MenuItem* close = Gtk::manage(new Gtk::MenuItem("Close view"));
+	auto sep=Gtk::manage(new Gtk::SeparatorMenuItem);
+	auto pop_out = Gtk::manage(new Gtk::MenuItem("Pop out"));
+	auto close = Gtk::manage(new Gtk::MenuItem("Close view"));
 
-	close->signal_activate().connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_close_click) );
-	pop_out->signal_activate().connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_pop_out_click) );
+	close->signal_activate().
+	connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_close_click) );
+	pop_out->signal_activate().
+	connect(sigc::mem_fun(*this, &GTK_View::on_context_menu_pop_out_click) );
 
 	popupMenu_->append(*sep);
 	view_menu->append(*pop_out);
@@ -131,24 +128,15 @@ void GTK_View::createContextMenu() {
 	view_menu->accelerate(*this);
 	popupMenu_->append(*view);
 
-	static_cast<GTK_ViewContainer*>(container_)->buildContextMenu(*popupMenu_.get());
+	static_cast<GTK_ViewContainer*>(parent_)->buildContextMenu(*popupMenu_.get());
 
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();
 }
 void GTK_View::showContextMenu() {
-	assert(popupMenu_!=nullptr&&"No popup menu set for GTK_View");
+	assert(popupMenu_.get()!=nullptr);
 
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
-}
-
-
-Glib::RefPtr<Gtk::Adjustment> GTK_View::getVAdjustment() {
-	return get_vadjustment();
-}
-
-Glib::RefPtr<Gtk::Adjustment> GTK_View::getHAdjustment() {
-	return get_hadjustment();
 }
 
 }//namespace erebus

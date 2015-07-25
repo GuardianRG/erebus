@@ -29,28 +29,28 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	/**
 	 * Copy constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_ViewWindow(const GTK_ViewWindow &obj)=delete;
 
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_ViewWindow( GTK_ViewWindow&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_ViewWindow& operator=(const GTK_ViewWindow&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_ViewWindow& operator=(GTK_ViewWindow&&)=delete;
 
@@ -95,14 +95,12 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	IViewContainer& getBasicViewContainer()override;
 
 	/**
-	 * Whether the window contains any views.
-	 *
-	 * @return true if the window contains at least one view
+	 * See IViewWindow::isEmpty
 	 */
 	bool isEmpty()const override;
 
 	/**
-	 * Closes the window.
+	 * See IViewWindow::close
 	 */
 	void close()override;
 };

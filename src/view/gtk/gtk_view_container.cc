@@ -69,7 +69,8 @@ GTK_ViewContainer::GTK_ViewContainer(
 	add_events(Gdk::BUTTON_PRESS_MASK );
 
 #ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
-	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
+	signal_button_press_event().
+	connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
 #endif
 
 	//Build popMenu
@@ -186,8 +187,13 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu& menu) {
 	auto split_h = Gtk::manage(new Gtk::MenuItem{"Horizontal"});
 	auto split_v = Gtk::manage(new Gtk::MenuItem{"Vertical"});
 
-	split_h->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_split_horizontal_click) );
-	split_v->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_split_vertical_click) );
+	split_h->signal_activate().
+	connect(sigc::mem_fun(*this,
+	                      &GTK_ViewContainer::on_context_menu_split_horizontal_click) );
+
+	split_v->signal_activate().
+	connect(sigc::mem_fun(*this,
+	                      &GTK_ViewContainer::on_context_menu_split_vertical_click) );
 
 	split_menu->append(*split_h);
 	split_menu->append(*split_v);
@@ -198,11 +204,15 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu& menu) {
 	auto view_menu=Gtk::manage(new Gtk::Menu);
 
 	auto empty_view = Gtk::manage(new Gtk::MenuItem{"Empty View"});
-	empty_view->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_add_view_empty_view_click) );
+	empty_view->signal_activate().
+	connect(sigc::mem_fun(*this,
+	                      &GTK_ViewContainer::on_context_menu_add_view_empty_view_click) );
 	view_menu->append(*empty_view);
 
 	auto hex_view = Gtk::manage(new Gtk::MenuItem{"Hex View"});
-	hex_view->signal_activate().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_context_menu_add_view_hex_view_click) );
+	hex_view->signal_activate().
+	connect(sigc::mem_fun(*this,
+	                      &GTK_ViewContainer::on_context_menu_add_view_hex_view_click) );
 	view_menu->append(*hex_view);
 
 	add_view->set_submenu(*view_menu);
@@ -362,12 +372,22 @@ void GTK_ViewContainer::split() {
 	Gtk::Container::remove(*notebook_);
 
 	//Create both containers for the paned
-	auto vc1=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),std::move(notebook_),this));
+	auto vc1=Gtk::manage(new GTK_ViewContainer(
+	                         get_hadjustment(),
+	                         get_vadjustment(),
+	                         std::move(notebook_),this)
+	                    );
+
 	auto vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),this));
 
 	//Create the presenters of the container
-	auto vcp1=std::unique_ptr<IViewContainerPresenter>(std::make_unique<ViewContainerPresenter>());
-	auto vcp2=std::unique_ptr<IViewContainerPresenter>(std::make_unique<ViewContainerPresenter>());
+	auto vcp1=std::unique_ptr<IViewContainerPresenter>(
+	              std::make_unique<ViewContainerPresenter>()
+	          );
+
+	auto vcp2=std::unique_ptr<IViewContainerPresenter>(
+	              std::make_unique<ViewContainerPresenter>()
+	          );
 
 	vcp1->setViewContainer(vc1);
 	vcp2->setViewContainer(vc2);
@@ -427,7 +447,10 @@ void GTK_ViewContainer::addView(ViewType type) {
 	case ViewType::EMPTY_VIEW: {
 		auto title=std::string{"Empty View"};
 
-		auto presenter=std::unique_ptr<IEmptyViewPresenter>(std::make_unique<EmptyViewPresenter>());
+		auto presenter=std::unique_ptr<IEmptyViewPresenter>(
+		                   std::make_unique<EmptyViewPresenter>()
+		               );
+
 		auto builder=GTK_BuilderFactory::getBuilder(Views::EMPTY_VIEW);
 		GTK_EmptyView* view;
 		builder->get_widget_derived("empty_view",view);
@@ -442,7 +465,10 @@ void GTK_ViewContainer::addView(ViewType type) {
 	case ViewType::HEX_VIEW: {
 		auto title=std::string{"Hex View"};
 
-		auto presenter=std::unique_ptr<IHexViewPresenter>(std::make_unique<HexViewPresenter>());
+		auto presenter=std::unique_ptr<IHexViewPresenter>(
+		                   std::make_unique<HexViewPresenter>()
+		               );
+
 		auto builder=GTK_BuilderFactory::getBuilder(Views::HEX_VIEW);
 		GTK_HexView* view;
 		builder->get_widget_derived("hex_view",view);

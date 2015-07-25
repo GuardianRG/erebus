@@ -49,6 +49,8 @@ class IWindow {
 
 	/**
 	 * Closes the window.
+	 *
+	 * WARNING: This window will commit suicide.
 	 */
 	virtual void close()=0;
 };

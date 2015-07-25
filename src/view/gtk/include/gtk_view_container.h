@@ -13,7 +13,8 @@ namespace erebus {
 class GTK_View;
 
 /**
- * This class containes the different views of the different areas on the screen.
+ * This class containes the different views of the different areas on the
+ * screen.
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	std::unique_ptr<Gtk::Notebook>			notebook_;
@@ -186,7 +187,8 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * Adds the standard menu items to the given menu.
 	 *
 	 * This method gets called by the widgets this container contains.
-	 * It adds the items like splitVertical, splitHorizontal ... to the menu.
+	 * It adds the items like splitVertical, splitHorizontal ... to the
+	 * menu.
 	 *
 	 * @param menu menu to add items to
 	 */

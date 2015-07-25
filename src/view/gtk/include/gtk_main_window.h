@@ -33,28 +33,28 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	/**
 	 * Copy constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied-
 	 */
 	GTK_MainWindow(const GTK_MainWindow &obj)=delete;
 
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be moved since Gtk::Viewport cant be moved.
+	 * Cant be moved since Gtk::Window cant be moved.
 	 */
 	GTK_MainWindow( GTK_MainWindow&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied.
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_MainWindow& operator=(const GTK_MainWindow&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be moved.
+	 * Cant be copied since Gtk::Window cant be moved.
 	 */
 	GTK_MainWindow& operator=(GTK_MainWindow&&)=delete;
 
@@ -94,6 +94,9 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 */
 	void unmaximize() override;
 
+	/**
+	 * See IMainWindow::close
+	 */
 	void close() override;
 };
 }//namespace erebus

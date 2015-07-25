@@ -42,6 +42,9 @@ class GTK_HexView:public GTK_View,public IHexView {
 	 */
 	GTK_HexView& operator=(GTK_HexView&&)=delete;
 
+	/**
+	 * Destructor.
+	 */
 	~GTK_HexView();
 
 	void createContextMenu()override;

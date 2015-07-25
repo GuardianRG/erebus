@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 
 #include <view/interfaces/i_main_window.h>
 #include <view/interfaces/i_gui_state_object.h>
@@ -25,6 +26,7 @@ class GUIManager {
 	std::shared_ptr<Model>			model_;
 
 	std::unique_ptr<IGUIStateObject>	stateObject_;
+	std::vector<std::unique_ptr<IWindow>> 	windows_;
 
 	GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv);
 
@@ -87,9 +89,12 @@ class GUIManager {
 	/**
 	 * Adds a new window to the manager.
 	 *
+	 * Those windows persist even when the main window is closed.
+	 * The basically bcome another main window.
+	 *
 	 * @param window window to add
 	 */
-	void addWindow(IWindow* window);
+	//void addWindow(IWindow* window);
 
 	/**
 	 * Creates a new window and adds the view to it.
@@ -97,6 +102,18 @@ class GUIManager {
 	 * @param view view to add to the new window
 	 */
 	void moveViewToNewWindow(IView& view);
+
+	/**
+	 * Destroys the window.
+	 *
+	 * This method only destroys the given window.
+	 * For hiding it the caller is responsible.
+	 *
+	 * After this method window is a invalid pointer and will be ste to nullptr.
+	 *
+	 * @param window the window to destroy
+	 */
+	void deleteWindow(IWindow* window);
 };
 
 }//namespace erbus
