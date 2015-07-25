@@ -12,7 +12,7 @@ class GTK_HexView:public GTK_View,public IHexView {
   protected:
 	IViewPresenter& getPresenter() const override;
   public:
-	GTK_HexView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
+	GTK_HexView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
 	/**
 	 * Copy constructor.

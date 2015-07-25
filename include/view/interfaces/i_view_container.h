@@ -92,14 +92,14 @@ class IViewContainer {
 	 *
 	 * @param view view to add
 	 */
-	virtual void addView(IView* view)=0;
+	virtual void addView(IView& view)=0;
 
 	/**
 	 * Removs a view.
 	 *
 	 * @param view the view to remove
 	 */
-	virtual void removeView(IView* view)=0;
+	virtual void removeView(IView& view)=0;
 
 	/**
 	 * Adds a view.
@@ -113,14 +113,14 @@ class IViewContainer {
 	 *
 	 * @param view the view to pop out
 	 */
-	virtual void popOutView(IView* view)=0;
+	virtual void popOutView(IView& view)=0;
 
 	/**
 	 * Closes a view.
 	 *
 	 * @param view the view to close
 	 */
-	virtual void closeView(IView* view)=0;
+	virtual void closeView(IView& view)=0;
 
 };
 }//namespace erbus

@@ -44,3 +44,18 @@ add_custom_target(hex_view.glade DEPENDS "${PROJECT_BINARY_DIR}/resources/hex_vi
 add_dependencies(erebus hex_view.glade)
 
 ###########################
+
+###########################
+#Add empty_view.glade
+###########################
+add_custom_command(
+    OUTPUT "${PROJECT_BINARY_DIR}/resources/empty_view.glade"
+    COMMAND ${CMAKE_COMMAND} -E copy "${PROJECT_SOURCE_DIR}/resources/view/gtk/empty_view.glade" "${PROJECT_BINARY_DIR}/resources/"
+    DEPENDS "${PROJECT_SOURCE_DIR}/resources/view/gtk/empty_view.glade"
+    COMMENT "add empty_view file")
+ 
+add_custom_target(empty_view.glade DEPENDS "${PROJECT_BINARY_DIR}/resources/empty_view.glade")
+
+add_dependencies(erebus empty_view.glade)
+
+###########################

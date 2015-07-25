@@ -9,8 +9,8 @@ set(GTK_GUI_HEADERS
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_gui_state_object.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container.h
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_builder.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_window.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window.h
+	${CMAKE_CURRENT_SOURCE_DIR}/glade_files.h
 	PARENT_SCOPE
 )

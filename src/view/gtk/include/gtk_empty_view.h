@@ -33,7 +33,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	 *
 	 * This constructor is needed to create a valid View.
 	 */
-	GTK_EmptyView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment);
+	GTK_EmptyView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
 	/**
 	 * Copy constructor.

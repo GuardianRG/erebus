@@ -10,16 +10,15 @@
 #include <presenter/empty_view_presenter.h>
 
 #include <gtk_view.h>
+#include <gtk_logger.h>
 
 
 namespace erebus {
 
-GTK_EmptyView::GTK_EmptyView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment):GTK_View(h_adjustment,v_adjustment),presenter_(std::unique_ptr<IEmptyViewPresenter>(nullptr)) {
+GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject,refBuilder) {
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
-
-	set_shadow_type(Gtk::SHADOW_NONE);
 }
 
 

@@ -13,7 +13,7 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::
 	refBuilder->get_widget("base_view",base);
 
 	auto presenter=std::unique_ptr<ViewContainerPresenter>(new ViewContainerPresenter);
-	basicView_=new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr,nullptr);
+	basicView_=Gtk::manage(new GTK_ViewContainer(base->get_hadjustment(),base->get_vadjustment(),nullptr,nullptr));
 
 	presenter->setViewContainer(basicView_);
 	basicView_->setPresenter(std::move(presenter));

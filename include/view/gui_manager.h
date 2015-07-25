@@ -96,7 +96,7 @@ class GUIManager {
 	 *
 	 * @param view view to add to the new window
 	 */
-	void moveViewToNewWindow(IView* view);
+	void moveViewToNewWindow(IView& view);
 };
 
 }//namespace erbus

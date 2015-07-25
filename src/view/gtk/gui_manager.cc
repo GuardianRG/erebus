@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 
 #include <memory>
+#include <typeinfo>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <view/interfaces/i_main_window.h>
@@ -15,8 +16,10 @@
 #include <gtk_gui_state_object.h>
 #include <gtk_window.h>
 #include <gtk_view_window.h>
+#include <gtk_logger.h>
 #include <presenter/main_window_presenter.h>
 #include <presenter/view_window_presenter.h>
+#include <glade_files.h>
 
 
 namespace erebus {
@@ -34,7 +37,7 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv):arg
 	Glib::RefPtr<Gtk::Builder> builder;
 
 	//load the main window
-	builder=GTK_BuilderFactory::getBuilder("resources/main_window.glade");
+	builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
 
 	GTK_MainWindow* window;
 	builder->get_widget_derived("main_window", window);
@@ -76,14 +79,20 @@ void GUIManager::runGUI() {
 
 void GUIManager::addWindow(IWindow* window) {
 	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
-	GTK_Window* window_c=dynamic_cast<GTK_Window*>(window);
-	stateObject->application_->add_window(*window_c);
+
+	try {
+		auto window_c=dynamic_cast<GTK_Window*>(window);
+		stateObject->application_->add_window(*window_c);
+	} catch(std::bad_cast e) {
+		BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"Cast failed.";
+		return;
+	}
 }
 
-void GUIManager::moveViewToNewWindow(IView* view) {
+void GUIManager::moveViewToNewWindow(IView& view) {
 	Glib::RefPtr<Gtk::Builder> builder;
 
-	builder=GTK_BuilderFactory::getBuilder("resources/view_window.glade");
+	builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
 
 	GTK_ViewWindow* viewWindow;
 	builder->get_widget_derived("view_window", viewWindow);

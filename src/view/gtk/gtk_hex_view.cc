@@ -7,7 +7,7 @@
 #include <gtk_logger.h>
 
 namespace erebus {
-GTK_HexView::GTK_HexView(Glib::RefPtr<Gtk::Adjustment> h_adjustment,Glib::RefPtr<Gtk::Adjustment> v_adjustment):GTK_View(h_adjustment,v_adjustment) {
+GTK_HexView::GTK_HexView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject,refBuilder) {
 
 }
 

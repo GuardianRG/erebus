@@ -17,7 +17,7 @@ class GTK_View;
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	std::unique_ptr<Gtk::Notebook>			notebook_;
-	std::unique_ptr<Gtk::Paned>			paned_;
+	Gtk::Paned*					paned_;
 
 	std::unique_ptr<IViewContainerPresenter> 	presenter_;
 	IViewContainer*					parent_;
@@ -56,7 +56,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * Constructor.
 	 *
-	 * Creates an empty notebook
+	 * Creates an empty notebook.
 	 *
 	 * @param h_adjustment horizontal adjustment for the child views.
 	 * @param v_adjustment vertical adjustment for the child views.
@@ -70,28 +70,28 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * Copy constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_ViewContainer(const GTK_ViewContainer &obj)=delete;
 
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_ViewContainer( GTK_ViewContainer&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_ViewContainer& operator=(const GTK_ViewContainer&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_ViewContainer& operator=(GTK_ViewContainer&&)=delete;
 
@@ -128,7 +128,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::addView(IView* view)
 	 */
-	void addView(IView* view)override;
+	void addView(IView& view)override;
 
 	/**
 	 * See IViewContainer::addView(ViewType view)
@@ -153,7 +153,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::closeView
 	 */
-	void closeView(IView* view)override;
+	void closeView(IView& view)override;
 
 	/**
 	 * See IViewContainer::joinContainer
@@ -168,7 +168,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::popOutView
 	 */
-	void popOutView(IView* view)override;
+	void popOutView(IView& view)override;
 
 	/**
 	 * See IViewContainer::isTopLevel
@@ -180,17 +180,17 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 *
 	 * @param view the view to remove.
 	 */
-	void removeView(IView* view)override;
+	void removeView(IView& view)override;
 
 	/**
 	 * Adds the standard menu items to the given menu.
 	 *
-	 * This method gets called by the widget this container contains.
+	 * This method gets called by the widgets this container contains.
 	 * It adds the items like splitVertical, splitHorizontal ... to the menu.
 	 *
 	 * @param menu menu to add items to
 	 */
-	void buildContextMenu(Gtk::Menu* menu);
+	void buildContextMenu(Gtk::Menu& menu);
 
 	/**
 	 * Gets called when a mouseclick on this container occured.

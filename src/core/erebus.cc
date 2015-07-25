@@ -92,6 +92,6 @@ int main(int argc, char *argv[]) {
 	auto gui=erebus::GUIManager::create(model,argc,argv);
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Running gui";
 	gui->runGUI();
-
+	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Stopped gui";
 	return 0;
 }
