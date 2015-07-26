@@ -94,7 +94,7 @@ class GUIManager {
 	 *
 	 * @param window window to add
 	 */
-	//void addWindow(IWindow* window);
+	void addWindow(IWindow& window);
 
 	/**
 	 * Creates a new window and adds the view to it.

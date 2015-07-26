@@ -64,7 +64,7 @@ void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter> presente
 }
 
 void GTK_MainWindow::close() {
-	GTK_Window::close();
+	Gtk::Window::close();
 }
 
 IWindowPresenter& GTK_MainWindow::getPresenter() {

@@ -33,11 +33,11 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,
                       ):argc_(argc),argv_(argv),model_(model) {
 	stateObject_=std::make_unique<GTK_GUIStateObject>();
 
-	auto stateObject=GTK_GUIStateObject::getState(stateObject_.get());
+	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
 
 	auto app = Gtk::Application::create(argc_, argv_,"org.werner.erebus");
 
-	stateObject->application_=app;
+	guido.application_=app;
 
 	auto builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
 
@@ -48,8 +48,8 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,
 	presenter->setWindow(window);
 
 	window->setPresenter(std::move(presenter));
-	stateObject->mainWindow_=std::unique_ptr<GTK_MainWindow>(window);
 
+	guido.mainWindow_=std::unique_ptr<GTK_MainWindow>(window);
 }
 
 GUIManager::~GUIManager() {
@@ -70,25 +70,26 @@ GUIManager* GUIManager::getInstance() {
 }
 
 void GUIManager::runGUI() {
-	auto guido=GTK_GUIStateObject::getState(stateObject_.get());
+	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
 
-	guido->mainWindow_->setPreferredSize(800,600);
-	guido->mainWindow_->maximize();
 
-	guido->application_->run(*(static_cast<GTK_MainWindow*>(guido->mainWindow_.get())));
+	guido.mainWindow_->setPreferredSize(800,600);
+	guido.mainWindow_->maximize();
+
+	guido.application_->run(*guido.mainWindow_.get());
 }
 
-/*void GUIManager::addWindow(IWindow* window) {
-	GTK_GUIStateObject* stateObject=GTK_GUIStateObject::getState(stateObject_.get());
+void GUIManager::addWindow(IWindow& window) {
+	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
 
 	try {
-		auto window_c=dynamic_cast<GTK_Window*>(window);
-		stateObject->application_->add_window(*window_c);
+		auto& window_c=dynamic_cast<GTK_Window&>(window);
+		guido.application_->add_window(window_c);
 	} catch(std::bad_cast e) {
 		BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"Cast failed.";
 		return;
 	}
-}*/
+}
 
 void GUIManager::deleteWindow(IWindow* window) {
 	windows_.erase(std::remove_if(windows_.begin(), windows_.end(),
@@ -104,7 +105,9 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 	GTK_ViewWindow* viewWindow;
 	builder->get_widget_derived("view_window", viewWindow);
 
-	auto presenter=std::unique_ptr<IViewWindowPresenter>(new ViewWindowPresenter);
+	auto presenter=std::unique_ptr<IViewWindowPresenter>(
+	                   std::make_unique<ViewWindowPresenter>());
+
 	presenter->setWindow(viewWindow);
 
 	viewWindow->setPresenter(std::move(presenter));

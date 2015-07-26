@@ -48,26 +48,36 @@ void createDirectory_Linux(std::string path) {
 void initLogging() {
 	createDirectory_Linux("logs");
 
-	boost::log::add_console_log(std::clog, boost::log::keywords::format = "%LineID%: [%Channel%]: %Message%");
+	boost::log::add_console_log(std::clog, 
+				boost::log::keywords::format = "%LineID%: [%Channel%]: %Message%");
 
 	boost::log::add_file_log
 	(
 	    "logs/%Y_%m_%d_%H_%M_%S.log",
 	    boost::log::keywords::auto_flush = true ,
-	    boost::log::keywords::filter = boost::log::expressions::attr< severity_level >("Severity") >= warning,
+	    boost::log::keywords::filter = 
+			boost::log::expressions::attr< severity_level >("Severity") >= warning,
+	 
 	    boost::log::keywords::format = boost::log::expressions::stream
-	                                   <<boost::log::expressions::attr<unsigned int>("LineID")
-	                                   << ": "<<boost::log::expressions::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
-	                                   << " [" << boost::log::expressions::format_date_time< boost::log::attributes::timer::value_type >("Uptime", "%O:%M:%S")
-	                                   << "] [" << boost::log::expressions::attr<std::string>("Channel")
-	                                   << "] <" << boost::log::expressions::attr< severity_level >("Severity")
-	                                   << "> " << boost::log::expressions::message
+			<<boost::log::expressions::attr<unsigned int>("LineID")
+			<< ": "
+			<<boost::log::expressions::format_date_time< 
+				boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
+			<< " [" << boost::log::expressions::format_date_time< 
+				boost::log::attributes::timer::value_type >("Uptime", "%O:%M:%S")
+			<< "] [" << boost::log::expressions::attr<std::string>("Channel")
+			<< "] <" << boost::log::expressions::attr< severity_level >("Severity")
+			<< "> " << boost::log::expressions::message
 	);
 
 	boost::log::add_common_attributes();
-	boost::log::core::get()->add_global_attribute("LineID", boost::log::attributes::counter< unsigned int >(1));
+	boost::log::core::get()->add_global_attribute("LineID", 
+					boost::log::attributes::counter< unsigned int >(1));
+	
 	boost::log::core::get()->add_global_attribute("Uptime", boost::log::attributes::timer());
-	boost::log::core::get()->add_thread_attribute("Scope", boost::log::attributes::named_scope());
+	
+	boost::log::core::get()->add_thread_attribute("Scope", 
+					boost::log::attributes::named_scope());
 
 	BOOST_LOG_FUNCTION();
 }

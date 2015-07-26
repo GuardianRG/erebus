@@ -64,8 +64,8 @@ class GTK_GUIStateObject: public IGUIStateObject {
 	 *
 	 * @return the concrete GTK_GUIStateObject
 	 */
-	static GTK_GUIStateObject* getState(IGUIStateObject *obj) {
-		return static_cast<GTK_GUIStateObject*>(obj);
+	static GTK_GUIStateObject& getState(IGUIStateObject &obj) {
+		return static_cast<GTK_GUIStateObject&>(obj);
 	}
 
 };
