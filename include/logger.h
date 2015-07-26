@@ -5,7 +5,11 @@
 #include <boost/log/trivial.hpp>
 
 //Should be used in the log messages
+#ifdef _DEBUG_
 #define LOCATION "("<<__FILE__<<" : "<<__LINE__<<")->"
+#else
+#define LOCATION ""
+#endif
 
 //The different serevrity levels
 enum severity_level {
@@ -16,7 +20,8 @@ enum severity_level {
 	critical
 };
 
-using severity_channel_logger = boost::log::sources::severity_channel_logger_mt<severity_level,std::string>;
+using severity_channel_logger =
+    boost::log::sources::severity_channel_logger_mt<severity_level,std::string>;
 
 //Forward declaration
 std::ostream& operator<< (std::ostream& strm, severity_level level);

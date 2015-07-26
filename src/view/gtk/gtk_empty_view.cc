@@ -21,6 +21,8 @@ GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
+
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating empty view";
 }
 
 

@@ -8,6 +8,7 @@
 #include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_view_presenter.h>
 #include <view/gui_manager.h>
+#include <gtk_logger.h>
 
 namespace erebus {
 
@@ -86,7 +87,7 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 
 void GTK_View::close() {
 	assert( parent_!=nullptr);
-
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing view";
 	parent_->closeView(*this);
 }
 

@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
 
 project(erebus CXX)
 
-
 ###########################################
 ##Enable testing with googletest
 ###########################################
@@ -70,8 +69,8 @@ include_directories( ${Boost_INCLUDE_DIR} )
 include_directories(include)
 
 #set compileflags
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb")
-#SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++14 -Wall -Werror")
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -D_DEBUG_")
+SET(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Werror")
 
 #add source directories
@@ -92,18 +91,24 @@ endif()
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
 target_link_libraries(erebus ${Boost_LIBRARIES} -pthread)
 
-#Add command to automatically format the code when building
-add_custom_command(
-	TARGET erebus POST_BUILD
-    	COMMAND ${PROJECT_SOURCE_DIR}/insert-new-lines.sh
-    	DEPENDS "${PROJECT_SOURCE_DIR}/insert-new-lines.sh"
-    	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    	COMMENT "Adds new lines to the end of the files if thex dont have one")
+##############################################
+#NEVER UNCOMMENT THE COMMANDS BELOW
+#OTHERWISE EVERYTHING WILL BE BUILD EVERYTIME
+#WHEN CALLING MAKE
+###############################################
 
 #Add command to automatically format the code when building
-add_custom_command(
-	TARGET erebus POST_BUILD
-    	COMMAND ${PROJECT_SOURCE_DIR}/format-code.sh
-    	DEPENDS "${PROJECT_SOURCE_DIR}/format-code.sh"
-    	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    	COMMENT "Formats the code")
+#add_custom_command(
+#	TARGET erebus POST_BUILD
+#	COMMAND ${PROJECT_SOURCE_DIR}/insert-new-lines.sh
+#	DEPENDS "${PROJECT_SOURCE_DIR}/insert-new-lines.sh"
+#	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+#	COMMENT "Adds new lines to the end of the files if thex dont have one")
+
+#Add command to automatically format the code when building
+#add_custom_command(
+#	TARGET erebus POST_BUILD
+#	COMMAND ${PROJECT_SOURCE_DIR}/format-code.sh
+#	DEPENDS "${PROJECT_SOURCE_DIR}/format-code.sh"
+#	WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+#	COMMENT "Formats the code")

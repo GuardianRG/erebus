@@ -20,6 +20,9 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 
 
 	GTK_ViewContainer*	basicView_;
+	
+	void on_menu_view_save_click();
+	void on_menu_view_show_tabs_click();
   protected:
 	IWindowPresenter& getPresenter();
   public:
@@ -33,7 +36,7 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	/**
 	 * Copy constructor.
 	 *
-	 * Cant be copied since Gtk::Window cant be copied-
+	 * Cant be copied since Gtk::Window cant be copied.
 	 */
 	GTK_MainWindow(const GTK_MainWindow &obj)=delete;
 

@@ -114,6 +114,14 @@ class GUIManager {
 	 * @param window the window to destroy
 	 */
 	void deleteWindow(IWindow* window);
+	
+	/**
+	 * Shows a info dialog.
+	 * 
+	 * @param title the title of the dialog
+	 * @param text the info text
+	 */
+	void showInfoDialog(std::string title,std::string text);
 };
 
 }//namespace erbus

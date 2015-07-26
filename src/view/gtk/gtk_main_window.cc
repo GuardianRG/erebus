@@ -33,10 +33,29 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 	show_all_children();
 
 	signal_hide().connect(sigc::mem_fun(*this,&GTK_MainWindow::close) );
+	
+	Gtk::MenuItem* view_save;
+	refBuilder->get_widget("view_save",view_save);
+	view_save->signal_activate().
+			connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_save_click) );
+			
+	Gtk::MenuItem* view_show_tabs;
+	refBuilder->get_widget("view_show_tabs",view_show_tabs);
+	view_show_tabs->signal_activate().
+			connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_show_tabs_click));
+	
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
 
+}
+
+void GTK_MainWindow::on_menu_view_save_click() {
+	presenter_->on_menu_view_save_click();
+}
+
+void GTK_MainWindow::on_menu_view_show_tabs_click() {
+	presenter_->on_menu_view_show_tabs_click();
 }
 
 void GTK_MainWindow::setTitle(std::string title) {

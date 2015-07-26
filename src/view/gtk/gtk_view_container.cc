@@ -22,6 +22,7 @@
 #include <gtk_builder_factory.h>
 #include <gtk_hex_view.h>
 #include <gtk_empty_view.h>
+#include <view/view_preferences.h>
 #include <glade_files.h>
 
 namespace erebus {
@@ -46,7 +47,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 	if(notebook==nullptr) {
 		notebook_=std::make_unique<Gtk::Notebook>();
 		notebook_->set_group_name("notebooks");
-		showTabs(true);
+		showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
 	} else {
 		assert(notebook.get()!=nullptr);
 		notebook_=std::move(notebook);
@@ -61,6 +62,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 		}
 
 	}
+	
 	set_shadow_type(Gtk::SHADOW_NONE);
 	notebook_->set_scrollable(true);
 
@@ -230,6 +232,8 @@ void GTK_ViewContainer::joinContainer() {
 		return;
 	isSplit_=false;
 
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Joining view container";
+
 	assert(paned_!=nullptr);
 
 	//Get both containers
@@ -293,7 +297,7 @@ void GTK_ViewContainer::joinContainer() {
 	Gtk::Container::remove(*paned_);
 	paned_=nullptr;
 
-	showTabs(true);
+	showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
 
 	add(*notebook_);
 
@@ -417,6 +421,8 @@ void GTK_ViewContainer::splitHorizontal() {
 	if(isSplit_)
 		return;
 
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Splitting view container horizontally";
+
 	//Create horizontal paned
 	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL));
 	auto rec=get_allocation();
@@ -427,6 +433,8 @@ void GTK_ViewContainer::splitHorizontal() {
 void GTK_ViewContainer::splitVertical() {
 	if(isSplit_)
 		return;
+
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Splitting view container vertically";
 
 	//Create vertical paned
 	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_VERTICAL));
@@ -512,9 +520,18 @@ void GTK_ViewContainer::addView(IView& view) {
 }
 
 void GTK_ViewContainer::showTabs(bool showTabs) {
-	assert( notebook_.get()!=nullptr);
-
-	notebook_->set_show_tabs(showTabs);
+	if(notebook_.get()!=nullptr) {
+		notebook_->set_show_tabs(showTabs);
+	}
+	else {
+		assert(paned_!=nullptr);
+		auto container1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
+		auto container2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
+		assert(container1!=0);
+		assert(container2!=0);
+		container1->showTabs(showTabs);
+		container2->showTabs(showTabs);
+	}
 }
 
 Glib::RefPtr<Gtk::Adjustment> GTK_ViewContainer::getHAdjustment() {

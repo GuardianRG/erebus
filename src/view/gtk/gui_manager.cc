@@ -57,6 +57,7 @@ GUIManager::~GUIManager() {
 }
 
 GUIManager* GUIManager::create(std::shared_ptr<Model> model,int& argc, char**& argv) {
+	//TODO:change to reference
 	if(guiManager_.get()==nullptr) {
 		guiManager_=std::unique_ptr<GUIManager>(new GUIManager(model,argc,argv));
 		return guiManager_.get();
@@ -66,6 +67,7 @@ GUIManager* GUIManager::create(std::shared_ptr<Model> model,int& argc, char**& a
 
 
 GUIManager* GUIManager::getInstance() {
+	//TODO:change to reference
 	return guiManager_.get();
 }
 
@@ -100,6 +102,8 @@ void GUIManager::deleteWindow(IWindow* window) {
 }
 
 void GUIManager::moveViewToNewWindow(IView& view) {
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Moving view to new window";
+
 	auto builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
 
 	GTK_ViewWindow* viewWindow;
@@ -117,6 +121,15 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 	viewWindow->show();
 
 	windows_.push_back(std::unique_ptr<IWindow>(viewWindow));
+}
+
+void GUIManager::showInfoDialog(std::string title,std::string text) {
+	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
+	
+	Gtk::MessageDialog dialog(*guido.mainWindow_, title);
+	dialog.set_secondary_text(text);
+	
+	dialog.run();
 }
 
 }//namespace erebus
