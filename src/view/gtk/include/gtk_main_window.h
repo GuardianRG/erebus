@@ -20,7 +20,7 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 
 
 	GTK_ViewContainer*	basicView_;
-	
+
 	void on_menu_view_save_click();
 	void on_menu_view_show_tabs_click();
   protected:

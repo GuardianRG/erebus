@@ -125,10 +125,10 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 
 void GUIManager::showInfoDialog(std::string title,std::string text) {
 	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
-	
+
 	Gtk::MessageDialog dialog(*guido.mainWindow_, title);
 	dialog.set_secondary_text(text);
-	
+
 	dialog.run();
 }
 

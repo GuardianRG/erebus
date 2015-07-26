@@ -13,12 +13,12 @@ class IMainWindowPresenter:public IWindowPresenter {
 	 * Destructor.
 	 */
 	virtual ~IMainWindowPresenter() {}
-	
+
 	/**
 	 * Handels a click on the menu->view->save entry.
 	 */
 	virtual void on_menu_view_save_click()=0;
-	
+
 	/**
 	 * Handels a click on the menu->view->save entry.
 	 */

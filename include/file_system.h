@@ -30,7 +30,7 @@ bool doesFileExist(const std::string& path);
 
 /**
  * Creates the file if it doesnt exist.
- * 
+ *
  * @param path the fileto create
  */
 void createFile(const std::string& path);

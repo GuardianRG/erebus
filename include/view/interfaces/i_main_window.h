@@ -14,7 +14,7 @@ class IMainWindow :virtual public IWindow {
 	 * Destructor.
 	 */
 	virtual ~IMainWindow() {};
-	
+
 };
 
 }//namespace erbus

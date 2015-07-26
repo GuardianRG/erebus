@@ -62,7 +62,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 		}
 
 	}
-	
+
 	set_shadow_type(Gtk::SHADOW_NONE);
 	notebook_->set_scrollable(true);
 
@@ -522,8 +522,7 @@ void GTK_ViewContainer::addView(IView& view) {
 void GTK_ViewContainer::showTabs(bool showTabs) {
 	if(notebook_.get()!=nullptr) {
 		notebook_->set_show_tabs(showTabs);
-	}
-	else {
+	} else {
 		assert(paned_!=nullptr);
 		auto container1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
 		auto container2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
