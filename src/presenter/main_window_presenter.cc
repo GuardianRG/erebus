@@ -41,7 +41,7 @@ void MainWindowPresenter::on_menu_view_save_click() {
 }
 
 void MainWindowPresenter::on_menu_view_show_tabs_click() {
-
+	
 }
 
 

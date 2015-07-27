@@ -1,6 +1,7 @@
 #include <presenter/view_container_presenter.h>
 
 #include <assert.h>
+#include <memory>
 
 namespace erebus {
 ViewContainerPresenter::ViewContainerPresenter() {
@@ -29,6 +30,10 @@ void ViewContainerPresenter::on_right_button_click() {
 }
 void ViewContainerPresenter::on_left_button_click() {
 
+}
+
+void ViewContainerPresenter::setSettingsPropagator(std::unique_ptr<IViewContainerSettingsPropagator> p) {
+	propagator_=std::move(p);
 }
 
 void ViewContainerPresenter::on_context_menu_split_horizontal_click() {

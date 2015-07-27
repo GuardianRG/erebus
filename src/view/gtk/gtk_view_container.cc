@@ -25,6 +25,8 @@
 #include <view/view_preferences.h>
 #include <glade_files.h>
 
+INIT_LOCATION;
+
 namespace erebus {
 
 GTK_ViewContainer::GTK_ViewContainer(

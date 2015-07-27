@@ -21,6 +21,7 @@
 #include <presenter/view_window_presenter.h>
 #include <glade_files.h>
 
+INIT_LOCATION;
 
 namespace erebus {
 
@@ -121,7 +122,7 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 	viewWindow->setPresenter(std::move(presenter));
 	
 	BOOST_LOG_SEV(gtk_l::get(),normal)
-		<<LOCATION<<"Moving view to a new view window '"<<viewWindow<<"'";
+		<<LOCATION<<"Moving view '"<<&view<<"' to a new view window '"<<viewWindow<<"'";
 	viewWindow->getBasicViewContainer().addView(view);
 
 	viewWindow->show();

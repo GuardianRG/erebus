@@ -16,6 +16,8 @@
 #include <file_system.h>
 #include <types.h>
 
+INIT_LOCATION;
+
 namespace erebus {
 ViewPreferencesLoader::ViewPreferencesLoader() {
 

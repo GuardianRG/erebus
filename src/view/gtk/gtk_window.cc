@@ -7,6 +7,8 @@
 #include <view/gui_manager.h>
 #include <gtk_logger.h>
 
+INIT_LOCATION;
+
 namespace erebus {
 GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
 

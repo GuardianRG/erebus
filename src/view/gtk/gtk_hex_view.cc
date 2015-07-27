@@ -6,6 +6,8 @@
 #include <gtk_view.h>
 #include <gtk_logger.h>
 
+INIT_LOCATION;
+
 namespace erebus {
 GTK_HexView::GTK_HexView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject,refBuilder) {
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating hex view '"<<this<<"'";

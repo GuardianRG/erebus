@@ -24,49 +24,53 @@
 #include <file_system.h>
 
 
+INIT_LOCATION;
+
 /**
  * Initializes the logger.
  */
 void initLogging() {
-	createDirectory("logs");
-	
-	boost::log::add_console_log(std::clog,
-				    boost::log::keywords::format = boost::log::expressions::stream
-				    <<boost::log::expressions::attr<unsigned int>("LineID")
-				    << ": ["<< boost::log::expressions::attr<std::string>("Channel")
-				    << "] \t[" << boost::log::expressions::attr< severity_level >("Severity")
-				    << "]\t" << boost::log::expressions::message
-	);
+    createDirectory("logs");
 
-	boost::log::add_file_log
-	(
-	    "logs/%Y_%m_%d_%H_%M_%S.log",
-	    boost::log::keywords::auto_flush = true ,
-	    boost::log::keywords::filter =
-	        boost::log::expressions::attr< severity_level >("Severity") >= warning,
+    boost::log::add_console_log(std::clog,
+                                boost::log::keywords::format = boost::log::expressions::stream
+                                                               << boost::log::expressions::attr<unsigned int>("LineID")
+                                                               << ": [" <<
+                                                               boost::log::expressions::attr<std::string>("Channel")
+                                                               << "] \t[" <<
+                                                               boost::log::expressions::attr<severity_level>("Severity")
+                                                               << "]\t" << boost::log::expressions::message
+    );
 
-	    boost::log::keywords::format = boost::log::expressions::stream
-	                                   <<boost::log::expressions::attr<unsigned int>("LineID")
-	                                   << ": "
-	                                   <<boost::log::expressions::format_date_time<
-	                                   boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
-	                                   << " [" << boost::log::expressions::format_date_time<
-	                                   boost::log::attributes::timer::value_type >("Uptime", "%O:%M:%S")
-	                                   << "] [" << boost::log::expressions::attr<std::string>("Channel")
-	                                   << "] [" << boost::log::expressions::attr< severity_level >("Severity")
-	                                   << "] " << boost::log::expressions::message
-	);
+    boost::log::add_file_log
+            (
+                    "logs/%Y_%m_%d_%H_%M_%S.log",
+                    boost::log::keywords::auto_flush = true,
+                    boost::log::keywords::filter =
+                            boost::log::expressions::attr<severity_level>("Severity") >= warning,
 
-	boost::log::add_common_attributes();
-	boost::log::core::get()->add_global_attribute("LineID",
-	        boost::log::attributes::counter< unsigned int >(1));
+                    boost::log::keywords::format = boost::log::expressions::stream
+                                                   << boost::log::expressions::attr<unsigned int>("LineID")
+                                                   << ": "
+                                                   << boost::log::expressions::format_date_time<
+                            boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
+                                                   << " [" << boost::log::expressions::format_date_time<
+                            boost::log::attributes::timer::value_type>("Uptime", "%O:%M:%S")
+                                                   << "] [" << boost::log::expressions::attr<std::string>("Channel")
+                                                   << "] [" << boost::log::expressions::attr<severity_level>("Severity")
+                                                   << "] " << boost::log::expressions::message
+            );
 
-	boost::log::core::get()->add_global_attribute("Uptime", boost::log::attributes::timer());
+    boost::log::add_common_attributes();
+    boost::log::core::get()->add_global_attribute("LineID",
+                                                  boost::log::attributes::counter<unsigned int>(1));
 
-	boost::log::core::get()->add_thread_attribute("Scope",
-	        boost::log::attributes::named_scope());
+    boost::log::core::get()->add_global_attribute("Uptime", boost::log::attributes::timer());
 
-	BOOST_LOG_FUNCTION();
+    boost::log::core::get()->add_thread_attribute("Scope",
+                                                  boost::log::attributes::named_scope());
+
+    BOOST_LOG_FUNCTION();
 }
 
 /**
@@ -75,34 +79,34 @@ void initLogging() {
  * First the default preferences get loaded and the the custom preferences.
  */
 void loadViewPreferences() {
-	auto viewPrefLoader=erebus::ViewPreferencesLoader{};
-	//Load defaulr preferences first to assure everything has a solid initiliazation value
-	viewPrefLoader.loadDefaultViewPreferences();
-	//The load the custom preferences
-	viewPrefLoader.loadViewPreferences();
+    auto viewPrefLoader = erebus::ViewPreferencesLoader{};
+    //Load defaulr preferences first to assure everything has a solid initiliazation value
+    viewPrefLoader.loadDefaultViewPreferences();
+    //The load the custom preferences
+    viewPrefLoader.loadViewPreferences();
 }
 
 int main(int argc, char *argv[]) {
-	try {
-		initLogging();
-	} catch(std::exception const& e) {
-		std::cout<<e.what()
-		         <<std::endl
-		         <<"Something went wronge while building the logger!"
-		         <<std::endl
-		         <<"Exiting..."
-		         <<std::endl;
-		return 1;
-	}
-	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Boost logger initialized";
+    try {
+        initLogging();
+    } catch (std::exception const &e) {
+        std::cout << e.what()
+        << std::endl
+        << "Something went wronge while building the logger!"
+        << std::endl
+        << "Exiting..."
+        << std::endl;
+        return 1;
+    }
+    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
 
-	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Initializing model";
-	auto model=std::make_shared<erebus::Model>();
-	loadViewPreferences();
-	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Creating gui";
-	auto& gui=erebus::GUIManager::create(model,argc,argv);
-	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Running gui";
-	gui.runGUI();
-	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Stopping gui";
-	return 0;
+    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Initializing model";
+    auto model = std::make_shared<erebus::Model>();
+    loadViewPreferences();
+    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Creating gui";
+    auto &gui = erebus::GUIManager::create(model, argc, argv);
+    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Running gui";
+    gui.runGUI();
+    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Stopping gui";
+    return 0;
 }

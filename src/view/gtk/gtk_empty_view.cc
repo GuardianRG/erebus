@@ -12,6 +12,7 @@
 #include <gtk_view.h>
 #include <gtk_logger.h>
 
+INIT_LOCATION;
 
 namespace erebus {
 
@@ -52,7 +53,7 @@ void GTK_EmptyView::showContextMenu() {
 
 
 void GTK_EmptyView::close() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing empty '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing empty view '"<<this<<"'";
 	GTK_View::close();
 }
 

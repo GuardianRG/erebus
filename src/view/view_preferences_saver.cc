@@ -8,6 +8,8 @@
 #include <file_system.h>
 #include <types.h>
 
+INIT_LOCATION;
+
 namespace erebus {
 ViewPreferencesSaver::ViewPreferencesSaver() {
 	if(!doesFileExist(ViewPreferences::VIEW_PREFERENCE_FILE)) {

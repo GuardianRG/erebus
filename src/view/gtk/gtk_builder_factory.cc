@@ -5,6 +5,8 @@
 
 #include <gtk_logger.h>
 
+INIT_LOCATION;
+
 namespace erebus {
 
 Glib::RefPtr<Gtk::Builder> GTK_BuilderFactory::getBuilder(std::string path) {

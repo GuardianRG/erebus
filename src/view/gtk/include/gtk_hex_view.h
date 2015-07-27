@@ -17,28 +17,28 @@ class GTK_HexView:public GTK_View,public IHexView {
 	/**
 	 * Copy constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_HexView(const GTK_HexView &obj)=delete;
 
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be moved since Gtk::Viewport cant be moved.
 	 */
 	GTK_HexView( GTK_HexView&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_HexView& operator=(const GTK_HexView&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Viewport cant be copied-
+	 * Cant be moved since Gtk::Viewport cant be moved.
 	 */
 	GTK_HexView& operator=(GTK_HexView&&)=delete;
 

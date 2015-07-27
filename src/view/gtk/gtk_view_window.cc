@@ -12,6 +12,7 @@
 #include <view/view_type.h>
 #include <gtk_logger.h>
 
+INIT_LOCATION;
 
 namespace erebus  {
 GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
@@ -41,7 +42,7 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
 
 	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
 	
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<"Creating view window '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating view window '"<<this<<"'";
 }
 
 GTK_ViewWindow::~GTK_ViewWindow() {

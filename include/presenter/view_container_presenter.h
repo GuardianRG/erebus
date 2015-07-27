@@ -1,7 +1,10 @@
 #pragma once
 
+#include <memory>
+
 #include <presenter/interfaces/i_view_container_presenter.h>
 #include <view/interfaces/i_view_container.h>
+#include <view/interfaces/i_view_container_settings_propagator.h>
 
 
 
@@ -12,7 +15,7 @@ namespace erebus {
  */
 class ViewContainerPresenter:public IViewContainerPresenter {
 	IViewContainer*			container_;
-
+	std::unique_ptr<IViewContainerSettingsPropagator>	propagator_;
   public:
 	/**
 	 * Constructor.
@@ -49,7 +52,11 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	virtual ~ViewContainerPresenter();
 
 
-
+	/**
+	 * IViewContainerPresenter::setSettingsPropagator
+	 */
+	virtual void setSettingsPropagator(std::unique_ptr<IViewContainerSettingsPropagator> p)override;
+	
 	/**
 	 * See IViewContainerPresenter::setViewContainer
 	 */

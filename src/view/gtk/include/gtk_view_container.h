@@ -9,6 +9,7 @@
 #include <view/interfaces/i_view.h>
 
 namespace erebus {
+	class GTK_ViewContainerSettingsPropagator;
 
 class GTK_View;
 
@@ -17,6 +18,8 @@ class GTK_View;
  * screen.
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
+	friend class GTK_ViewContainerSettingsPropagator;
+	
 	std::unique_ptr<Gtk::Notebook>			notebook_;
 	Gtk::Paned*					paned_;
 
