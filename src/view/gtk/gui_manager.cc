@@ -56,19 +56,17 @@ GUIManager::~GUIManager() {
 
 }
 
-GUIManager* GUIManager::create(std::shared_ptr<Model> model,int& argc, char**& argv) {
-	//TODO:change to reference
+GUIManager& GUIManager::create(std::shared_ptr<Model> model,int& argc, char**& argv) {
 	if(guiManager_.get()==nullptr) {
 		guiManager_=std::unique_ptr<GUIManager>(new GUIManager(model,argc,argv));
-		return guiManager_.get();
+		return *guiManager_.get();
 	}
-	return guiManager_.get();
+	return *guiManager_.get();
 }
 
 
-GUIManager* GUIManager::getInstance() {
-	//TODO:change to reference
-	return guiManager_.get();
+GUIManager& GUIManager::getInstance() {
+	return *guiManager_.get();
 }
 
 void GUIManager::runGUI() {

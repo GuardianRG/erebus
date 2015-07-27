@@ -41,14 +41,14 @@ class GUIManager {
 	 * @param argc number of console arguments
 	 * @param argv console arguments
 	 */
-	static GUIManager* create(std::shared_ptr<Model> model,int& argc, char**& argv);
+	static GUIManager& create(std::shared_ptr<Model> model,int& argc, char**& argv);
 
 	/**
 	 * Returns the singleton of this class.
 	 *
 	 * @return singleton of this class
 	 */
-	static GUIManager* getInstance();
+	static GUIManager& getInstance();
 
 	/**
 	 * Copy Constructor.

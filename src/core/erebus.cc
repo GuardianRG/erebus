@@ -95,9 +95,9 @@ int main(int argc, char *argv[]) {
 	auto model=std::make_shared<erebus::Model>();
 	loadViewPreferences();
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Creating gui";
-	auto gui=erebus::GUIManager::create(model,argc,argv);
+	auto& gui=erebus::GUIManager::create(model,argc,argv);
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Running gui";
-	gui->runGUI();
+	gui.runGUI();
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Stopping gui";
 	return 0;
 }

@@ -414,7 +414,7 @@ void GTK_ViewContainer::popOutView(IView& view) {
 	if(!isTopLevel())
 		return;
 	removeView(view);
-	GUIManager::getInstance()->moveViewToNewWindow(view);
+	GUIManager::getInstance().moveViewToNewWindow(view);
 }
 
 void GTK_ViewContainer::splitHorizontal() {

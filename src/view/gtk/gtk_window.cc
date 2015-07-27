@@ -37,6 +37,6 @@ void GTK_Window::unmaximize() {
 
 void GTK_Window::close() {
 	Gtk::Window::close();
-	GUIManager::getInstance()->deleteWindow(this);
+	GUIManager::getInstance().deleteWindow(this);
 }
 }//namespace erebus
