@@ -92,11 +92,19 @@ void GUIManager::addWindow(IWindow& window) {
 }
 
 void GUIManager::deleteWindow(IWindow* window) {
-	windows_.erase(std::remove_if(windows_.begin(), windows_.end(),
+	if(window==nullptr)
+		return;
+
+	auto rwindows=std::remove_if(windows_.begin(), windows_.end(),
 	[window](const std::unique_ptr<IWindow>& iwindow) {
 		return iwindow.get()==window;
-	}),
-	windows_.end());
+	});
+
+	if(rwindows!=windows_.end()) {
+		windows_.erase(rwindows,windows_.end());
+		window=nullptr;
+	}
+
 }
 
 void GUIManager::moveViewToNewWindow(IView& view) {
