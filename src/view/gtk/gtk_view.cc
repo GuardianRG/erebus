@@ -87,7 +87,6 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 
 void GTK_View::close() {
 	assert( parent_!=nullptr);
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing view";
 	parent_->closeView(*this);
 }
 

@@ -94,22 +94,20 @@ void GUIManager::addWindow(IWindow& window) {
 void GUIManager::deleteWindow(IWindow* window) {
 	if(window==nullptr)
 		return;
-
+	
 	auto rwindows=std::remove_if(windows_.begin(), windows_.end(),
 	[window](const std::unique_ptr<IWindow>& iwindow) {
 		return iwindow.get()==window;
 	});
-
+	
 	if(rwindows!=windows_.end()) {
 		windows_.erase(rwindows,windows_.end());
 		window=nullptr;
 	}
-
+	
 }
 
 void GUIManager::moveViewToNewWindow(IView& view) {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Moving view to new window";
-
 	auto builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
 
 	GTK_ViewWindow* viewWindow;
@@ -121,7 +119,9 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 	presenter->setWindow(viewWindow);
 
 	viewWindow->setPresenter(std::move(presenter));
-
+	
+	BOOST_LOG_SEV(gtk_l::get(),normal)
+		<<LOCATION<<"Moving view to a new view window '"<<viewWindow<<"'";
 	viewWindow->getBasicViewContainer().addView(view);
 
 	viewWindow->show();

@@ -232,7 +232,7 @@ void GTK_ViewContainer::joinContainer() {
 		return;
 	isSplit_=false;
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Joining view container";
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Joining view container '"<<this<<"'";
 
 	assert(paned_!=nullptr);
 
@@ -421,7 +421,8 @@ void GTK_ViewContainer::splitHorizontal() {
 	if(isSplit_)
 		return;
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Splitting view container horizontally";
+	BOOST_LOG_SEV(gtk_l::get(),normal)
+			<<LOCATION<<"Splitting view container '"<<this<<"' horizontally";
 
 	//Create horizontal paned
 	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL));
@@ -434,7 +435,8 @@ void GTK_ViewContainer::splitVertical() {
 	if(isSplit_)
 		return;
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Splitting view container vertically";
+	BOOST_LOG_SEV(gtk_l::get(),normal)
+			<<LOCATION<<"Splitting view container '"<<this<<"' vertically";
 
 	//Create vertical paned
 	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_VERTICAL));

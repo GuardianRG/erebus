@@ -6,6 +6,7 @@
 #include <presenter/interfaces/i_view_container_presenter.h>
 
 #include <gtk_view_container.h>
+#include <gtk_logger.h>
 #include <presenter/view_container_presenter.h>
 
 namespace erebus {
@@ -43,7 +44,8 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 	refBuilder->get_widget("view_show_tabs",view_show_tabs);
 	view_show_tabs->signal_activate().
 	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_show_tabs_click));
-
+	
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<"Creating main window '"<<this<<"'";
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
@@ -83,6 +85,7 @@ void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter> presente
 }
 
 void GTK_MainWindow::close() {
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing main window '"<<this<<"'";
 	GTK_Window::close();
 }
 

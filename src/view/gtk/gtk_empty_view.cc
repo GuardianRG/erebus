@@ -22,7 +22,7 @@ GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating empty view";
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating empty view '"<<this<<"'";
 }
 
 
@@ -52,6 +52,7 @@ void GTK_EmptyView::showContextMenu() {
 
 
 void GTK_EmptyView::close() {
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing empty '"<<this<<"'";
 	GTK_View::close();
 }
 

@@ -29,9 +29,14 @@
  */
 void initLogging() {
 	createDirectory("logs");
-
+	
 	boost::log::add_console_log(std::clog,
-	                            boost::log::keywords::format = "%LineID%: [%Channel%]: %Message%");
+				    boost::log::keywords::format = boost::log::expressions::stream
+				    <<boost::log::expressions::attr<unsigned int>("LineID")
+				    << ": ["<< boost::log::expressions::attr<std::string>("Channel")
+				    << "] \t[" << boost::log::expressions::attr< severity_level >("Severity")
+				    << "]\t" << boost::log::expressions::message
+	);
 
 	boost::log::add_file_log
 	(
@@ -48,8 +53,8 @@ void initLogging() {
 	                                   << " [" << boost::log::expressions::format_date_time<
 	                                   boost::log::attributes::timer::value_type >("Uptime", "%O:%M:%S")
 	                                   << "] [" << boost::log::expressions::attr<std::string>("Channel")
-	                                   << "] <" << boost::log::expressions::attr< severity_level >("Severity")
-	                                   << "> " << boost::log::expressions::message
+	                                   << "] [" << boost::log::expressions::attr< severity_level >("Severity")
+	                                   << "] " << boost::log::expressions::message
 	);
 
 	boost::log::add_common_attributes();

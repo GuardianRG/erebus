@@ -40,6 +40,8 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
 	show_all_children();
 
 	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
+	
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<"Creating view window '"<<this<<"'";
 }
 
 GTK_ViewWindow::~GTK_ViewWindow() {
@@ -79,6 +81,7 @@ bool GTK_ViewWindow::isEmpty() const {
 }
 
 void GTK_ViewWindow::close() {
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing view window '"<<this<<"'";
 	GTK_Window::close();
 }
 

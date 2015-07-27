@@ -5,6 +5,7 @@
 #include <presenter/interfaces/i_window_presenter.h>
 
 #include <view/gui_manager.h>
+#include <gtk_logger.h>
 
 namespace erebus {
 GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
@@ -36,6 +37,7 @@ void GTK_Window::unmaximize() {
 }
 
 void GTK_Window::close() {
+	//BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing window '"<<this<<"'";
 	Gtk::Window::close();
 	GUIManager::getInstance().deleteWindow(this);
 }
