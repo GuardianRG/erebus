@@ -6,6 +6,7 @@
 #include <memory>
 
 #include <view/interfaces/i_view.h>
+#include <view/interfaces/i_gui_manager.h>
 #include <presenter/interfaces/i_view_presenter.h>
 #include <view/gui_manager.h>
 #include <gtk_logger.h>
@@ -48,6 +49,10 @@ void GTK_View::on_my_parent_changed(Gtk::Widget* previous_parent) {
 }
 void GTK_View::setTitle(std::string title) {
 	title_=title;
+}
+
+void GTK_View::setGUIManager(IGUIManager* manager) {
+	guiManager_=manager;
 }
 
 std::string GTK_View::getTitle() const {

@@ -11,6 +11,7 @@
 #include <view/interfaces/i_view_container.h>
 #include <presenter/interfaces/i_empty_view_presenter.h>
 #include <presenter/interfaces/i_hex_view_presenter.h>
+#include <view/interfaces/i_gui_manager.h>
 
 #include <presenter/empty_view_presenter.h>
 #include <presenter/hex_view_presenter.h>
@@ -49,7 +50,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 	if(notebook==nullptr) {
 		notebook_=std::make_unique<Gtk::Notebook>();
 		notebook_->set_group_name("notebooks");
-		showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
+		//showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
 	} else {
 		assert(notebook.get()!=nullptr);
 		notebook_=std::move(notebook);
@@ -299,7 +300,7 @@ void GTK_ViewContainer::joinContainer() {
 	Gtk::Container::remove(*paned_);
 	paned_=nullptr;
 
-	showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
+	//showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
 
 	add(*notebook_);
 
@@ -416,7 +417,7 @@ void GTK_ViewContainer::popOutView(IView& view) {
 	if(!isTopLevel())
 		return;
 	removeView(view);
-	GUIManager::getInstance().moveViewToNewWindow(view);
+	//GUIManager::getInstance().moveViewToNewWindow(view);
 }
 
 void GTK_ViewContainer::splitHorizontal() {
@@ -535,6 +536,10 @@ void GTK_ViewContainer::showTabs(bool showTabs) {
 		container1->showTabs(showTabs);
 		container2->showTabs(showTabs);
 	}
+}
+
+void GTK_ViewContainer::setGUIManager(IGUIManager* manager) {
+	guiManager_=manager;
 }
 
 Glib::RefPtr<Gtk::Adjustment> GTK_ViewContainer::getHAdjustment() {

@@ -67,7 +67,8 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	 * Destructor.
 	 */
 	~GTK_EmptyView();
-
+	
+	
 	/**
 	 * See GTK_View::createContextMenu
 	 */

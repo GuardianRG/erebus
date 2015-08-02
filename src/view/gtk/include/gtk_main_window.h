@@ -76,6 +76,7 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 * See IMainWindow::setTitle
 	 */
 	void setTitle(std::string title) override;
+	
 
 	/**
 	 * See IMainWindow::getTitle

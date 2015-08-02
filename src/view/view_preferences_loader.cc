@@ -51,7 +51,7 @@ void ViewPreferencesLoader::loadDefaultViewPreferences() {
 }
 
 void ViewPreferencesLoader::loadPreferences(const std::string& file) {
-	auto& viewPref=ViewPreferences::getInstance();
+	/*auto& viewPref=ViewPreferences::getInstance();
 
 	std::ifstream infile(ViewPreferences::DEFAULT_VIEW_PREFERENCE_FILE);
 	std::string line;
@@ -90,7 +90,7 @@ void ViewPreferencesLoader::loadPreferences(const std::string& file) {
 			                                    <<strs[1]<<"' in '"
 			                                    <<file<<"'";
 		}
-	}
+	}*/
 }
 
 }//namespace erebus

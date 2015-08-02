@@ -72,6 +72,8 @@ class GTK_HexView:public GTK_View,public IHexView {
 	 * See IHexView::close
 	 */
 	void close()override;
+	
+	
 
 	/**
 	 * See IHexView::setParent

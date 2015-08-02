@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include <string.h>
 
 #include <boost/log/sources/severity_channel_logger.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
@@ -17,10 +16,9 @@
 //this INIT_LOCATION in your file even before opening the namespace.
 //If you dont the code wont compile.
 #define INIT_LOCATION namespace {std::string displayPath=getDisplayPath(std::string(__FILE__));}
-
 #define LOCATION boost::format("%-60s")% (std::string("(")+displayPath+" : "+std::to_string(__LINE__)+")")
-
 #else
+#define INIT_LOCATION
 #define LOCATION ""
 #endif
 

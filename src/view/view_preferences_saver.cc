@@ -40,12 +40,11 @@ ViewPreferencesSaver::~ViewPreferencesSaver() {
 }
 
 void ViewPreferencesSaver::saveViewPreferences() {
-	using vp=ViewPreferences;
-	auto vpo=vp::getInstance();
+	//using vp=ViewPreferences;
 
 	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Saving view preferences";
 
-	writeToFile(vp::ALWAYS_SHOW_TABS,BoolStr::toStr(vpo.getAlwaysShowTabs()));
+	//writeToFile(vp::ALWAYS_SHOW_TABS,BoolStr::toStr(vpo.getAlwaysShowTabs()));
 
 
 }

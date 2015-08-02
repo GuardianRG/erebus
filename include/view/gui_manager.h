@@ -9,46 +9,35 @@
 #include <view/interfaces/i_window.h>
 
 #include <model.h>
+#include <view/view_preferences.h>
 
 
 namespace erebus {
+	
+	
+	enum class ErrorLevel {
+		INFO,
+		ERROR	
+	};
 
 /**
  * This class handels the gui. The concrete implementation
  * gets statically linked on compile time.
  */
 class GUIManager {
-	static std::unique_ptr<GUIManager>	guiManager_;
-
 	int&					argc_;
 	char**& 				argv_;
 
 	std::shared_ptr<Model>			model_;
 
 	std::unique_ptr<IGUIStateObject>	stateObject_;
+	
 	std::vector<std::unique_ptr<IWindow>> 	windows_;
 
-	GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv);
+	std::unique_ptr<ViewPreferences>	viewPreferences_;
 
   public:
-	/**
-	 * Creates the singleton object.
-	 *
-	 * Theis method only builds the gui but doesnt show it.
-	 * To show the gui call GUIManager::runGUI.
-	 *
-	 * @param model The model the gui shall operate on
-	 * @param argc number of console arguments
-	 * @param argv console arguments
-	 */
-	static GUIManager& create(std::shared_ptr<Model> model,int& argc, char**& argv);
-
-	/**
-	 * Returns the singleton of this class.
-	 *
-	 * @return singleton of this class
-	 */
-	static GUIManager& getInstance();
+	  GUIManager(std::shared_ptr<Model> model,int& argc, char**& argv);
 
 	/**
 	 * Copy Constructor.
@@ -95,6 +84,8 @@ class GUIManager {
 	 * @param window window to add
 	 */
 	void addWindow(IWindow& window);
+	
+	void loadViewPreferences();
 
 	/**
 	 * Creates a new window and adds the view to it.
@@ -121,7 +112,8 @@ class GUIManager {
 	 * @param title the title of the dialog
 	 * @param text the info text
 	 */
-	void showInfoDialog(std::string title,std::string text);
+	void showInfoDialog(std::string title,std::string text,ErrorLevel el);
 };
+
 
 }//namespace erbus

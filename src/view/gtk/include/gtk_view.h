@@ -7,6 +7,7 @@
 #include <view/interfaces/i_view.h>
 #include <presenter/interfaces/i_view_presenter.h>
 #include <view/interfaces/i_view_container.h>
+#include <view/interfaces/i_gui_manager.h>
 
 #include <gtk_view_container.h>
 
@@ -29,6 +30,8 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	void on_context_menu_close_click();
 
   protected:
+	  IGUIManager*	guiManager_;
+	  
 	/**
 	 * The context menu to show.
 	 */
@@ -88,7 +91,8 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	virtual ~GTK_View();
 
 
-
+	
+	void setGUIManager(IGUIManager* manager)override;
 	/**
 	 * See IView::setViewContainer
 	 */

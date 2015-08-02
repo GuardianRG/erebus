@@ -4,7 +4,7 @@
 
 #include <presenter/interfaces/i_window_presenter.h>
 
-#include <view/gui_manager.h>
+#include <view/interfaces/i_gui_manager.h>
 #include <gtk_logger.h>
 
 INIT_LOCATION;
@@ -34,6 +34,11 @@ void GTK_Window::maximize() {
 	Gtk::Window::maximize();
 }
 
+
+void GTK_Window::setGUIManager(IGUIManager* manager) {
+	guiManager_=manager;
+}
+
 void GTK_Window::unmaximize() {
 	Gtk::Window::unmaximize();
 }
@@ -41,6 +46,6 @@ void GTK_Window::unmaximize() {
 void GTK_Window::close() {
 	//BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing window '"<<this<<"'";
 	Gtk::Window::close();
-	GUIManager::getInstance().deleteWindow(this);
+	//GUIManager::getInstance().deleteWindow(this);
 }
 }//namespace erebus

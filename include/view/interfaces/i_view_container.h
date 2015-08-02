@@ -1,6 +1,7 @@
 #pragma once
 
 #include <view/view_type.h>
+#include <view/interfaces/i_gui_manager.h>
 
 namespace erebus {
 //Forward declarations to avoid cyclic includation.
@@ -67,6 +68,9 @@ class IViewContainer {
 	 * @return true, when the container is split
 	 */
 	virtual bool isSplit() const=0;
+	
+	
+	virtual void setGUIManager(IGUIManager* manager)=0;
 
 	/**
 	 * Wether this container contains container.

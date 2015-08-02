@@ -21,6 +21,7 @@
 #include <view/view_preferences_loader.h>
 #include <view/gui_manager.h>
 #include <model.h>
+#include <gtk_gui_manager.h>
 #include <file_system.h>
 
 
@@ -98,15 +99,29 @@ int main(int argc, char *argv[]) {
         << std::endl;
         return 1;
     }
+#ifndef _DEBUG_
+try {
+#endif
+	
     BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
 
     BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Initializing model";
     auto model = std::make_shared<erebus::Model>();
-    loadViewPreferences();
-    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Creating gui";
-    auto &gui = erebus::GUIManager::create(model, argc, argv);
+    
+#ifdef _GTKMM_
+    auto guiManager=std::make_unique<erebus::GTK_GUIManager>();
+#else
+    BOOST_LOG_SEV(main_l::get(),error)<<LOCATION<<"Could not find a graphics library";
+    return 1;
+#endif
     BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Running gui";
-    gui.runGUI();
+    //gui.runGUI();
     BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Stopping gui";
+    
+#ifndef _DEBUG_
+}catch(std::exception& e) {
+	BOOST_LOG_SEV(main_l::get(),error)<<LOCATION<<"Unexpected error:"<<e.what();
+}
+#endif
     return 0;
 }

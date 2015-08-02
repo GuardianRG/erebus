@@ -1,4 +1,4 @@
-#include <view/gui_manager.h>
+#include <gtk_gui_manager.h>
 
 #include <gtkmm.h>
 
@@ -25,7 +25,7 @@ INIT_LOCATION;
 
 namespace erebus {
 
-std::unique_ptr<GUIManager> GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
+/*std::unique_ptr<GUIManager> GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
 
 
 GUIManager::GUIManager(std::shared_ptr<Model> model,
@@ -55,19 +55,6 @@ GUIManager::GUIManager(std::shared_ptr<Model> model,
 
 GUIManager::~GUIManager() {
 
-}
-
-GUIManager& GUIManager::create(std::shared_ptr<Model> model,int& argc, char**& argv) {
-	if(guiManager_.get()==nullptr) {
-		guiManager_=std::unique_ptr<GUIManager>(new GUIManager(model,argc,argv));
-		return *guiManager_.get();
-	}
-	return *guiManager_.get();
-}
-
-
-GUIManager& GUIManager::getInstance() {
-	return *guiManager_.get();
 }
 
 void GUIManager::runGUI() {
@@ -130,13 +117,23 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 	windows_.push_back(std::unique_ptr<IWindow>(viewWindow));
 }
 
-void GUIManager::showInfoDialog(std::string title,std::string text) {
+void GUIManager::showInfoDialog(std::string title,std::string text,ErrorLevel el) {
 	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
-
-	Gtk::MessageDialog dialog(*guido.mainWindow_, title);
-	dialog.set_secondary_text(text);
-
-	dialog.run();
-}
+	
+	std::unique_ptr<Gtk::MessageDialog> dialog;
+	switch(el) {
+		case ErrorLevel::INFO:
+			dialog=std::make_unique<MessageDialog>(*guido.mainWindow_, title);
+			break;
+		case ErrorLevel::ERROR:
+			dialog=std::make_unique<MessageDialog>(*guido.mainWindow_, title,Gtk::ERROR);
+			break;
+		default:
+			assert(false);
+			break;
+	}
+	dialog->set_secondary_text(text);
+	dialog->run();
+}*/
 
 }//namespace erebus

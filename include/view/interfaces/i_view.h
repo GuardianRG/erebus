@@ -5,6 +5,7 @@
 
 #include <view/interfaces/i_view.h>
 #include <view/interfaces/i_view_container.h>
+#include <view/interfaces/i_gui_manager.h>
 
 namespace erebus {
 
@@ -43,6 +44,8 @@ class IView {
 	 * as well as the standard entries.
 	 */
 	virtual void showContextMenu()=0;
+	
+	virtual void setGUIManager(IGUIManager* manager)=0;
 
 	/**
 	 * Closes the view.

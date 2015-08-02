@@ -57,6 +57,7 @@ if(UNIX)
 	if(GTKMM_FOUND)
 		link_directories(${GTKMM_LIBRARY_DIRS})
 		include_directories(${GTKMM_INCLUDE_DIRS})
+		SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GTKMM_")
 	endif()
 endif()
 
@@ -78,15 +79,16 @@ add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(test)
 
+if(GTKMM_FOUND)
+	include_directories(src/view/gtk/include/)
+endif()
+
 #create executable
 add_executable(erebus ${SOURCE} ${HEADER_FILES})
 
 #add resources o build directory
 add_subdirectory(resources)
 
-if(GTKMM_FOUND)
-	target_link_libraries(erebus gtk_gui)
-endif()
 
 target_link_libraries(erebus ${GTKMM_LIBRARIES})
 target_link_libraries(erebus ${Boost_LIBRARIES} -pthread)

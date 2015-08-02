@@ -36,8 +36,8 @@ void MainWindowPresenter::setWindow(IWindow* window) {
 void MainWindowPresenter::on_menu_view_save_click() {
 	auto saver=ViewPreferencesSaver{};
 	saver.saveViewPreferences();
-	GUIManager::getInstance().
-	showInfoDialog("Save view preferences","View preferences succesfully saved");
+	//GUIManager::getInstance().
+	//showInfoDialog("Save view preferences","View preferences succesfully saved");
 }
 
 void MainWindowPresenter::on_menu_view_show_tabs_click() {

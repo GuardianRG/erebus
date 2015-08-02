@@ -2,6 +2,7 @@
 
 
 #include <string>
+#include <view/interfaces/i_gui_manager.h>
 
 namespace erebus {
 
@@ -28,7 +29,9 @@ class IWindow {
 	 * @return the title of the window
 	 */
 	virtual std::string getTitle() const=0;
-
+	
+	virtual void setGUIManager(IGUIManager* manager)=0;
+	
 	/**
 	 * Sets the preferred size of the window.
 	 *

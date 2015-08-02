@@ -6,6 +6,7 @@
 
 #include <view/interfaces/i_window.h>
 #include <presenter/interfaces/i_window_presenter.h>
+#include <view/interfaces/i_gui_manager.h>
 
 namespace erebus {
 
@@ -15,6 +16,7 @@ namespace erebus {
 class GTK_Window:public Gtk::Window,virtual public IWindow {
 
   protected:
+	  IGUIManager*	guiManager_;
 	/**
 	 * Returns the presenter.
 	 *
@@ -79,6 +81,9 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 * See IWindow::maximize
 	 */
 	virtual void maximize() override;
+	
+	
+	void setGUIManager(IGUIManager* manager)override;
 
 	/**
 	 * See IWindow::unmaximize
