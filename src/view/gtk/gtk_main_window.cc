@@ -1,6 +1,7 @@
 #include <gtk_main_window.h>
 
 #include <memory>
+#include <stdexcept>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <presenter/interfaces/i_view_container_presenter.h>
@@ -17,7 +18,7 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder)
 	: GTK_Window(cobject) {
 
-	Gtk::Viewport *base;
+	/*Gtk::Viewport *base;
 	refBuilder->get_widget("base_view",base);
 
 	auto presenter=std::unique_ptr<IViewContainerPresenter>(
@@ -48,7 +49,10 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 	view_show_tabs->signal_activate().
 	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_show_tabs_click));
 	
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating main window '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),
+	              normal)<<LOCATION<<"Creating main window '"<<this<<"'";*/
+	
+	throw std::logic_error("BAd thishs");
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
@@ -56,11 +60,11 @@ GTK_MainWindow::~GTK_MainWindow() {
 }
 
 void GTK_MainWindow::on_menu_view_save_click() {
-	presenter_->on_menu_view_save_click();
+	//presenter_->on_menu_view_save_click();
 }
 
 void GTK_MainWindow::on_menu_view_show_tabs_click() {
-	presenter_->on_menu_view_show_tabs_click();
+	//presenter_->on_menu_view_show_tabs_click();
 }
 
 void GTK_MainWindow::setTitle(std::string title) {
@@ -83,12 +87,14 @@ void GTK_MainWindow::unmaximize() {
 	GTK_Window::unmaximize();
 }
 
-void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter> presenter) {
+void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter>
+                                  presenter) {
 	presenter_=std::move(presenter);
 }
 
 void GTK_MainWindow::close() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing main window '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),
+	              normal)<<LOCATION<<"Closing main window '"<<this<<"'";
 	GTK_Window::close();
 }
 

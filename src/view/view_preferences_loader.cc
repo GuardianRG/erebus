@@ -39,7 +39,8 @@ void ViewPreferencesLoader::loadViewPreferences() {
 }
 
 void ViewPreferencesLoader::loadDefaultViewPreferences() {
-	BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"Loading default view preferences";
+	BOOST_LOG_SEV(main_l::get(),
+	              normal)<<LOCATION<<"Loading default view preferences";
 
 	if(!doesFileExist(ViewPreferences::DEFAULT_VIEW_PREFERENCE_FILE)) {
 		BOOST_LOG_SEV(main_l::get(),warning)

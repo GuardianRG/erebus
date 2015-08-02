@@ -22,11 +22,13 @@ ViewPreferencesSaver::ViewPreferencesSaver() {
 	preferenceFile_= new std::ofstream(ViewPreferences::VIEW_PREFERENCE_FILE);
 }
 
-ViewPreferencesSaver::ViewPreferencesSaver( ViewPreferencesSaver&& obj): preferenceFile_(obj.preferenceFile_) {
+ViewPreferencesSaver::ViewPreferencesSaver( ViewPreferencesSaver&& obj):
+	preferenceFile_(obj.preferenceFile_) {
 
 }
 
-ViewPreferencesSaver& ViewPreferencesSaver::operator=(ViewPreferencesSaver&& obj) {
+ViewPreferencesSaver& ViewPreferencesSaver::operator=(ViewPreferencesSaver&&
+        obj) {
 	if(this != &obj) {
 		preferenceFile_=obj.preferenceFile_;
 	}

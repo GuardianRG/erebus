@@ -25,11 +25,12 @@ class IViewContainerPresenter {
 	 * @param container the container
 	 */
 	virtual void setViewContainer(IViewContainer* container)=0;
-	
+
 	/**
 	 * Sets the settings propagator for the view container.
 	 */
-	virtual void setSettingsPropagator(std::unique_ptr<IViewContainerSettingsPropagator> p)=0;
+	virtual void setSettingsPropagator(
+	    std::unique_ptr<IViewContainerSettingsPropagator> p)=0;
 
 	/**
 	 * Handels a right mouse button click.

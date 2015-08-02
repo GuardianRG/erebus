@@ -26,7 +26,8 @@ binVec* FileReader::readFile(std::string path) {
 	binVec* vec(new binVec);
 	vec->reserve(fileSize);
 
-	vec->insert(vec->begin(), std::istream_iterator<byte>(file),std::istream_iterator<byte>());
+	vec->insert(vec->begin(), std::istream_iterator<byte>(file),
+	            std::istream_iterator<byte>());
 
 	file.close();
 

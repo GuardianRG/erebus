@@ -10,11 +10,13 @@ File::File(binVec* file): File(file,"") {
 
 }
 
-File::File(binVec* file,std::string path): file_(std::make_unique<binVec>(*file)),path_(path) {
+File::File(binVec* file,
+           std::string path): file_(std::make_unique<binVec>(*file)),path_(path) {
 
 }
 
-File::File(const File &obj): file_(std::make_unique<binVec>(*(obj.file_.get()))),path_(obj.path_) {
+File::File(const File &obj): file_(std::make_unique<binVec>(*
+	                                   (obj.file_.get()))),path_(obj.path_) {
 
 }
 

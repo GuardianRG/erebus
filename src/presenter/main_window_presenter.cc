@@ -3,7 +3,6 @@
 #include <assert.h>
 
 #include <view/interfaces/i_window.h>
-#include <view/gui_manager.h>
 #include <view/interfaces/i_main_window.h>
 #include <view/view_preferences_saver.h>
 
@@ -17,7 +16,8 @@ MainWindowPresenter::~MainWindowPresenter() {
 
 }
 
-MainWindowPresenter::MainWindowPresenter( MainWindowPresenter&& obj): mainWindow_(obj.mainWindow_) {
+MainWindowPresenter::MainWindowPresenter( MainWindowPresenter&& obj):
+	mainWindow_(obj.mainWindow_) {
 
 }
 
@@ -41,7 +41,7 @@ void MainWindowPresenter::on_menu_view_save_click() {
 }
 
 void MainWindowPresenter::on_menu_view_show_tabs_click() {
-	
+
 }
 
 

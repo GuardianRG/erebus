@@ -1,6 +1,7 @@
 #include <exception>
 #include <stdexcept>
 #include <iostream>
+#include <assert.h>
 #include <string>
 #include <memory>
 
@@ -17,12 +18,21 @@
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/support/date_time.hpp>
 
+#include <view/interfaces/i_gui_manager.h>
+
 #include <logger.h>
 #include <view/view_preferences_loader.h>
-#include <view/gui_manager.h>
 #include <model.h>
-#include <gtk_gui_manager.h>
 #include <file_system.h>
+
+#ifdef _GTKMM_
+#include <gtk_gui_manager.h>
+#include <glibmm/exception.h>
+#endif
+
+namespace logging = boost::log;
+namespace expr = logging::expressions;
+namespace attrs = logging::attributes;
 
 
 INIT_LOCATION;
@@ -31,97 +41,144 @@ INIT_LOCATION;
  * Initializes the logger.
  */
 void initLogging() {
-    createDirectory("logs");
+	//Create the directory in which the log files get stored
+	createDirectory("logs");
 
-    boost::log::add_console_log(std::clog,
-                                boost::log::keywords::format = boost::log::expressions::stream
-                                                               << boost::log::expressions::attr<unsigned int>("LineID")
-                                                               << ": [" <<
-                                                               boost::log::expressions::attr<std::string>("Channel")
-                                                               << "] \t[" <<
-                                                               boost::log::expressions::attr<severity_level>("Severity")
-                                                               << "]\t" << boost::log::expressions::message
-    );
+	//Add the console log
+	logging::add_console_log(std::clog,
+	                         logging::keywords::format = expr::stream
+	                                 << expr::attr<unsigned int>("LineID")
+	                                 << ": [" <<
+	                                 expr::attr<std::string>("Channel")
+	                                 << "] \t[" <<
+	                                 expr::attr<severity_level>("Severity")
+	                                 << "]\t" << expr::message
+	                        );
 
-    boost::log::add_file_log
-            (
-                    "logs/%Y_%m_%d_%H_%M_%S.log",
-                    boost::log::keywords::auto_flush = true,
-                    boost::log::keywords::filter =
-                            boost::log::expressions::attr<severity_level>("Severity") >= warning,
+	//Add the file log
+	logging::add_file_log
+	(
+	    "logs/%Y_%m_%d_%H_%M_%S.log",
+	    logging::keywords::auto_flush = true,
+	    logging::keywords::filter =
+	        expr::attr<severity_level>("Severity") >= warning,
 
-                    boost::log::keywords::format = boost::log::expressions::stream
-                                                   << boost::log::expressions::attr<unsigned int>("LineID")
-                                                   << ": "
-                                                   << boost::log::expressions::format_date_time<
-                            boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
-                                                   << " [" << boost::log::expressions::format_date_time<
-                            boost::log::attributes::timer::value_type>("Uptime", "%O:%M:%S")
-                                                   << "] [" << boost::log::expressions::attr<std::string>("Channel")
-                                                   << "] [" << boost::log::expressions::attr<severity_level>("Severity")
-                                                   << "] " << boost::log::expressions::message
-            );
+	    logging::keywords::format = expr::stream<<expr::attr<unsigned int>("LineID")<< ": "<<
+	                                expr::format_date_time<
+	                                boost::posix_time::ptime>("TimeStamp", "%Y-%m-%d, %H:%M:%S.%f")
+	                                << " [" << expr::format_date_time<
+	                                attrs::timer::value_type>("Uptime", "%O:%M:%S")
+	                                << "] [" << expr::attr<std::string>("Channel")
+	                                << "] [" << expr::attr<severity_level>("Severity")
+	                                << "] " << expr::message
+	);
 
-    boost::log::add_common_attributes();
-    boost::log::core::get()->add_global_attribute("LineID",
-                                                  boost::log::attributes::counter<unsigned int>(1));
+	logging::add_common_attributes();
 
-    boost::log::core::get()->add_global_attribute("Uptime", boost::log::attributes::timer());
+	logging::core::get()->add_global_attribute("LineID",attrs::counter<unsigned int>(1));
 
-    boost::log::core::get()->add_thread_attribute("Scope",
-                                                  boost::log::attributes::named_scope());
+	logging::core::get()->add_global_attribute("Uptime",attrs::timer());
 
-    BOOST_LOG_FUNCTION();
-}
-
-/**
- * Loads the view preferences.
- *
- * First the default preferences get loaded and the the custom preferences.
- */
-void loadViewPreferences() {
-    auto viewPrefLoader = erebus::ViewPreferencesLoader{};
-    //Load defaulr preferences first to assure everything has a solid initiliazation value
-    viewPrefLoader.loadDefaultViewPreferences();
-    //The load the custom preferences
-    viewPrefLoader.loadViewPreferences();
+	logging::core::get()->add_thread_attribute("Scope",attrs::named_scope());
 }
 
 int main(int argc, char *argv[]) {
-    try {
-        initLogging();
-    } catch (std::exception const &e) {
-        std::cout << e.what()
-        << std::endl
-        << "Something went wronge while building the logger!"
-        << std::endl
-        << "Exiting..."
-        << std::endl;
-        return 1;
-    }
-#ifndef _DEBUG_
-try {
-#endif
-	
-    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
+	try {
+		initLogging();
+	} catch (std::exception const &e) {
+		std::cout << e.what()
+		          << std::endl
+		          << "Something went wronge while building the logger!"
+		          << std::endl
+		          << "Exiting..."
+		          << std::endl;
+		return 1;
+	}
+	BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
 
-    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Initializing model";
-    auto model = std::make_shared<erebus::Model>();
-    
-#ifdef _GTKMM_
-    auto guiManager=std::make_unique<erebus::GTK_GUIManager>();
-#else
-    BOOST_LOG_SEV(main_l::get(),error)<<LOCATION<<"Could not find a graphics library";
-    return 1;
-#endif
-    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Running gui";
-    //gui.runGUI();
-    BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Stopping gui";
-    
 #ifndef _DEBUG_
-}catch(std::exception& e) {
-	BOOST_LOG_SEV(main_l::get(),error)<<LOCATION<<"Unexpected error:"<<e.what();
-}
+	try {
 #endif
-    return 0;
+		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Initializing model";
+		auto model = std::make_shared<erebus::Model>();
+
+#ifndef _DEBUG_
+	} catch(const std::exception& e) {
+		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		                                  <<"Unexpected error while initializing the model: "
+		                                  <<e.what();
+		return 2;
+	}
+#endif
+
+	auto guiManager=std::unique_ptr<erebus::IGUIManager>(nullptr);
+
+#ifndef _DEBUG_
+	try {
+#endif
+
+#ifdef _GTKMM_
+		guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>());
+		auto gmc=static_cast<erebus::GTK_GUIManager*>(guiManager.get());
+		gmc->initialize(argc,argv);
+#else
+		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		                                  <<"Could not find a graphics library";
+		return 3;
+#endif
+
+#ifndef _DEBUG_
+	} catch(const std::exception& e) {
+		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		                                  <<"Unexpected error while building the gui: "
+		                                  <<e.what();
+		return 4;
+	}
+#ifdef _GTKMM_
+	catch(const Glib::Exception& e) {
+		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		                                  <<"Unexpected error while building the gui: "
+		                                  <<e.what();
+		return 4;
+	}
+#endif
+
+#endif
+	assert(guiManager.get()!=nullptr);
+
+#ifndef _DEBUG_
+	try {
+#endif
+		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Running gui";
+		guiManager->runGUI();
+
+#ifndef _DEBUG_
+	} catch(const std::exception& e) {
+		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		                                  <<"Unexpected error occured: "
+		                                  <<e.what();
+
+		guiManager->showMessageDialog("An unexpected error has occured!",e.what(),
+		                              erebus::ErrorLevel::ERROR);
+
+		return 5;
+	}
+#ifdef _GTKMM_
+	catch(const Glib::Exception& e) {
+		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		                                  <<"Unexpected error occured: "
+		                                  <<e.what();
+
+		guiManager->showMessageDialog("An unexpected error has occured!",e.what(),
+		                              erebus::ErrorLevel::ERROR);
+
+		return 5;
+	}
+#endif
+
+#endif
+	BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Stopping gui";
+
+
+	return 0;
 }

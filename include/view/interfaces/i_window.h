@@ -29,9 +29,14 @@ class IWindow {
 	 * @return the title of the window
 	 */
 	virtual std::string getTitle() const=0;
-	
+
+	/**
+	 * Sets the gui manager that this window holds.
+	 *
+	 * @param manager the guin manager
+	 */
 	virtual void setGUIManager(IGUIManager* manager)=0;
-	
+
 	/**
 	 * Sets the preferred size of the window.
 	 *

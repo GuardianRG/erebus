@@ -18,7 +18,6 @@
 #include <presenter/view_container_presenter.h>
 #include <view/view_type.h>
 #include <gtk_view.h>
-#include <view/gui_manager.h>
 #include <gtk_logger.h>
 #include <gtk_builder_factory.h>
 #include <gtk_hex_view.h>
@@ -235,7 +234,8 @@ void GTK_ViewContainer::joinContainer() {
 		return;
 	isSplit_=false;
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Joining view container '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),
+	              normal)<<LOCATION<<"Joining view container '"<<this<<"'";
 
 	assert(paned_!=nullptr);
 
@@ -325,7 +325,8 @@ void GTK_ViewContainer::on_context_menu_join_click() {
 	presenter_->on_context_menu_join_click();
 }
 
-void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter> presenter) {
+void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter>
+                                     presenter) {
 	assert(presenter.get()!=nullptr);
 
 	presenter_=std::move(presenter);
@@ -385,7 +386,8 @@ void GTK_ViewContainer::split() {
 	                         std::move(notebook_),this)
 	                    );
 
-	auto vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),this));
+	auto vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),
+	                     this));
 
 	//Create the presenters of the container
 	auto vcp1=std::unique_ptr<IViewContainerPresenter>(
@@ -425,7 +427,7 @@ void GTK_ViewContainer::splitHorizontal() {
 		return;
 
 	BOOST_LOG_SEV(gtk_l::get(),normal)
-			<<LOCATION<<"Splitting view container '"<<this<<"' horizontally";
+	        <<LOCATION<<"Splitting view container '"<<this<<"' horizontally";
 
 	//Create horizontal paned
 	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL));
@@ -439,7 +441,7 @@ void GTK_ViewContainer::splitVertical() {
 		return;
 
 	BOOST_LOG_SEV(gtk_l::get(),normal)
-			<<LOCATION<<"Splitting view container '"<<this<<"' vertically";
+	        <<LOCATION<<"Splitting view container '"<<this<<"' vertically";
 
 	//Create vertical paned
 	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_VERTICAL));

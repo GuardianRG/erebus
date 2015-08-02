@@ -10,7 +10,7 @@
 #include <view/interfaces/i_gui_manager.h>
 
 namespace erebus {
-	class GTK_ViewContainerSettingsPropagator;
+class GTK_ViewContainerSettingsPropagator;
 
 class GTK_View;
 
@@ -20,7 +20,7 @@ class GTK_View;
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	friend class GTK_ViewContainerSettingsPropagator;
-	
+
 	std::unique_ptr<Gtk::Notebook>			notebook_;
 	Gtk::Paned*					paned_;
 
@@ -42,8 +42,8 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void on_context_menu_split_vertical_click();
 	void on_context_menu_add_view_empty_view_click();
 	void on_context_menu_add_view_hex_view_click();
-	
-protected:
+
+  protected:
 	IGUIManager*	guiManager_;
 
   public:
@@ -95,8 +95,8 @@ protected:
 	 * Cant be copied since Gtk::Viewport cant be copied.
 	 */
 	GTK_ViewContainer& operator=(const GTK_ViewContainer&)=delete;
-	
-	
+
+
 	void setGUIManager(IGUIManager* manager)override;
 
 	/**

@@ -44,10 +44,10 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(main_l, severity_channel_logger) {
 
 /**
  * Turns the given path to the path that gets diaplyes in the log messages.
- * 
+ *
  * It should at some point have a folder calles src. But this is given since
  * the project only gets build if theres a folder src.
- * 
+ *
  * @param path the path to convert
  */
 std::string getDisplayPath(const std::string& path);

@@ -1,6 +1,6 @@
 #include <view/gui_manager.h>
 
 namespace erebus {
-	GUIManager::loadViewPreferences
+GUIManager::loadViewPreferences
 
 }//namespace erebus

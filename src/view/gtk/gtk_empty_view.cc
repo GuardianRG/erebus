@@ -23,7 +23,8 @@ GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating empty view '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),
+	              normal)<<LOCATION<<"Creating empty view '"<<this<<"'";
 }
 
 
@@ -31,7 +32,8 @@ GTK_EmptyView::~GTK_EmptyView() {
 
 }
 
-void GTK_EmptyView::setPresenter(std::unique_ptr<IEmptyViewPresenter> presenter) {
+void GTK_EmptyView::setPresenter(std::unique_ptr<IEmptyViewPresenter>
+                                 presenter) {
 	presenter_=std::move(presenter);
 }
 

@@ -24,13 +24,12 @@ std::string getDisplayPath(const std::string& path) {
 	boost::filesystem::path bpath{path};
 	auto it=bpath.begin();
 	std::string displayPath("");
-	for(auto end=--bpath.end();end!=bpath.begin();--end) {
+	for(auto end=--bpath.end(); end!=bpath.begin(); --end) {
 		auto s=(*end).filename().string();
 		if(s!="erebus") {
 			displayPath.insert(0,s);
 			displayPath.insert(0,"/");
-		}
-		else {
+		} else {
 			displayPath.insert(0,s);
 			break;
 		}

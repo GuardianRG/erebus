@@ -68,8 +68,8 @@ class IViewContainer {
 	 * @return true, when the container is split
 	 */
 	virtual bool isSplit() const=0;
-	
-	
+
+
 	virtual void setGUIManager(IGUIManager* manager)=0;
 
 	/**

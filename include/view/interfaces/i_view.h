@@ -44,7 +44,7 @@ class IView {
 	 * as well as the standard entries.
 	 */
 	virtual void showContextMenu()=0;
-	
+
 	virtual void setGUIManager(IGUIManager* manager)=0;
 
 	/**

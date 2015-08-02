@@ -57,7 +57,8 @@ if(UNIX)
 	if(GTKMM_FOUND)
 		link_directories(${GTKMM_LIBRARY_DIRS})
 		include_directories(${GTKMM_INCLUDE_DIRS})
-		SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -D_GTKMM_")
+		include_directories(src/view/gtk/include/)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GTKMM_")
 	endif()
 endif()
 
@@ -71,17 +72,13 @@ include_directories(include)
 
 #set compileflags
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -D_DEBUG_")
-SET(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -O3")
+SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Werror")
 
 #add source directories
 add_subdirectory(include)
 add_subdirectory(src)
 add_subdirectory(test)
-
-if(GTKMM_FOUND)
-	include_directories(src/view/gtk/include/)
-endif()
 
 #create executable
 add_executable(erebus ${SOURCE} ${HEADER_FILES})

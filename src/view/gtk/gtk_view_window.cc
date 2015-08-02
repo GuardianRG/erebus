@@ -41,8 +41,9 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
 	show_all_children();
 
 	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
-	
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating view window '"<<this<<"'";
+
+	BOOST_LOG_SEV(gtk_l::get(),
+	              normal)<<LOCATION<<"Creating view window '"<<this<<"'";
 }
 
 GTK_ViewWindow::~GTK_ViewWindow() {
@@ -69,7 +70,8 @@ void GTK_ViewWindow::unmaximize() {
 	GTK_Window::unmaximize();
 }
 
-void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter> presenter) {
+void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
+                                  presenter) {
 	presenter_=std::move(presenter);
 }
 
@@ -82,7 +84,8 @@ bool GTK_ViewWindow::isEmpty() const {
 }
 
 void GTK_ViewWindow::close() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing view window '"<<this<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),
+	              normal)<<LOCATION<<"Closing view window '"<<this<<"'";
 	GTK_Window::close();
 }
 

@@ -31,7 +31,8 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 *
 	 * This Constructor is need for building this window from a builder.
 	 */
-	GTK_MainWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
+	GTK_MainWindow(BaseObjectType* cobject,
+	               const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
 	/**
 	 * Copy constructor.
@@ -76,7 +77,7 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 * See IMainWindow::setTitle
 	 */
 	void setTitle(std::string title) override;
-	
+
 
 	/**
 	 * See IMainWindow::getTitle

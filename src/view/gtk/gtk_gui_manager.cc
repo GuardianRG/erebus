@@ -1,73 +1,83 @@
 #include <gtk_gui_manager.h>
 
-#include <gtkmm.h>
+#include <gtkmm/messagedialog.h>
+#include <gtkmm/enums.h>
 
-#include <memory>
-#include <typeinfo>
+#include <string>
+#include <assert.h>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
-#include <view/interfaces/i_main_window.h>
-#include <view/interfaces/i_view.h>
-#include <view/interfaces/i_window.h>
-#include <presenter/interfaces/i_view_window_presenter.h>
 
-#include <gtk_builder_factory.h>
-#include <gtk_main_window.h>
-#include <gtk_gui_state_object.h>
-#include <gtk_window.h>
-#include <gtk_view_window.h>
-#include <gtk_logger.h>
-#include <presenter/main_window_presenter.h>
-#include <presenter/view_window_presenter.h>
 #include <glade_files.h>
+#include <presenter/main_window_presenter.h>
+#include <gtk_main_window.h>
+#include <gtk_builder_factory.h>
+#include <logger.h>
 
 INIT_LOCATION;
 
 namespace erebus {
 
-/*std::unique_ptr<GUIManager> GUIManager::guiManager_=std::unique_ptr<GUIManager>(nullptr);
+const std::string  GTK_GUIManager::PACKAGE_NAME="org.werner.erebus";
 
 
-GUIManager::GUIManager(std::shared_ptr<Model> model,
-                       int& argc,
-                       char**& argv
-                      ):argc_(argc),argv_(argv),model_(model) {
-	stateObject_=std::make_unique<GTK_GUIStateObject>();
+GTK_GUIManager::GTK_GUIManager() {
+	isInitialized_=false;
+}
 
-	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
+GTK_GUIManager::~GTK_GUIManager() {
 
-	auto app = Gtk::Application::create(argc_, argv_,"org.werner.erebus");
+}
 
-	guido.application_=app;
+void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secondaryText,
+                                       ErrorLevel errorLevel) {
+
+	Gtk::MessageType type=Gtk::MESSAGE_INFO;
+
+	switch(errorLevel) {
+	case ErrorLevel::INFO:
+		type=Gtk::MESSAGE_INFO;
+		break;
+	case ErrorLevel::ERROR:
+		type=Gtk::MESSAGE_ERROR;
+		break;
+	default:
+		type=Gtk::MESSAGE_OTHER;
+		break;
+	};
+
+	Gtk::MessageDialog dialog(primaryText,false,type,Gtk::BUTTONS_OK,true);
+	dialog.set_secondary_text(secondaryText);
+
+	dialog.run();
+}
+
+void GTK_GUIManager::initialize(int argc, char** argv) {
+	application_=Gtk::Application::create(argc, argv,PACKAGE_NAME);
+
+	isInitialized_=true;
+}
+
+void GTK_GUIManager::runGUI() {
+	assert(isInitialized_);
 
 	auto builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
 
 	GTK_MainWindow* window;
 	builder->get_widget_derived("main_window", window);
 
-	auto presenter=std::unique_ptr<IMainWindowPresenter>(new MainWindowPresenter);
+	auto presenter=std::unique_ptr<IMainWindowPresenter>(std::make_unique<MainWindowPresenter>());
 	presenter->setWindow(window);
 
 	window->setPresenter(std::move(presenter));
 
-	guido.mainWindow_=std::unique_ptr<GTK_MainWindow>(window);
+	window->setPreferredSize(800,600);
+	window->maximize();
+
+	application_->run(*window);
 }
 
-GUIManager::~GUIManager() {
-
-}
-
-void GUIManager::runGUI() {
-	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
-
-
-	guido.mainWindow_->setPreferredSize(800,600);
-	guido.mainWindow_->maximize();
-
-	guido.application_->run(*guido.mainWindow_.get());
-}
-
-void GUIManager::addWindow(IWindow& window) {
+/*void GUIManager::addWindow(IWindow& window) {
 	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
 
 	try {
@@ -82,17 +92,17 @@ void GUIManager::addWindow(IWindow& window) {
 void GUIManager::deleteWindow(IWindow* window) {
 	if(window==nullptr)
 		return;
-	
+
 	auto rwindows=std::remove_if(windows_.begin(), windows_.end(),
 	[window](const std::unique_ptr<IWindow>& iwindow) {
 		return iwindow.get()==window;
 	});
-	
+
 	if(rwindows!=windows_.end()) {
 		windows_.erase(rwindows,windows_.end());
 		window=nullptr;
 	}
-	
+
 }
 
 void GUIManager::moveViewToNewWindow(IView& view) {
@@ -107,7 +117,7 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 	presenter->setWindow(viewWindow);
 
 	viewWindow->setPresenter(std::move(presenter));
-	
+
 	BOOST_LOG_SEV(gtk_l::get(),normal)
 		<<LOCATION<<"Moving view '"<<&view<<"' to a new view window '"<<viewWindow<<"'";
 	viewWindow->getBasicViewContainer().addView(view);
@@ -119,7 +129,7 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 
 void GUIManager::showInfoDialog(std::string title,std::string text,ErrorLevel el) {
 	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
-	
+
 	std::unique_ptr<Gtk::MessageDialog> dialog;
 	switch(el) {
 		case ErrorLevel::INFO:

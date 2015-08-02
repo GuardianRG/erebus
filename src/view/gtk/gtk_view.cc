@@ -8,7 +8,6 @@
 #include <view/interfaces/i_view.h>
 #include <view/interfaces/i_gui_manager.h>
 #include <presenter/interfaces/i_view_presenter.h>
-#include <view/gui_manager.h>
 #include <gtk_logger.h>
 
 INIT_LOCATION;

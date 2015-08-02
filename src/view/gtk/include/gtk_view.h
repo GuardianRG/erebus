@@ -30,8 +30,8 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	void on_context_menu_close_click();
 
   protected:
-	  IGUIManager*	guiManager_;
-	  
+	IGUIManager*	guiManager_;
+
 	/**
 	 * The context menu to show.
 	 */
@@ -91,7 +91,7 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	virtual ~GTK_View();
 
 
-	
+
 	void setGUIManager(IGUIManager* manager)override;
 	/**
 	 * See IView::setViewContainer

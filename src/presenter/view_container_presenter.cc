@@ -12,11 +12,13 @@ ViewContainerPresenter::~ViewContainerPresenter() {
 
 }
 
-ViewContainerPresenter::ViewContainerPresenter( ViewContainerPresenter&& obj): container_(obj.container_) {
+ViewContainerPresenter::ViewContainerPresenter( ViewContainerPresenter&& obj):
+	container_(obj.container_) {
 
 }
 
-ViewContainerPresenter& ViewContainerPresenter::operator=(ViewContainerPresenter&& obj) {
+ViewContainerPresenter& ViewContainerPresenter::operator=
+(ViewContainerPresenter&& obj) {
 	if(this != &obj) {
 		container_=obj.container_;
 	}
@@ -32,7 +34,8 @@ void ViewContainerPresenter::on_left_button_click() {
 
 }
 
-void ViewContainerPresenter::setSettingsPropagator(std::unique_ptr<IViewContainerSettingsPropagator> p) {
+void ViewContainerPresenter::setSettingsPropagator(
+    std::unique_ptr<IViewContainerSettingsPropagator> p) {
 	propagator_=std::move(p);
 }
 

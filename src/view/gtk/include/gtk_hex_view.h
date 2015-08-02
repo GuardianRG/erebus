@@ -12,7 +12,8 @@ class GTK_HexView:public GTK_View,public IHexView {
   protected:
 	IViewPresenter& getPresenter() const override;
   public:
-	GTK_HexView(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
+	GTK_HexView(BaseObjectType* cobject,
+	            const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
 	/**
 	 * Copy constructor.
@@ -72,8 +73,8 @@ class GTK_HexView:public GTK_View,public IHexView {
 	 * See IHexView::close
 	 */
 	void close()override;
-	
-	
+
+
 
 	/**
 	 * See IHexView::setParent

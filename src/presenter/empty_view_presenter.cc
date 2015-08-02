@@ -15,7 +15,8 @@ EmptyViewPresenter::~EmptyViewPresenter() {
 
 }
 
-EmptyViewPresenter::EmptyViewPresenter( EmptyViewPresenter&& obj): view_(obj.view_) {
+EmptyViewPresenter::EmptyViewPresenter( EmptyViewPresenter&& obj): view_
+	(obj.view_) {
 
 }
 

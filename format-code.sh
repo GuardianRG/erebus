@@ -3,17 +3,18 @@
 #Check if astyle is installed
 command -v astyle >/dev/null 2>&1 || { printf >&2 "This script needs astyle to be installed.\nSee http://astyle.sourceforge.net/ for more information.\n";exit 1; }
 
+AFLAGS="-t -v -r -xC100 -A14"
 
 #format all .cc files
 printf "\nFormatting all *.cc files...\n\n"
-astyle -r "src/*.cc" -t -v -A14
-astyle -r "test/*.cc" -t -v -A14
+astyle ${AFLAGS} "src/*.cc" 
+astyle ${AFLAGS} "test/*.cc"
 
 
 #format all header files
 printf "\n\nFormatting all header files...\n\n"
-astyle -r "include/*.h" -t -v -A14
-astyle -r "src/*.h" -t -v -A14
+astyle ${AFLAGS} "include/*.h" 
+astyle ${AFLAGS} "src/*.h"
 
 #delete all *.orig files created by astyle
 printf "\n\nDeleting all temporary files...\n"

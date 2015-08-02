@@ -55,8 +55,9 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * IViewContainerPresenter::setSettingsPropagator
 	 */
-	virtual void setSettingsPropagator(std::unique_ptr<IViewContainerSettingsPropagator> p)override;
-	
+	virtual void setSettingsPropagator(
+	    std::unique_ptr<IViewContainerSettingsPropagator> p)override;
+
 	/**
 	 * See IViewContainerPresenter::setViewContainer
 	 */

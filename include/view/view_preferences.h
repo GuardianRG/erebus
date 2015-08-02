@@ -8,7 +8,7 @@ class ViewPreferences {
 
 	bool			alwaysShowTabs_;
 
-	
+
   public:
 	static const std::string 	ALWAYS_SHOW_TABS;
 

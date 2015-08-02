@@ -14,7 +14,8 @@ ViewWindowPresenter::~ViewWindowPresenter() {
 
 }
 
-ViewWindowPresenter::ViewWindowPresenter( ViewWindowPresenter&& obj): viewWindow_(obj.viewWindow_) {
+ViewWindowPresenter::ViewWindowPresenter( ViewWindowPresenter&& obj):
+	viewWindow_(obj.viewWindow_) {
 
 }
 

@@ -24,7 +24,8 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	/**
 	 * Constructor.
 	 */
-	GTK_ViewWindow(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
+	GTK_ViewWindow(BaseObjectType* cobject,
+	               const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
 	/**
 	 * Copy constructor.
@@ -68,7 +69,7 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	 * See IViewWindow::setTitle
 	 */
 	void setTitle(std::string title) override;
-	
+
 
 	/**
 	 * IViewWindow::getTitle

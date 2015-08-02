@@ -16,7 +16,7 @@ namespace erebus {
 class GTK_Window:public Gtk::Window,virtual public IWindow {
 
   protected:
-	  IGUIManager*	guiManager_;
+	IGUIManager*	guiManager_;
 	/**
 	 * Returns the presenter.
 	 *
@@ -81,8 +81,8 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 * See IWindow::maximize
 	 */
 	virtual void maximize() override;
-	
-	
+
+
 	void setGUIManager(IGUIManager* manager)override;
 
 	/**
