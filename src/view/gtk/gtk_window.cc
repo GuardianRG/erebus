@@ -2,16 +2,21 @@
 
 #include <string>
 
-#include <presenter/interfaces/i_window_presenter.h>
-
-#include <view/interfaces/i_gui_manager.h>
 #include <gtk_logger.h>
+#include <gtk_window.h>
 
 INIT_LOCATION;
 
 namespace erebus {
-GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
+class IGUIManager;
+}
 
+namespace erebus {
+
+GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating window '"<<getID()<<"'";
+
+	guiManager_=nullptr;
 }
 
 GTK_Window::~GTK_Window() {
@@ -43,9 +48,15 @@ void GTK_Window::unmaximize() {
 	Gtk::Window::unmaximize();
 }
 
+long GTK_Window::getID() {
+	return reinterpret_cast<long>(this);
+}
+
 void GTK_Window::close() {
-	//BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing window '"<<this<<"'";
+	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
+
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing window '"<<getID()<<"'";
 	Gtk::Window::close();
-	//GUIManager::getInstance().deleteWindow(this);
+	guiManager_->destroyWindow(*this);
 }
 }//namespace erebus

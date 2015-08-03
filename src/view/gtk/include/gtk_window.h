@@ -5,27 +5,37 @@
 #include <string>
 
 #include <view/interfaces/i_window.h>
-#include <presenter/interfaces/i_window_presenter.h>
-#include <view/interfaces/i_gui_manager.h>
+
+namespace erebus {
+class IGUIManager;
+class IWindowPresenter;
+}
 
 namespace erebus {
 
 /**
- * This class is base gtk window.
+ * This class is the base gtk window.
  */
 class GTK_Window:public Gtk::Window,virtual public IWindow {
 
   protected:
+	/**
+	 * Holds the pointer to the manager of the gui,
+	 */
 	IGUIManager*	guiManager_;
+
 	/**
 	 * Returns the presenter.
 	 *
 	 * @return the presenter
 	 */
 	virtual IWindowPresenter& getPresenter()=0;
+
   public:
 	/**
 	 * Construcctor.
+	 *
+	 * This constructor is needed for bulding subclasses from a builder.
 	 */
 	GTK_Window(BaseObjectType* cobject);
 
@@ -65,30 +75,39 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	/**
 	 * See IWindow::setTitle
 	 */
-	virtual void setTitle(std::string title) override;
+	void setTitle(std::string title) override;
 
 	/**
 	 * See IWindow::getTitle
 	 */
-	virtual std::string getTitle() const override;
+	std::string getTitle() const override;
 
 	/**
 	 * See IWindow::setPreferredSize
 	 */
-	virtual void setPreferredSize(int width,int height) override;
+	void setPreferredSize(int width,int height) override;
 
 	/**
 	 * See IWindow::maximize
 	 */
-	virtual void maximize() override;
+	void maximize() override;
 
-
+	/**
+	 * Sets the gui manager.
+	 *
+	 * @param manager the gui manager to set
+	 */
 	void setGUIManager(IGUIManager* manager)override;
 
 	/**
 	 * See IWindow::unmaximize
 	 */
-	virtual void unmaximize() override;
+	void unmaximize() override;
+
+	/**
+	 * See IWindow::getID
+	 */
+	long getID()override;
 
 	/**
 	 * See IWindow::close

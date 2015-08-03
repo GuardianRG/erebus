@@ -1,6 +1,7 @@
 #pragma once
 
-#include <gtkmm.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
 
 #include <string>
 
@@ -12,6 +13,7 @@ namespace erebus {
  */
 class GTK_BuilderFactory {
 	GTK_BuilderFactory();
+
   public:
 	~GTK_BuilderFactory() {}
 

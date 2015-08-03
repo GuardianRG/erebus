@@ -22,7 +22,7 @@
 
 #include <logger.h>
 #include <view/view_preferences_loader.h>
-#include <model.h>
+//#include <model.h>
 #include <file_system.h>
 
 #ifdef _GTKMM_
@@ -50,9 +50,9 @@ void initLogging() {
 	                                 << expr::attr<unsigned int>("LineID")
 	                                 << ": [" <<
 	                                 expr::attr<std::string>("Channel")
-	                                 << "] \t[" <<
+	                                 << "] [" <<
 	                                 expr::attr<severity_level>("Severity")
-	                                 << "]\t" << expr::message
+	                                 << "] " << expr::message
 	                        );
 
 	//Add the file log
@@ -83,69 +83,50 @@ void initLogging() {
 }
 
 int main(int argc, char *argv[]) {
-	try {
-		initLogging();
-	} catch (std::exception const &e) {
-		std::cout << e.what()
-		          << std::endl
-		          << "Something went wronge while building the logger!"
-		          << std::endl
-		          << "Exiting..."
-		          << std::endl;
-		return 1;
-	}
-	BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
-
-#ifndef _DEBUG_
-	try {
-#endif
-		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Initializing model";
-		auto model = std::make_shared<erebus::Model>();
-
-#ifndef _DEBUG_
-	} catch(const std::exception& e) {
-		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Unexpected error while initializing the model: "
-		                                  <<e.what();
-		return 2;
-	}
-#endif
-
 	auto guiManager=std::unique_ptr<erebus::IGUIManager>(nullptr);
 
+	//Initializing everything
 #ifndef _DEBUG_
 	try {
 #endif
+
+		initLogging();
+		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
+
+		//auto model = std::make_shared<erebus::Model>();
+		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Model initialized";
 
 #ifdef _GTKMM_
 		guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>());
 		auto gmc=static_cast<erebus::GTK_GUIManager*>(guiManager.get());
 		gmc->initialize(argc,argv);
+		BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"GUI initialized";
 #else
 		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
 		                                  <<"Could not find a graphics library";
-		return 3;
+		return 1;
 #endif
 
 #ifndef _DEBUG_
 	} catch(const std::exception& e) {
 		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Unexpected error while building the gui: "
+		                                  <<"Unexpected error during initialization: "
 		                                  <<e.what();
-		return 4;
+		return 2;
 	}
 #ifdef _GTKMM_
 	catch(const Glib::Exception& e) {
 		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Unexpected error while building the gui: "
+		                                  <<"Unexpected error during initialization: "
 		                                  <<e.what();
-		return 4;
+		return 2;
 	}
 #endif
 
 #endif
-	assert(guiManager.get()!=nullptr);
+	LOG_ASSERT(main_l::get(),guiManager.get()!=nullptr);
 
+	//Running the gui
 #ifndef _DEBUG_
 	try {
 #endif
@@ -155,7 +136,7 @@ int main(int argc, char *argv[]) {
 #ifndef _DEBUG_
 	} catch(const std::exception& e) {
 		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Unexpected error occured: "
+		                                  <<"An unexpected error has occured: "
 		                                  <<e.what();
 
 		guiManager->showMessageDialog("An unexpected error has occured!",e.what(),
@@ -166,7 +147,7 @@ int main(int argc, char *argv[]) {
 #ifdef _GTKMM_
 	catch(const Glib::Exception& e) {
 		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Unexpected error occured: "
+		                                  <<"An unexpected error has occured: "
 		                                  <<e.what();
 
 		guiManager->showMessageDialog("An unexpected error has occured!",e.what(),
@@ -177,7 +158,7 @@ int main(int argc, char *argv[]) {
 #endif
 
 #endif
-	BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Stopping gui";
+	BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "GUI stopped";
 
 
 	return 0;

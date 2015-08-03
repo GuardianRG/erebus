@@ -1,14 +1,17 @@
 #pragma once
 
-#include <gtkmm.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
 
 #include <memory>
 
-#include <presenter/interfaces/i_main_window_presenter.h>
 #include <view/interfaces/i_main_window.h>
 
 #include <gtk_window.h>
-#include <gtk_view_container.h>
+
+namespace erebus {
+class IMainWindowPresenter;
+}
 
 namespace erebus {
 
@@ -19,17 +22,21 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	std::unique_ptr<IMainWindowPresenter>	presenter_;
 
 
-	GTK_ViewContainer*	basicView_;
+	//GTK_ViewContainer*	basicView_;
 
-	void on_menu_view_save_click();
-	void on_menu_view_show_tabs_click();
+	//void on_menu_view_save_click();
+	//void on_menu_view_show_tabs_click();
   protected:
-	IWindowPresenter& getPresenter();
+	/**
+	 * See GTK_Window::getPresenter
+	 */
+	IWindowPresenter& getPresenter()override;
+
   public:
 	/**
 	 * Constructor.
 	 *
-	 * This Constructor is need for building this window from a builder.
+	 * This Constructor is needed for building this window from a builder.
 	 */
 	GTK_MainWindow(BaseObjectType* cobject,
 	               const Glib::RefPtr<Gtk::Builder>& refBuilder);
@@ -72,32 +79,6 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 * See IMainWindow::setPresenter
 	 */
 	void setPresenter(std::unique_ptr<IMainWindowPresenter> presenter);
-
-	/**
-	 * See IMainWindow::setTitle
-	 */
-	void setTitle(std::string title) override;
-
-
-	/**
-	 * See IMainWindow::getTitle
-	 */
-	std::string getTitle() const override;
-
-	/**
-	 * See IMainWindow::setPreferredSize
-	 */
-	void setPreferredSize(int width,int height) override;
-
-	/**
-	 * See IMainWindow::maximize
-	 */
-	void maximize() override;
-
-	/**
-	 * See IMainWindow::unmaximize
-	 */
-	void unmaximize() override;
 
 	/**
 	 * See IMainWindow::close

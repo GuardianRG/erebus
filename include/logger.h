@@ -8,6 +8,8 @@
 #include <boost/format.hpp>
 #include <boost/filesystem/path.hpp>
 
+#include <assert.h>
+
 
 //Should be used in the log messages
 #ifdef _DEBUG_
@@ -16,11 +18,22 @@
 //this INIT_LOCATION in your file even before opening the namespace.
 //If you dont the code wont compile.
 #define INIT_LOCATION namespace {std::string displayPath=getDisplayPath(std::string(__FILE__));}
+
+//This macro defines a string which holds the location of the occurence of LOCATION
 #define LOCATION boost::format("%-60s")% (std::string("(")+displayPath+" : "+std::to_string(__LINE__)+")")
+
 #else
 #define INIT_LOCATION
 #define LOCATION ""
 #endif
+
+//defines a makro to log if a assertion has failed in release build.
+#define LOG_ASSERT(Y,X) if(!(X)) {\
+				assert(false);\
+				BOOST_LOG_SEV((Y),error)<<LOCATION\
+							<< "Assertion failed: ("\
+							<<#X<<") !";\
+			}
 
 //The different serevrity levels
 enum severity_level {

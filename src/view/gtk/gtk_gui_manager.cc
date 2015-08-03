@@ -2,9 +2,10 @@
 
 #include <gtkmm/messagedialog.h>
 #include <gtkmm/enums.h>
+#include <gtkmm/window.h>
 
 #include <string>
-#include <assert.h>
+#include <memory>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
 
@@ -12,9 +13,13 @@
 #include <presenter/main_window_presenter.h>
 #include <gtk_main_window.h>
 #include <gtk_builder_factory.h>
-#include <logger.h>
+#include <gtk_logger.h>
 
 INIT_LOCATION;
+
+namespace erebus {
+class IWindow;
+}
 
 namespace erebus {
 
@@ -46,20 +51,24 @@ void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secon
 		break;
 	};
 
-	Gtk::MessageDialog dialog(primaryText,false,type,Gtk::BUTTONS_OK,true);
+	Gtk::MessageDialog dialog(*dummyWindow_.get(),primaryText,false,type,Gtk::BUTTONS_OK,true);
 	dialog.set_secondary_text(secondaryText);
 
 	dialog.run();
 }
 
 void GTK_GUIManager::initialize(int argc, char** argv) {
+	LOG_ASSERT(gtk_l::get(),!isInitialized_);
+
 	application_=Gtk::Application::create(argc, argv,PACKAGE_NAME);
+
+	dummyWindow_=std::make_unique<Gtk::Window>();
 
 	isInitialized_=true;
 }
 
 void GTK_GUIManager::runGUI() {
-	assert(isInitialized_);
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
 	auto builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
 
@@ -70,41 +79,53 @@ void GTK_GUIManager::runGUI() {
 	presenter->setWindow(window);
 
 	window->setPresenter(std::move(presenter));
-
+	window->setGUIManager(this);
 	window->setPreferredSize(800,600);
 	window->maximize();
 
-	application_->run(*window);
-}
-
-/*void GUIManager::addWindow(IWindow& window) {
-	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
-
 	try {
-		auto& window_c=dynamic_cast<GTK_Window&>(window);
-		guido.application_->add_window(window_c);
-	} catch(std::bad_cast e) {
-		BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"Cast failed.";
-		return;
+		auto& ir_window=addWindow(std::unique_ptr<IWindow>(window),false);
+		auto& r_window=dynamic_cast<GTK_Window&>(ir_window);
+		application_->run(r_window);
+	} catch(const std::bad_cast& e) {
+		BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed";
+		throw;
 	}
+
 }
 
-void GUIManager::deleteWindow(IWindow* window) {
-	if(window==nullptr)
-		return;
+IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePersistent) {
+	LOG_ASSERT(gtk_l::get(),window.get()!=nullptr);
+
+	windows_.push_back(std::move(window));
+
+	auto v_window=(windows_.back()).get();
+
+	if(makePersistent) {
+		auto c_window=dynamic_cast<GTK_Window*>(v_window);
+
+		LOG_ASSERT(gtk_l::get(),c_window!=0);
+		if(c_window!=0)
+			application_->add_window(*c_window);
+	}
+
+	return *(v_window);
+}
+
+void GTK_GUIManager::destroyWindow(IWindow& window) {
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
 	auto rwindows=std::remove_if(windows_.begin(), windows_.end(),
-	[window](const std::unique_ptr<IWindow>& iwindow) {
-		return iwindow.get()==window;
+	[&window](const std::unique_ptr<IWindow>& iwindow) {
+		return iwindow.get()->getID()==window.getID();
 	});
 
 	if(rwindows!=windows_.end()) {
+		BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destroying window '"<<&window<<"'";
 		windows_.erase(rwindows,windows_.end());
-		window=nullptr;
 	}
-
 }
-
+/*
 void GUIManager::moveViewToNewWindow(IView& view) {
 	auto builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
 

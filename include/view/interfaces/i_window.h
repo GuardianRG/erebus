@@ -56,6 +56,13 @@ class IWindow {
 	virtual void unmaximize()=0;
 
 	/**
+	 * Returns an unique id for that object.
+	 *
+	 * @return unqiue id of that object.
+	 */
+	virtual long getID()=0;
+
+	/**
 	 * Closes the window.
 	 *
 	 * WARNING: This window will commit suicide.

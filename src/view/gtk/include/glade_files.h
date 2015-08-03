@@ -3,6 +3,7 @@
 #include <string>
 
 namespace erebus {
+
 /**
  * This class holds the paths to the glade files for the windows.
  */
@@ -12,6 +13,7 @@ class Windows {
 	 * Path to the main window file.
 	 */
 	static std::string 	MAIN_WINDOW;
+
 	/**
 	 * Path to the view window file.
 	 */
@@ -27,6 +29,7 @@ class Views {
 	 * Path to the empty view file.
 	 */
 	static std::string 	EMPTY_VIEW;
+
 	/**
 	 * Path to the hex view file.
 	 */

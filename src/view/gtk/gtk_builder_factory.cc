@@ -1,6 +1,10 @@
 #include <gtk_builder_factory.h>
 
-#include <gtkmm.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
+#include <glibmm/fileutils.h>
+#include <glibmm/markup.h>
+
 #include <string>
 
 #include <gtk_logger.h>
