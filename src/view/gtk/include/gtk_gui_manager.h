@@ -101,6 +101,11 @@ class GTK_GUIManager:public IGUIManager {
 	 * See IGUIManager::destroyWindow
 	 */
 	void destroyWindow(IWindow& window)override;
+	
+	/**
+	 * See IGUIManager::getID
+	 */
+	long getID()override;
 
 };
 }//namespace erebus

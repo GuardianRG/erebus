@@ -83,41 +83,42 @@ void initLogging() {
 }
 
 int main(int argc, char *argv[]) {
+	{
 	auto guiManager=std::unique_ptr<erebus::IGUIManager>(nullptr);
-
+	
 	//Initializing everything
-#ifndef _DEBUG_
+	#ifndef _DEBUG_
 	try {
-#endif
-
+	#endif
+		
 		initLogging();
 		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
-
+		
 		//auto model = std::make_shared<erebus::Model>();
 		BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Model initialized";
-
+		
 #ifdef _GTKMM_
 		guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>());
 		auto gmc=static_cast<erebus::GTK_GUIManager*>(guiManager.get());
 		gmc->initialize(argc,argv);
 		BOOST_LOG_SEV(main_l::get(),normal)<<LOCATION<<"GUI initialized";
 #else
-		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Could not find a graphics library";
+		BOOST_LOG_SEV(main_l::get(),critical)<<LOCATION
+		<<"Could not find a graphics library";
 		return 1;
 #endif
 
 #ifndef _DEBUG_
 	} catch(const std::exception& e) {
-		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		BOOST_LOG_SEV(main_l::get(),critical)<<LOCATION
 		                                  <<"Unexpected error during initialization: "
 		                                  <<e.what();
 		return 2;
 	}
 #ifdef _GTKMM_
 	catch(const Glib::Exception& e) {
-		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
-		                                  <<"Unexpected error during initialization: "
+		BOOST_LOG_SEV(main_l::get(),critical)<<LOCATION
+						<<"Unexpected error during initialization: "
 		                                  <<e.what();
 		return 2;
 	}
@@ -125,7 +126,7 @@ int main(int argc, char *argv[]) {
 
 #endif
 	LOG_ASSERT(main_l::get(),guiManager.get()!=nullptr);
-
+	
 	//Running the gui
 #ifndef _DEBUG_
 	try {
@@ -135,7 +136,7 @@ int main(int argc, char *argv[]) {
 
 #ifndef _DEBUG_
 	} catch(const std::exception& e) {
-		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		BOOST_LOG_SEV(main_l::get(),critical)<<LOCATION
 		                                  <<"An unexpected error has occured: "
 		                                  <<e.what();
 
@@ -146,7 +147,7 @@ int main(int argc, char *argv[]) {
 	}
 #ifdef _GTKMM_
 	catch(const Glib::Exception& e) {
-		BOOST_LOG_SEV(main_l::get(),error)<<LOCATION
+		BOOST_LOG_SEV(main_l::get(),critical)<<LOCATION
 		                                  <<"An unexpected error has occured: "
 		                                  <<e.what();
 
@@ -158,8 +159,10 @@ int main(int argc, char *argv[]) {
 #endif
 
 #endif
+	
+	}
+	
 	BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "GUI stopped";
-
-
+	
 	return 0;
 }

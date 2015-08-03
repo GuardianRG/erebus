@@ -1,36 +1,36 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 #include <boost/log/sources/severity_channel_logger.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
 #include <boost/log/trivial.hpp>
-#include <boost/format.hpp>
-#include <boost/filesystem/path.hpp>
 
 #include <assert.h>
 
-
-//Should be used in the log messages
-#ifdef _DEBUG_
+//This macro is the location of this statement as string
+#define LOCATION_ALL (std::string("(")+displayPath+" : "+std::to_string(__LINE__)+") ")
 
 //If you want to use LOCATION in your log messages then you have to call
 //this INIT_LOCATION in your file even before opening the namespace.
 //If you dont the code wont compile.
 #define INIT_LOCATION namespace {std::string displayPath=getDisplayPath(std::string(__FILE__));}
 
+//Should be used in the log messages
+#ifdef _DEBUG_
+
 //This macro defines a string which holds the location of the occurence of LOCATION
-#define LOCATION boost::format("%-60s")% (std::string("(")+displayPath+" : "+std::to_string(__LINE__)+")")
+#define LOCATION LOCATION_ALL
 
 #else
-#define INIT_LOCATION
 #define LOCATION ""
 #endif
 
 //defines a makro to log if a assertion has failed in release build.
 #define LOG_ASSERT(Y,X) if(!(X)) {\
-				assert(false);\
-				BOOST_LOG_SEV((Y),error)<<LOCATION\
+				assert((X));\
+				BOOST_LOG_SEV((Y),error)<<LOCATION_ALL\
 							<< "Assertion failed: ("\
 							<<#X<<") !";\
 			}

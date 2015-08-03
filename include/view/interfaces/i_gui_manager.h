@@ -28,7 +28,7 @@ enum class ErrorLevel {
  */
 class IGUIManager {
   public:
-	~IGUIManager() {}
+	virtual ~IGUIManager() {}
 
 	/**
 	 * Shows a Messagedialog without locking any window.
@@ -61,6 +61,13 @@ class IGUIManager {
 	 * @param window the window to destroy
 	 */
 	virtual void destroyWindow(IWindow& window)=0;
+	
+	/**
+	 * Returns a unqiue id for the gui manager.
+	 * 
+	 * @return unqiue id for the gui manager
+	 */
+	virtual long getID()=0;
 };
 
 }//namespace erebus

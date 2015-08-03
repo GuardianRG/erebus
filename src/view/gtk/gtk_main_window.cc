@@ -43,13 +43,13 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 	refBuilder->get_widget("view_show_tabs",view_show_tabs);
 	view_show_tabs->signal_activate().
 	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_show_tabs_click));
-
+	
 	BOOST_LOG_SEV(gtk_l::get(),
 	              normal)<<LOCATION<<"Creating main window '"<<this<<"'";*/
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
-
+	
 }
 
 /*void GTK_MainWindow::on_menu_view_save_click() {

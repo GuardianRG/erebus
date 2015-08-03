@@ -27,11 +27,13 @@ const std::string  GTK_GUIManager::PACKAGE_NAME="org.werner.erebus";
 
 
 GTK_GUIManager::GTK_GUIManager() {
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating gui manager '"<<getID()<<"'";
+	
 	isInitialized_=false;
 }
 
 GTK_GUIManager::~GTK_GUIManager() {
-
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing gui manager '"<<getID()<<"'";
 }
 
 void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secondaryText,
@@ -65,6 +67,10 @@ void GTK_GUIManager::initialize(int argc, char** argv) {
 	dummyWindow_=std::make_unique<Gtk::Window>();
 
 	isInitialized_=true;
+}
+
+long GTK_GUIManager::getID() {
+	return reinterpret_cast<long>(this);
 }
 
 void GTK_GUIManager::runGUI() {
@@ -121,7 +127,6 @@ void GTK_GUIManager::destroyWindow(IWindow& window) {
 	});
 
 	if(rwindows!=windows_.end()) {
-		BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destroying window '"<<&window<<"'";
 		windows_.erase(rwindows,windows_.end());
 	}
 }
