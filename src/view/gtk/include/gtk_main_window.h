@@ -4,6 +4,7 @@
 #include <glibmm/refptr.h>
 
 #include <memory>
+#include <string>
 
 #include <view/interfaces/i_main_window.h>
 
@@ -11,6 +12,7 @@
 
 namespace erebus {
 class IMainWindowPresenter;
+class GTK_ViewContainer;
 }
 
 namespace erebus {
@@ -22,7 +24,7 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	std::unique_ptr<IMainWindowPresenter>	presenter_;
 
 
-	//GTK_ViewContainer*	basicView_;
+	std::unique_ptr<GTK_ViewContainer>	basicView_;
 
 	//void on_menu_view_save_click();
 	//void on_menu_view_show_tabs_click();
@@ -74,7 +76,10 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 */
 	~GTK_MainWindow();
 
-
+	/**
+	 * See IMainWindow::classname
+	 */
+	virtual std::string classname()override;
 	/**
 	 * See IMainWindow::setPresenter
 	 */

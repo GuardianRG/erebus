@@ -69,7 +69,11 @@ class IViewContainer {
 	 */
 	virtual bool isSplit() const=0;
 
-
+	/**
+	 * Sets the manager.
+	 *
+	 * @param manager the manager
+	 */
 	virtual void setGUIManager(IGUIManager* manager)=0;
 
 	/**
@@ -118,6 +122,20 @@ class IViewContainer {
 	 * @param view the view to pop out
 	 */
 	virtual void popOutView(IView& view)=0;
+
+	/**
+	 * Returns a unique id for a instance.
+	 *
+	 * @return a unique id for a instance
+	 */
+	virtual long getID()=0;
+
+	/**
+	 * Returns the classname.
+	 *
+	 * @return the classname
+	 */
+	virtual std::string classname()=0;
 
 	/**
 	 * Closes a view.

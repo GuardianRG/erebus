@@ -77,6 +77,11 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	std::string getTitle() const override;
 
 	/**
+	 * See IViewWindow::classname
+	 */
+	virtual std::string classname()override;
+
+	/**
 	 * See IViewWindow::setPreferredSize
 	 */
 	void setPreferredSize(int width,int height) override;

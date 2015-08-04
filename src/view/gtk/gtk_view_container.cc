@@ -32,20 +32,14 @@ namespace erebus {
 GTK_ViewContainer::GTK_ViewContainer(
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-    IViewContainer* parent):
-	GTK_ViewContainer(h_adjustment,v_adjustment,nullptr,parent) {
+    std::unique_ptr<Gtk::Notebook> notebook):
+	Gtk::Viewport(h_adjustment,v_adjustment) {
 
-}
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
 
-GTK_ViewContainer::GTK_ViewContainer(
-    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
-    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-    std::unique_ptr<Gtk::Notebook> notebook,
-    IViewContainer* parent):
-	Gtk::Viewport(h_adjustment,v_adjustment),
-	parent_(parent) {
+	set_shadow_type(Gtk::SHADOW_NONE);
 
-	//Set up the notebook which contains the views.
+	/*//Set up the notebook which contains the views.
 	if(notebook==nullptr) {
 		notebook_=std::make_unique<Gtk::Notebook>();
 		notebook_->set_group_name("notebooks");
@@ -72,10 +66,10 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	add_events(Gdk::BUTTON_PRESS_MASK );
 
-#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
+	#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
 	signal_button_press_event().
 	connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
-#endif
+	#endif
 
 	//Build popMenu
 	popupMenu_=std::make_unique<Gtk::Menu>();
@@ -89,11 +83,11 @@ GTK_ViewContainer::GTK_ViewContainer(
 	timeBuffer_=0;
 	isSplit_=false;
 	parent_=nullptr;
-	paned_=nullptr;
+	paned_=nullptr;*/
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
-
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
 }
 
 bool GTK_ViewContainer::isEmpty(bool recursive) const {
@@ -371,7 +365,7 @@ bool GTK_ViewContainer::isSplit() const {
 }
 
 void GTK_ViewContainer::split() {
-	if(isSplit_)
+	/*if(isSplit_)
 		return;
 	isSplit_=true;
 
@@ -412,7 +406,7 @@ void GTK_ViewContainer::split() {
 
 	add(*paned_);
 
-	show_all_children();
+	show_all_children();*/
 }
 
 void GTK_ViewContainer::popOutView(IView& view) {
@@ -538,6 +532,14 @@ void GTK_ViewContainer::showTabs(bool showTabs) {
 		container1->showTabs(showTabs);
 		container2->showTabs(showTabs);
 	}
+}
+
+long GTK_ViewContainer::getID() {
+	return reinterpret_cast<long>(this);
+}
+
+std::string GTK_ViewContainer::classname() {
+	return "GTK_ViewContainer";
 }
 
 void GTK_ViewContainer::setGUIManager(IGUIManager* manager) {

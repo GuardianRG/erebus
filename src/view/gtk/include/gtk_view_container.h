@@ -58,22 +58,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	GTK_ViewContainer(
 	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-	    std::unique_ptr<Gtk::Notebook> notebook,
-	    IViewContainer* parent);
-
-	/**
-	 * Constructor.
-	 *
-	 * Creates an empty notebook.
-	 *
-	 * @param h_adjustment horizontal adjustment for the child views.
-	 * @param v_adjustment vertical adjustment for the child views.
-	 * @param parent the parent view container
-	 */
-	GTK_ViewContainer(
-	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
-	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-	    IViewContainer* parent);
+	    std::unique_ptr<Gtk::Notebook> notebook);
 
 	/**
 	 * Copy constructor.
@@ -96,9 +81,6 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 */
 	GTK_ViewContainer& operator=(const GTK_ViewContainer&)=delete;
 
-
-	void setGUIManager(IGUIManager* manager)override;
-
 	/**
 	 * Move assignment operator.
 	 *
@@ -110,6 +92,21 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * Destructor.
 	 */
 	~GTK_ViewContainer();
+
+	/**
+	 * See IViewContainer::setGUIManager
+	 */
+	void setGUIManager(IGUIManager* manager)override;
+
+	/**
+	 * See IViewContainer::getID
+	 */
+	long getID()override;
+
+	/**
+	 * See IViewContainer::classname
+	 */
+	std::string classname()override;
 
 	/**
 	 * Sets the presenter.

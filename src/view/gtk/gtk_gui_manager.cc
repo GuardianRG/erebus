@@ -6,20 +6,17 @@
 
 #include <string>
 #include <memory>
+#include <stdexcept>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
 
 #include <glade_files.h>
 #include <presenter/main_window_presenter.h>
 #include <gtk_main_window.h>
-#include <gtk_builder_factory.h>
 #include <gtk_logger.h>
+#include <gtk_window_factory.h>
 
 INIT_LOCATION;
-
-namespace erebus {
-class IWindow;
-}
 
 namespace erebus {
 
@@ -27,8 +24,8 @@ const std::string  GTK_GUIManager::PACKAGE_NAME="org.werner.erebus";
 
 
 GTK_GUIManager::GTK_GUIManager() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating gui manager '"<<getID()<<"'";
-	
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing gui manager '"<<getID()<<"'";
+
 	isInitialized_=false;
 }
 
@@ -38,7 +35,25 @@ GTK_GUIManager::~GTK_GUIManager() {
 
 void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secondaryText,
                                        ErrorLevel errorLevel) {
+	showMessageDialogPr(*(dummyWindow_.get()),primaryText,secondaryText,errorLevel);
+}
 
+void GTK_GUIManager::showMessageDialog(IWindow& window,std::string primaryText,
+                                       std::string secondaryText,
+                                       ErrorLevel errorLevel) {
+	try {
+		auto& c_window=dynamic_cast<Gtk::Window&>(window);
+		showMessageDialogPr(c_window,primaryText,secondaryText,errorLevel);
+	} catch(const std::bad_cast& e) {
+		BOOST_LOG_SEV(gtk_l::get(),warning)
+		        <<LOCATION<<"Could not show MessageDialog :"<<primaryText<<":"
+		        <<secondaryText<<"["<<static_cast<int>(errorLevel)<<"]";
+	}
+}
+
+void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primaryText,
+        std::string secondaryText,
+        ErrorLevel errorLevel) {
 	Gtk::MessageType type=Gtk::MESSAGE_INFO;
 
 	switch(errorLevel) {
@@ -53,7 +68,7 @@ void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secon
 		break;
 	};
 
-	Gtk::MessageDialog dialog(*dummyWindow_.get(),primaryText,false,type,Gtk::BUTTONS_OK,true);
+	Gtk::MessageDialog dialog(window,primaryText,false,type,Gtk::BUTTONS_OK,true);
 	dialog.set_secondary_text(secondaryText);
 
 	dialog.run();
@@ -76,21 +91,13 @@ long GTK_GUIManager::getID() {
 void GTK_GUIManager::runGUI() {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
-	auto builder=GTK_BuilderFactory::getBuilder(Windows::MAIN_WINDOW);
+	auto window=GTK_WindowFactory::createMainWindow(*this);
 
-	GTK_MainWindow* window;
-	builder->get_widget_derived("main_window", window);
-
-	auto presenter=std::unique_ptr<IMainWindowPresenter>(std::make_unique<MainWindowPresenter>());
-	presenter->setWindow(window);
-
-	window->setPresenter(std::move(presenter));
-	window->setGUIManager(this);
 	window->setPreferredSize(800,600);
 	window->maximize();
 
 	try {
-		auto& ir_window=addWindow(std::unique_ptr<IWindow>(window),false);
+		auto& ir_window=addWindow(std::move(window),false);
 		auto& r_window=dynamic_cast<GTK_Window&>(ir_window);
 		application_->run(r_window);
 	} catch(const std::bad_cast& e) {
@@ -152,24 +159,5 @@ void GUIManager::moveViewToNewWindow(IView& view) {
 
 	windows_.push_back(std::unique_ptr<IWindow>(viewWindow));
 }
-
-void GUIManager::showInfoDialog(std::string title,std::string text,ErrorLevel el) {
-	auto& guido=GTK_GUIStateObject::getState(*stateObject_.get());
-
-	std::unique_ptr<Gtk::MessageDialog> dialog;
-	switch(el) {
-		case ErrorLevel::INFO:
-			dialog=std::make_unique<MessageDialog>(*guido.mainWindow_, title);
-			break;
-		case ErrorLevel::ERROR:
-			dialog=std::make_unique<MessageDialog>(*guido.mainWindow_, title,Gtk::ERROR);
-			break;
-		default:
-			assert(false);
-			break;
-	}
-	dialog->set_secondary_text(text);
-	dialog->run();
-}*/
-
+*/
 }//namespace erebus

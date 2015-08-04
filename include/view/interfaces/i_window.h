@@ -63,6 +63,13 @@ class IWindow {
 	virtual long getID()=0;
 
 	/**
+	 * Returns the class name.
+	 *
+	 * @return the classname
+	 */
+	virtual std::string classname()=0;
+
+	/**
 	 * Closes the window.
 	 *
 	 * WARNING: This window will commit suicide.

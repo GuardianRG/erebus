@@ -26,6 +26,9 @@ class GTK_GUIManager:public IGUIManager {
 
 	bool	 					isInitialized_;
 
+	void showMessageDialogPr(Gtk::Window& window,std::string primaryText,std::string secondaryText,
+	                         ErrorLevel errorLevel);
+
   public:
 	/**
 	 * The package name of this application.
@@ -88,6 +91,12 @@ class GTK_GUIManager:public IGUIManager {
 	                       ErrorLevel errorLevel)override;
 
 	/**
+	 * See IGUIManager::showMessageDialog
+	 */
+	void showMessageDialog(IWindow& window,std::string primaryText,std::string secondaryText,
+	                       ErrorLevel errorLevel)override;
+
+	/**
 	 * See IGUIManager::runGUI
 	 */
 	void runGUI()override;
@@ -101,7 +110,7 @@ class GTK_GUIManager:public IGUIManager {
 	 * See IGUIManager::destroyWindow
 	 */
 	void destroyWindow(IWindow& window)override;
-	
+
 	/**
 	 * See IGUIManager::getID
 	 */

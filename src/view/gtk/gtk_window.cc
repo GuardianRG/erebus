@@ -8,19 +8,19 @@
 INIT_LOCATION;
 
 namespace erebus {
-	class IGUIManager;
+class IGUIManager;
 }
 
 namespace erebus {
-	
+
 GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating window '"<<getID()<<"'";
-	
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
+
 	guiManager_=nullptr;
 }
 
 GTK_Window::~GTK_Window() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing window '"<<getID()<<"'";
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
 }
 
 void GTK_Window::setTitle(std::string title) {
@@ -52,9 +52,13 @@ long GTK_Window::getID() {
 	return reinterpret_cast<long>(this);
 }
 
+std::string GTK_Window::classname() {
+	return "GTK_Window";
+}
+
 void GTK_Window::close() {
 	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
-	
+
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing window '"<<getID()<<"'";
 	Gtk::Window::close();
 	guiManager_->destroyWindow(*this);

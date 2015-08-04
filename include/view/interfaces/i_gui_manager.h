@@ -40,6 +40,17 @@ class IGUIManager {
 	virtual void showMessageDialog(std::string primaryText,std::string secondaryText,
 	                               ErrorLevel errorLevel)=0;
 
+
+	/**
+	* Shows a Messagedialog.
+	*
+	* @param window the window to lock with this dialog
+	* @param primaryText the main text
+	* @param secondaryText the secondary text
+	* @param errorLevel the error level
+	*/
+	virtual void showMessageDialog(IWindow& window,std::string primaryText,std::string secondaryText,
+	                               ErrorLevel errorLevel)=0;
 	/**
 	 * Runs the gui aka makes the main window to show up.
 	 */
@@ -61,10 +72,10 @@ class IGUIManager {
 	 * @param window the window to destroy
 	 */
 	virtual void destroyWindow(IWindow& window)=0;
-	
+
 	/**
 	 * Returns a unqiue id for the gui manager.
-	 * 
+	 *
 	 * @return unqiue id for the gui manager
 	 */
 	virtual long getID()=0;

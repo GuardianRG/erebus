@@ -70,6 +70,10 @@ void GTK_ViewWindow::unmaximize() {
 	GTK_Window::unmaximize();
 }
 
+std::string GTK_ViewWindow::classname() {
+	return "GTK_ViewWindow";
+}
+
 void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
                                   presenter) {
 	presenter_=std::move(presenter);
