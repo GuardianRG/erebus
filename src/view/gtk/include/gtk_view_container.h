@@ -1,50 +1,57 @@
 #pragma once
 
-#include <gtkmm.h>
+#include <gtkmm/menu.h>
+#include <glibmm/refptr.h>
+#include <gtkmm/adjustment.h>
+#include <gdk/gdk.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/viewport.h>
 
 #include <memory>
 
 #include <view/interfaces/i_view_container.h>
-#include <presenter/interfaces/i_view_container_presenter.h>
-#include <view/interfaces/i_view.h>
-#include <view/interfaces/i_gui_manager.h>
 
 namespace erebus {
-class GTK_ViewContainerSettingsPropagator;
+class IViewContainerPresenter;
+class IGUIManager;
+}
 
-class GTK_View;
+namespace erebus {
 
 /**
  * This class containes the different views of the different areas on the
  * screen.
  */
 class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
-	friend class GTK_ViewContainerSettingsPropagator;
-
-	std::unique_ptr<Gtk::Notebook>			notebook_;
-	Gtk::Paned*					paned_;
-
 	std::unique_ptr<IViewContainerPresenter> 	presenter_;
-	IViewContainer*					parent_;
+	IGUIManager*	guiManager_;
 
 	std::unique_ptr<Gtk::Menu>			popupMenu_;
-
-	bool						isSplit_;
 
 	int 						timeBuffer_;
 	int 						clickBuffer_;
 
-	void split();
-	void sanityCheck();
+	void buildContextMenu();
 
-	void on_context_menu_join_click();
-	void on_context_menu_split_horizontal_click();
-	void on_context_menu_split_vertical_click();
-	void on_context_menu_add_view_empty_view_click();
-	void on_context_menu_add_view_hex_view_click();
+	bool on_button_press_event(GdkEventButton *ev) override;
+	//Gtk::Paned*					paned_;
 
-  protected:
-	IGUIManager*	guiManager_;
+
+
+	//std::unique_ptr<Gtk::Notebook>			notebook_;
+
+	//bool						isSplit_;
+
+
+
+	//void split();
+	//void sanityCheck();
+
+	//void on_context_menu_join_click();
+	//void on_context_menu_split_horizontal_click();
+	//void on_context_menu_split_vertical_click();
+	//void on_context_menu_add_view_empty_view_click();
+	//void on_context_menu_add_view_hex_view_click();
 
   public:
 	/**
@@ -114,44 +121,34 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void setPresenter(std::unique_ptr<IViewContainerPresenter> presenter);
 
 	/**
-	 * See IViewContainer::getParent
-	 */
-	IViewContainer* getParent()const override;
-
-	/**
-	 * See IViewContainer::setParent
-	 */
-	void setParent(IViewContainer* parent)override;
-
-	/**
 	 * See IViewContainer::splitHorizontal
 	 */
-	void splitHorizontal() override;
+	//void splitHorizontal() override;
 
 	/**
 	 * See IViewContainer::splitVertical
 	 */
-	void splitVertical() override;
+	//void splitVertical() override;
 
 	/**
 	 * See IViewContainer::addView(IView* view)
 	 */
-	void addView(IView& view)override;
+	//void addView(IView& view)override;
 
 	/**
 	 * See IViewContainer::addView(ViewType view)
 	 */
-	void addView(ViewType type)override;
+	//void addView(ViewType type)override;
 
 	/**
 	 * See IViewContainer::isSplittet
 	 */
-	bool isSplit()const override;
+	//bool isSplit()const override;
 
 	/**
 	 * See IViewContainer::showTabs
 	 */
-	void showTabs(bool showTabs) override;
+	//void showTabs(bool showTabs) override;
 
 	/**
 	 * See IViewContainer::showContextMenu
@@ -161,63 +158,38 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::closeView
 	 */
-	void closeView(IView& view)override;
+	//void closeView(IView& view)override;
 
 	/**
 	 * See IViewContainer::joinContainer
 	 */
-	void joinContainer() override;
+	//void joinContainer() override;
 
 	/**
 	 * See IViewContainer::isEmpty
 	 */
-	bool isEmpty(bool recursive)const override;
+	//bool isEmpty(bool recursive)const override;
 
 	/**
 	 * See IViewContainer::popOutView
 	 */
-	void popOutView(IView& view)override;
+	//void popOutView(IView& view)override;
 
 	/**
 	 * See IViewContainer::isTopLevel
 	 */
-	bool isTopLevel()const override;
+	//bool isTopLevel()const override;
 
 	/**
 	 * Removes the view.
 	 *
 	 * @param view the view to remove.
 	 */
-	void removeView(IView& view)override;
-
-	/**
-	 * Adds the standard menu items to the given menu.
-	 *
-	 * This method gets called by the widgets this container contains.
-	 * It adds the items like splitVertical, splitHorizontal ... to the
-	 * menu.
-	 *
-	 * @param menu menu to add items to
-	 */
-	void buildContextMenu(Gtk::Menu& menu);
+	//void removeView(IView& view)override;
 
 	/**
 	 * Gets called when a mouseclick on this container occured.
 	 */
-	bool on_button_press_event(GdkEventButton *ev) override;
 
-	/**
-	 * Returns the horizontal adjustment.
-	 *
-	 * @return the horizontal adjustment
-	 */
-	Glib::RefPtr<Gtk::Adjustment> getHAdjustment();
-
-	/**
-	 * Returns the vertical adjustment.
-	 *
-	 * @return the vertical adjustment
-	 */
-	Glib::RefPtr<Gtk::Adjustment> getVAdjustment();
 };
 }//namespace erebus

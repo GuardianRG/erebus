@@ -109,6 +109,7 @@ void GTK_GUIManager::runGUI() {
 
 IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePersistent) {
 	LOG_ASSERT(gtk_l::get(),window.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
 	windows_.push_back(std::move(window));
 
@@ -117,9 +118,12 @@ IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePers
 	if(makePersistent) {
 		auto c_window=dynamic_cast<GTK_Window*>(v_window);
 
-		LOG_ASSERT(gtk_l::get(),c_window!=0);
-		if(c_window!=0)
+		if(c_window==0) {
+			BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Could not make "<<c_window->classname()
+			                                 <<" '"<<c_window->getID()<<"' persistent";
+		} else {
 			application_->add_window(*c_window);
+		}
 	}
 
 	return *(v_window);
@@ -128,13 +132,18 @@ IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePers
 void GTK_GUIManager::destroyWindow(IWindow& window) {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
-	auto rwindows=std::remove_if(windows_.begin(), windows_.end(),
-	[&window](const std::unique_ptr<IWindow>& iwindow) {
-		return iwindow.get()->getID()==window.getID();
-	});
+	try {
+		auto rwindows=std::remove_if(windows_.begin(), windows_.end(),
+		[&window](const std::unique_ptr<IWindow>& iwindow) {
+			return iwindow.get()->getID()==window.getID();
+		});
 
-	if(rwindows!=windows_.end()) {
-		windows_.erase(rwindows,windows_.end());
+		if(rwindows!=windows_.end()) {
+			windows_.erase(rwindows,windows_.end());
+		}
+	} catch(const std::exception& e) {
+		BOOST_LOG_SEV(gtk_l::get(),warning)<<"Could not destroy "<<window.classname()<<" '"<<window.getID()
+		                                   <<"' ("<<e.what()<<"). It will be destroyed when closing the application";
 	}
 }
 /*

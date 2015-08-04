@@ -1,29 +1,20 @@
 #include <gtk_view_container.h>
 
-#include <gtkmm.h>
+#include <gtkmm/menu.h>
+#include <glibmm/refptr.h>
+#include <gtkmm/adjustment.h>
+#include <gtkmm/menuitem.h>
+#include <gtkmm/separatormenuitem.h>
+#include <gdk/gdk.h>
+#include <gtkmm/notebook.h>
+#include <gtkmm/viewport.h>
 
-#include <assert.h>
-#include <iterator>
 #include <memory>
-#include <typeinfo>
 
 #include <presenter/interfaces/i_view_container_presenter.h>
-#include <view/interfaces/i_view_container.h>
-#include <presenter/interfaces/i_empty_view_presenter.h>
-#include <presenter/interfaces/i_hex_view_presenter.h>
 #include <view/interfaces/i_gui_manager.h>
 
-#include <presenter/empty_view_presenter.h>
-#include <presenter/hex_view_presenter.h>
-#include <presenter/view_container_presenter.h>
-#include <view/view_type.h>
-#include <gtk_view.h>
 #include <gtk_logger.h>
-#include <gtk_builder_factory.h>
-#include <gtk_hex_view.h>
-#include <gtk_empty_view.h>
-#include <view/view_preferences.h>
-#include <glade_files.h>
 
 INIT_LOCATION;
 
@@ -38,6 +29,15 @@ GTK_ViewContainer::GTK_ViewContainer(
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
 
 	set_shadow_type(Gtk::SHADOW_NONE);
+
+	add_events(Gdk::BUTTON_PRESS_MASK );
+
+#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
+	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event),
+	                                    false);
+#endif
+
+	buildContextMenu();
 
 	/*//Set up the notebook which contains the views.
 	if(notebook==nullptr) {
@@ -64,12 +64,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	add(*notebook_);
 
-	add_events(Gdk::BUTTON_PRESS_MASK );
 
-	#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
-	signal_button_press_event().
-	connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event), false);
-	#endif
 
 	//Build popMenu
 	popupMenu_=std::make_unique<Gtk::Menu>();
@@ -77,20 +72,23 @@ GTK_ViewContainer::GTK_ViewContainer(
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();
 
-	show_all_children();
+
+
+
+	isSplit_=false;
+	paned_=nullptr;*/
 
 	clickBuffer_=0;
 	timeBuffer_=0;
-	isSplit_=false;
-	parent_=nullptr;
-	paned_=nullptr;*/
+
+	show_all_children();
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
 }
 
-bool GTK_ViewContainer::isEmpty(bool recursive) const {
+/*bool GTK_ViewContainer::isEmpty(bool recursive) const {
 	if(isSplit_) {
 		if(recursive) {
 			assert(paned_!=nullptr);
@@ -122,13 +120,13 @@ void GTK_ViewContainer::on_context_menu_split_vertical_click() {
 
 	presenter_->on_context_menu_split_vertical_click();
 }
-
+*/
 void GTK_ViewContainer::showContextMenu() {
-	assert( popupMenu_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(), popupMenu_.get()!=nullptr);
 
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
-
+/*
 void GTK_ViewContainer::closeView(IView& view) {
 	try {
 		auto& buffer=dynamic_cast<GTK_View&>(view);
@@ -147,14 +145,16 @@ void GTK_ViewContainer::removeView(IView& view) {
 	}
 	show_all_children();
 }
+*/
+void GTK_ViewContainer::buildContextMenu() {
+	LOG_ASSERT(gtk_l::get(),popupMenu_.get()==nullptr);
 
-void GTK_ViewContainer::setParent(IViewContainer* parent) {
-	parent_=parent;
-}
+	popupMenu_=std::make_unique<Gtk::Menu>();
 
-void GTK_ViewContainer::buildContextMenu(Gtk::Menu& menu) {
 	//Separator Item
 	auto sep=Gtk::manage(new Gtk::SeparatorMenuItem);
+	auto sep1=Gtk::manage(new Gtk::SeparatorMenuItem);
+	auto sep2=Gtk::manage(new Gtk::SeparatorMenuItem);
 
 	//Control submenu
 	auto control=Gtk::manage(new Gtk::MenuItem{"Control"});
@@ -162,44 +162,30 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu& menu) {
 	control->set_submenu(*control_menu);
 
 	//Join item
-	auto join=Gtk::manage(new Gtk::MenuItem{"Join"});
+	/*auto join=Gtk::manage(new Gtk::MenuItem{"Join"});
 	join->set_sensitive(false);
-	if(parent_!=nullptr) {
-		if(parent_->isSplit()) {
-			join->set_sensitive(true);
-
-		}
-	}
 	join->signal_activate().
 	connect(
 	    sigc::mem_fun(*this,
 	                  &GTK_ViewContainer::on_context_menu_join_click)
 	);
-
+	*/
 	//Split submenu
-	auto split=Gtk::manage(new Gtk::MenuItem{"Split"});
-	auto add_view = Gtk::manage(new Gtk::MenuItem{"Add View"});
+	//auto add_view = Gtk::manage(new Gtk::MenuItem{"Add View"});
 
-	auto split_menu=Gtk::manage(new Gtk::Menu);
+	auto split_h = Gtk::manage(new Gtk::MenuItem{"Split Horizontal"});
+	auto split_v = Gtk::manage(new Gtk::MenuItem{"Split Vertical"});
 
-	auto split_h = Gtk::manage(new Gtk::MenuItem{"Horizontal"});
-	auto split_v = Gtk::manage(new Gtk::MenuItem{"Vertical"});
-
-	split_h->signal_activate().
+	/*split_h->signal_activate().
 	connect(sigc::mem_fun(*this,
 	                      &GTK_ViewContainer::on_context_menu_split_horizontal_click) );
 
 	split_v->signal_activate().
 	connect(sigc::mem_fun(*this,
-	                      &GTK_ViewContainer::on_context_menu_split_vertical_click) );
-
-	split_menu->append(*split_h);
-	split_menu->append(*split_v);
-
-	split->set_submenu(*split_menu);
+	                      &GTK_ViewContainer::on_context_menu_split_vertical_click) );*/
 
 	//View submenu
-	auto view_menu=Gtk::manage(new Gtk::Menu);
+	/*auto view_menu=Gtk::manage(new Gtk::Menu);
 
 	auto empty_view = Gtk::manage(new Gtk::MenuItem{"Empty View"});
 	empty_view->signal_activate().
@@ -213,16 +199,22 @@ void GTK_ViewContainer::buildContextMenu(Gtk::Menu& menu) {
 	                      &GTK_ViewContainer::on_context_menu_add_view_hex_view_click) );
 	view_menu->append(*hex_view);
 
-	add_view->set_submenu(*view_menu);
+	add_view->set_submenu(*view_menu);*/
 
 	//Add everything to the menu
-	menu.append(*sep);
-	control_menu->append(*join);
-	control_menu->append(*split);
-	control_menu->append(*add_view);
-	menu.append(*control);
-}
+	popupMenu_->append(*sep);
+	//control_menu->append(*join);
+	control_menu->append(*sep1);
+	control_menu->append(*split_h);
+	control_menu->append(*split_v);
+	control_menu->append(*sep2);
+	//control_menu->append(*add_view);
+	popupMenu_->append(*control);
 
+	popupMenu_->accelerate(*this);
+	popupMenu_->show_all();
+}
+/*
 void GTK_ViewContainer::joinContainer() {
 	if(!isSplit_)
 		return;
@@ -318,20 +310,15 @@ void GTK_ViewContainer::on_context_menu_join_click() {
 
 	presenter_->on_context_menu_join_click();
 }
-
-void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter>
-                                     presenter) {
-	assert(presenter.get()!=nullptr);
+*/
+void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter> presenter) {
+	LOG_ASSERT(gtk_l::get(),presenter.get()!=nullptr);
 
 	presenter_=std::move(presenter);
 }
 
-IViewContainer* GTK_ViewContainer::getParent() const {
-	return parent_;
-}
-
 bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
-	assert( presenter_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
 
 	bool return_value = false;
 	return_value = Viewport::on_button_press_event(ev);
@@ -355,7 +342,7 @@ bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 	}
 	return return_value;
 }
-
+/*
 bool GTK_ViewContainer::isTopLevel() const {
 	return !isSplit_;
 }
@@ -365,7 +352,7 @@ bool GTK_ViewContainer::isSplit() const {
 }
 
 void GTK_ViewContainer::split() {
-	/*if(isSplit_)
+	if(isSplit_)
 		return;
 	isSplit_=true;
 
@@ -406,7 +393,7 @@ void GTK_ViewContainer::split() {
 
 	add(*paned_);
 
-	show_all_children();*/
+	show_all_children();
 }
 
 void GTK_ViewContainer::popOutView(IView& view) {
@@ -533,7 +520,7 @@ void GTK_ViewContainer::showTabs(bool showTabs) {
 		container2->showTabs(showTabs);
 	}
 }
-
+*/
 long GTK_ViewContainer::getID() {
 	return reinterpret_cast<long>(this);
 }
@@ -544,14 +531,6 @@ std::string GTK_ViewContainer::classname() {
 
 void GTK_ViewContainer::setGUIManager(IGUIManager* manager) {
 	guiManager_=manager;
-}
-
-Glib::RefPtr<Gtk::Adjustment> GTK_ViewContainer::getHAdjustment() {
-	return get_hadjustment();
-}
-
-Glib::RefPtr<Gtk::Adjustment> GTK_ViewContainer::getVAdjustment() {
-	return get_vadjustment();
 }
 
 }//namespace erebus

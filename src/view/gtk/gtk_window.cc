@@ -1,9 +1,12 @@
 #include <gtk_window.h>
 
+#include <gtkmm/window.h>
+
 #include <string>
 
 #include <gtk_logger.h>
 #include <gtk_window.h>
+#include <gtk_gui_manager.h>
 
 INIT_LOCATION;
 

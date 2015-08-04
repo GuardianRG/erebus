@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include <gtkmm/viewport.h>
+
 #include <presenter/interfaces/i_main_window_presenter.h>
 
 #include <gtk_logger.h>

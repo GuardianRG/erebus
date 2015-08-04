@@ -1,12 +1,10 @@
 #pragma once
 
-#include <memory>
-
 #include <presenter/interfaces/i_view_container_presenter.h>
-#include <view/interfaces/i_view_container.h>
-#include <view/interfaces/i_view_container_settings_propagator.h>
 
-
+namespace erebus {
+class IViewContainer;
+}
 
 namespace erebus {
 
@@ -15,7 +13,7 @@ namespace erebus {
  */
 class ViewContainerPresenter:public IViewContainerPresenter {
 	IViewContainer*			container_;
-	std::unique_ptr<IViewContainerSettingsPropagator>	propagator_;
+	//std::unique_ptr<IViewContainerSettingsPropagator>	propagator_;
   public:
 	/**
 	 * Constructor.
@@ -55,8 +53,8 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * IViewContainerPresenter::setSettingsPropagator
 	 */
-	virtual void setSettingsPropagator(
-	    std::unique_ptr<IViewContainerSettingsPropagator> p)override;
+	//virtual void setSettingsPropagator(
+	//  std::unique_ptr<IViewContainerSettingsPropagator> p)override;
 
 	/**
 	 * See IViewContainerPresenter::setViewContainer
@@ -66,7 +64,7 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * See IViewContainerPresenter::on_context_menu_join_click
 	 */
-	virtual void on_context_menu_join_click()override;
+	//virtual void on_context_menu_join_click()override;
 
 	/**
 	 * See IViewContainerPresenter::on_right_button_click
@@ -81,16 +79,16 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * See IViewContainerPresenter::on_context_menu_split_view_vertical_click
 	 */
-	virtual void on_context_menu_split_vertical_click()override;
+	//virtual void on_context_menu_split_vertical_click()override;
 
 	/**
 	 * See IViewContainerPresenter::on_context_menu_split_view_horizontal_click
 	 */
-	virtual void on_context_menu_split_horizontal_click()override;
+	//virtual void on_context_menu_split_horizontal_click()override;
 
 	/**
 	 * See IViewContainerPresenter::on_context_menu_add_view_click
 	 */
-	virtual void on_context_menu_add_view_click(ViewType type)override;
+	//virtual void on_context_menu_add_view_click(ViewType type)override;
 };
 }//namespace erbus

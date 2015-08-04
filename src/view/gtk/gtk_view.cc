@@ -92,14 +92,11 @@ bool GTK_View::on_button_press_event(GdkEventButton *ev) {
 }
 
 void GTK_View::close() {
-	assert( parent_!=nullptr);
-	parent_->closeView(*this);
+
 }
 
 void GTK_View::popOut() {
-	assert( parent_!=nullptr);
 
-	parent_->popOutView(*this);
 }
 
 void GTK_View::on_context_menu_close_click() {
@@ -134,7 +131,6 @@ void GTK_View::createContextMenu() {
 	view_menu->accelerate(*this);
 	popupMenu_->append(*view);
 
-	static_cast<GTK_ViewContainer*>(parent_)->buildContextMenu(*popupMenu_.get());
 
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();

@@ -84,7 +84,7 @@ IViewContainer& GTK_ViewWindow::getBasicViewContainer() {
 }
 
 bool GTK_ViewWindow::isEmpty() const {
-	return container_->isEmpty(true);
+	return true;//container_->isEmpty(true);
 }
 
 void GTK_ViewWindow::close() {

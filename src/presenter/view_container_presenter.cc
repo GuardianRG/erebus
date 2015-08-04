@@ -1,9 +1,15 @@
 #include <presenter/view_container_presenter.h>
 
-#include <assert.h>
 #include <memory>
 
+#include <view/interfaces/i_view_container.h>
+
+#include <presenter/presenter_logger.h>
+
+INIT_LOCATION;
+
 namespace erebus {
+
 ViewContainerPresenter::ViewContainerPresenter() {
 	container_=nullptr;
 }
@@ -26,14 +32,15 @@ ViewContainerPresenter& ViewContainerPresenter::operator=
 }
 
 void ViewContainerPresenter::on_right_button_click() {
-	assert(container_!=nullptr);
-	if(container_->isEmpty(false))
-		container_->showContextMenu();
+	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
+
+	//if(container_->isEmpty(false))
+	container_->showContextMenu();
 }
 void ViewContainerPresenter::on_left_button_click() {
 
 }
-
+/*
 void ViewContainerPresenter::setSettingsPropagator(
     std::unique_ptr<IViewContainerSettingsPropagator> p) {
 	propagator_=std::move(p);
@@ -52,15 +59,15 @@ void ViewContainerPresenter::on_context_menu_add_view_click(ViewType type) {
 	assert(container_!=nullptr);
 	container_->addView(type);
 }
-
+*/
 void ViewContainerPresenter::setViewContainer(IViewContainer* container) {
 	container_=container;
-	assert(container_!=nullptr);
+	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
 }
-
+/*
 void ViewContainerPresenter::on_context_menu_join_click() {
 	assert(container_!=nullptr);
-	if(container_->getParent()!=nullptr)
-		container_->getParent()->joinContainer();
-}
+
+}*/
+
 }//namespace erbus

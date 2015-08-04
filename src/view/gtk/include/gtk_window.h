@@ -1,14 +1,16 @@
 #pragma once
 
-#include <gtkmm.h>
+#include <gtkmm/window.h>
 
 #include <string>
 
 #include <view/interfaces/i_window.h>
 
 namespace erebus {
+
 class IGUIManager;
 class IWindowPresenter;
+
 }
 
 namespace erebus {
