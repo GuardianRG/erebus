@@ -33,7 +33,7 @@ class GTK_GUIManager:public IGUIManager {
 	/**
 	 * The package name of this application.
 	 */
-	static const std::string PACKAGE_NAME;
+	static const std::string STD_APP_ID;
 
 	/**
 	 * Constructor.

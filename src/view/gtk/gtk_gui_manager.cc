@@ -6,6 +6,7 @@
 
 #include <string>
 #include <memory>
+#include <chrono>
 #include <stdexcept>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
@@ -20,7 +21,7 @@ INIT_LOCATION;
 
 namespace erebus {
 
-const std::string  GTK_GUIManager::PACKAGE_NAME="org.werner.erebus";
+const std::string  GTK_GUIManager::STD_APP_ID="org.werner.erebus";
 
 
 GTK_GUIManager::GTK_GUIManager() {
@@ -77,7 +78,11 @@ void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primary
 void GTK_GUIManager::initialize(int argc, char** argv) {
 	LOG_ASSERT(gtk_l::get(),!isInitialized_);
 
-	application_=Gtk::Application::create(argc, argv,PACKAGE_NAME);
+	//Allow multiple instances of the appliation by adding the time to the application id
+	std::string id=STD_APP_ID+std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>
+	               (std::chrono::system_clock::now().time_since_epoch()).count());
+
+	application_=Gtk::Application::create(argc, argv,id);
 
 	dummyWindow_=std::make_unique<Gtk::Window>();
 
@@ -119,7 +124,8 @@ IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePers
 		auto c_window=dynamic_cast<GTK_Window*>(v_window);
 
 		if(c_window==0) {
-			BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Could not make "<<c_window->classname()
+			BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Could not make "
+			                                 <<c_window->classname()
 			                                 <<" '"<<c_window->getID()<<"' persistent";
 		} else {
 			application_->add_window(*c_window);
@@ -142,8 +148,10 @@ void GTK_GUIManager::destroyWindow(IWindow& window) {
 			windows_.erase(rwindows,windows_.end());
 		}
 	} catch(const std::exception& e) {
-		BOOST_LOG_SEV(gtk_l::get(),warning)<<"Could not destroy "<<window.classname()<<" '"<<window.getID()
-		                                   <<"' ("<<e.what()<<"). It will be destroyed when closing the application";
+		BOOST_LOG_SEV(gtk_l::get(),warning)<<"Could not destroy "
+		                                   <<window.classname()<<" '"<<window.getID()
+		                                   <<"' ("<<e.what()
+		                                   <<"). It will be destroyed when closing the application";
 	}
 }
 /*
