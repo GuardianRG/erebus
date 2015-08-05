@@ -7,6 +7,8 @@
 #include <gtkmm/separatormenuitem.h>
 #include <gdk/gdk.h>
 #include <gtkmm/notebook.h>
+#include <glibmm/exception.h>
+#include <gtkmm/paned.h>
 #include <gtkmm/viewport.h>
 
 #include <memory>
@@ -15,6 +17,7 @@
 #include <view/interfaces/i_gui_manager.h>
 
 #include <gtk_logger.h>
+#include <gtk_view_container_factory.h>
 
 INIT_LOCATION;
 
@@ -59,7 +62,6 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	}
 
-	set_shadow_type(Gtk::SHADOW_NONE);
 	notebook_->set_scrollable(true);
 
 	add(*notebook_);
@@ -77,9 +79,11 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 	isSplit_=false;
 	paned_=nullptr;*/
-
+	
+	isSplitted_=false;
 	clickBuffer_=0;
 	timeBuffer_=0;
+	guiManager_=nullptr;
 
 	show_all_children();
 }
@@ -107,20 +111,20 @@ GTK_ViewContainer::~GTK_ViewContainer() {
 
 	return notebook_->get_n_pages()==0;
 }
-
+*/
 
 void GTK_ViewContainer::on_context_menu_split_horizontal_click() {
-	assert( presenter_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
 
 	presenter_->on_context_menu_split_horizontal_click();
 }
 
 void GTK_ViewContainer::on_context_menu_split_vertical_click() {
-	assert( presenter_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
 
 	presenter_->on_context_menu_split_vertical_click();
 }
-*/
+
 void GTK_ViewContainer::showContextMenu() {
 	LOG_ASSERT(gtk_l::get(), popupMenu_.get()!=nullptr);
 
@@ -162,27 +166,26 @@ void GTK_ViewContainer::buildContextMenu() {
 	control->set_submenu(*control_menu);
 
 	//Join item
-	/*auto join=Gtk::manage(new Gtk::MenuItem{"Join"});
-	join->set_sensitive(false);
+	auto join=Gtk::manage(new Gtk::MenuItem{"Join"});
 	join->signal_activate().
 	connect(
 	    sigc::mem_fun(*this,
 	                  &GTK_ViewContainer::on_context_menu_join_click)
 	);
-	*/
+	
 	//Split submenu
 	//auto add_view = Gtk::manage(new Gtk::MenuItem{"Add View"});
 
 	auto split_h = Gtk::manage(new Gtk::MenuItem{"Split Horizontal"});
 	auto split_v = Gtk::manage(new Gtk::MenuItem{"Split Vertical"});
 
-	/*split_h->signal_activate().
+	split_h->signal_activate().
 	connect(sigc::mem_fun(*this,
 	                      &GTK_ViewContainer::on_context_menu_split_horizontal_click) );
 
 	split_v->signal_activate().
 	connect(sigc::mem_fun(*this,
-	                      &GTK_ViewContainer::on_context_menu_split_vertical_click) );*/
+	                      &GTK_ViewContainer::on_context_menu_split_vertical_click) );
 
 	//View submenu
 	/*auto view_menu=Gtk::manage(new Gtk::Menu);
@@ -203,7 +206,7 @@ void GTK_ViewContainer::buildContextMenu() {
 
 	//Add everything to the menu
 	popupMenu_->append(*sep);
-	//control_menu->append(*join);
+	control_menu->append(*join);
 	control_menu->append(*sep1);
 	control_menu->append(*split_h);
 	control_menu->append(*split_v);
@@ -214,40 +217,35 @@ void GTK_ViewContainer::buildContextMenu() {
 	popupMenu_->accelerate(*this);
 	popupMenu_->show_all();
 }
-/*
-void GTK_ViewContainer::joinContainer() {
-	if(!isSplit_)
+
+void GTK_ViewContainer::join() {
+	if(!isSplitted())
 		return;
-	isSplit_=false;
+	isSplitted_=false;
 
 	BOOST_LOG_SEV(gtk_l::get(),
 	              normal)<<LOCATION<<"Joining view container '"<<this<<"'";
-
-	assert(paned_!=nullptr);
-
-	//Get both containers
-	auto container1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
-	auto container2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
-
-	assert(container1!=0);
-	assert(container2!=0);
+	try {
+		      LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
+		      LOG_ASSERT(gtk_l::get(),child1_.get()!=nullptr);
+		      LOG_ASSERT(gtk_l::get(),child2_.get()!=nullptr);
 
 	//If one of the containers is splitted join them too
-	if(!container1->isTopLevel()) {
-		container1->joinContainer();
+	if(!child1_->isTopLevel()) {
+		child1_->join();
 	}
-	if(!container2->isTopLevel()) {
-		container2->joinContainer();
+	if(!child2_->isTopLevel()) {
+		child2_->join();
 	}
 
-	assert(container1->notebook_.get()!=nullptr);
-	assert(container2->notebook_.get()!=nullptr);
+	//assert(container1->notebook_.get()!=nullptr);
+	//assert(container2->notebook_.get()!=nullptr);
 
 	//Create the new notebook
-	notebook_=std::make_unique<Gtk::Notebook>();
-	notebook_->set_group_name("notebooks");
+	//notebook_=std::make_unique<Gtk::Notebook>();
+	//notebook_->set_group_name("notebooks");
 
-	auto children=container1->notebook_->get_children();
+	/*auto children=container1->notebook_->get_children();
 
 	//Put the views of container 1 into the notebook
 	for(auto it:children) {
@@ -281,18 +279,32 @@ void GTK_ViewContainer::joinContainer() {
 		notebook_->append_page(*buffer,buffer->getTitle());
 		notebook_->set_tab_reorderable(*buffer);
 		notebook_->set_tab_detachable(*buffer);
-	}
-
-	Gtk::Container::remove(*paned_);
-	paned_=nullptr;
+	}*/
+	
+	paned_->remove(*(child1_.get()));
+	paned_->remove(*(child2_.get()));
+	Gtk::Container::remove(*(paned_.get()));
+	paned_=std::unique_ptr<Gtk::Paned>(nullptr);
+	child1_=std::unique_ptr<GTK_ViewContainer>(nullptr);
+	child2_=std::unique_ptr<GTK_ViewContainer>(nullptr);
 
 	//showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
 
-	add(*notebook_);
-
+	//add(*notebook_);
+	}
+	catch(const std::exception& e) {
+		isSplitted_=true;
+		BOOST_LOG_SEV(gtk_l::get(),error)<<"Joining the view container '"<<getID()<<"' failed. ("<<e.what()<<")";
+		guiManager_->showMessageDialog(getID(),"Joining the container failes!",e.what(),ErrorLevel::ERROR);
+	}
+	catch(const Glib::Exception& e) {
+		isSplitted_=true;
+		BOOST_LOG_SEV(gtk_l::get(),error)<<"Joining the view container '"<<getID()<<"' failed. ("<<e.what()<<")";
+		guiManager_->showMessageDialog(getID(),"Joining the container failes!",e.what(),ErrorLevel::ERROR);
+	}
 	show_all_children();
 }
-
+/*
 void GTK_ViewContainer::on_context_menu_add_view_empty_view_click() {
 	assert( presenter_.get()!=nullptr);
 
@@ -304,13 +316,13 @@ void GTK_ViewContainer::on_context_menu_add_view_hex_view_click() {
 
 	presenter_->on_context_menu_add_view_click(ViewType::HEX_VIEW);
 }
-
+*/
 void GTK_ViewContainer::on_context_menu_join_click() {
-	assert( presenter_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
 
 	presenter_->on_context_menu_join_click();
 }
-*/
+
 void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter> presenter) {
 	LOG_ASSERT(gtk_l::get(),presenter.get()!=nullptr);
 
@@ -319,7 +331,7 @@ void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter> pr
 
 bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
-
+	
 	bool return_value = false;
 	return_value = Viewport::on_button_press_event(ev);
 
@@ -342,26 +354,43 @@ bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 	}
 	return return_value;
 }
-/*
-bool GTK_ViewContainer::isTopLevel() const {
-	return !isSplit_;
+
+bool GTK_ViewContainer::containsWidget(std::size_t id) {
+	if(id==getID()) {
+		return true;
+	}
+	if(isSplitted()) {
+		return child1_->containsWidget(id)||child2_->containsWidget(id);
+	}
+	else {
+		//TODO::check for views
+	}
+	return false;
 }
 
-bool GTK_ViewContainer::isSplit() const {
-	return isSplit_;
+bool GTK_ViewContainer::isTopLevel() const {
+	return !isSplitted();
+}
+
+bool GTK_ViewContainer::isSplitted() const {
+	return isSplitted_;
 }
 
 void GTK_ViewContainer::split() {
-	if(isSplit_)
+	if(isSplitted())
 		return;
-	isSplit_=true;
+	isSplitted_=true;
+	try {
+		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
+		LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
+	//assert(notebook_.get()!=nullptr);
 
-	assert(notebook_.get()!=nullptr);
-
-	Gtk::Container::remove(*notebook_);
+	//Gtk::Container::remove(*notebook_);
 
 	//Create both containers for the paned
-	auto vc1=Gtk::manage(new GTK_ViewContainer(
+		child1_=GTK_ViewContainerFactory::createViewContainer(*guiManager_,get_hadjustment(),get_vadjustment());
+		child2_=GTK_ViewContainerFactory::createViewContainer(*guiManager_,get_hadjustment(),get_vadjustment());
+	/*auto vc1=Gtk::manage(new GTK_ViewContainer(
 	                         get_hadjustment(),
 	                         get_vadjustment(),
 	                         std::move(notebook_),this)
@@ -369,9 +398,9 @@ void GTK_ViewContainer::split() {
 
 	auto vc2=Gtk::manage(new GTK_ViewContainer(get_hadjustment(),get_vadjustment(),
 	                     this));
-
+	*/
 	//Create the presenters of the container
-	auto vcp1=std::unique_ptr<IViewContainerPresenter>(
+	/*auto vcp1=std::unique_ptr<IViewContainerPresenter>(
 	              std::make_unique<ViewContainerPresenter>()
 	          );
 
@@ -387,51 +416,63 @@ void GTK_ViewContainer::split() {
 
 	vc1->setParent(this);
 	vc2->setParent(this);
-
-	paned_->pack1(*vc1,true,false);
-	paned_->pack2(*vc2,true,false);
+	*/
+	paned_->pack1(*(child1_.get()),true,false);
+	paned_->pack2(*(child2_.get()),true,false);
 
 	add(*paned_);
 
+	
+	
+	}
+	catch(const std::exception& e) {
+		isSplitted_=false;
+		BOOST_LOG_SEV(gtk_l::get(),error)<<"Splitting the view container '"<<getID()<<"' failed. ("<<e.what()<<")";
+		guiManager_->showMessageDialog(getID(),"Splitting the container failes!",e.what(),ErrorLevel::ERROR);
+	}
+	catch(const Glib::Exception& e) {
+		isSplitted_=false;
+		BOOST_LOG_SEV(gtk_l::get(),error)<<"Splitting the view container '"<<getID()<<"' failed. ("<<e.what()<<")";
+		guiManager_->showMessageDialog(getID(),"Splitting the container failes!",e.what(),ErrorLevel::ERROR);
+	}
 	show_all_children();
 }
-
+/*
 void GTK_ViewContainer::popOutView(IView& view) {
 	if(!isTopLevel())
 		return;
 	removeView(view);
 	//GUIManager::getInstance().moveViewToNewWindow(view);
 }
-
+*/
 void GTK_ViewContainer::splitHorizontal() {
-	if(isSplit_)
+	if(isSplitted())
 		return;
 
 	BOOST_LOG_SEV(gtk_l::get(),normal)
-	        <<LOCATION<<"Splitting view container '"<<this<<"' horizontally";
+	        <<LOCATION<<"Splitting "<<classname()<<" '"<<getID()<<"' horizontally";
 
-	//Create horizontal paned
-	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_HORIZONTAL));
+	paned_=std::make_unique<Gtk::Paned>( Gtk::ORIENTATION_HORIZONTAL);
 	auto rec=get_allocation();
 	paned_->set_position(rec.get_width()/2);
 
 	split();
 }
 void GTK_ViewContainer::splitVertical() {
-	if(isSplit_)
+	if(isSplitted())
 		return;
-
+	
 	BOOST_LOG_SEV(gtk_l::get(),normal)
-	        <<LOCATION<<"Splitting view container '"<<this<<"' vertically";
+		<<LOCATION<<"Splitting "<<classname()<<" '"<<getID()<<"' vertically";
 
-	//Create vertical paned
-	paned_=Gtk::manage(new Gtk::Paned( Gtk::ORIENTATION_VERTICAL));
+	paned_=std::make_unique<Gtk::Paned>( Gtk::ORIENTATION_VERTICAL);
 	auto rec=get_allocation();
 	paned_->set_position(rec.get_height()/2);
 
 	split();
 }
 
+/*
 void GTK_ViewContainer::addView(ViewType type) {
 	//I really would love to outsource the creation of the views into
 	//a factory class but unfortunatly his is not possible since the buildrt
@@ -521,8 +562,8 @@ void GTK_ViewContainer::showTabs(bool showTabs) {
 	}
 }
 */
-long GTK_ViewContainer::getID() {
-	return reinterpret_cast<long>(this);
+std::size_t GTK_ViewContainer::getID() {
+	return reinterpret_cast<std::size_t>(this);
 }
 
 std::string GTK_ViewContainer::classname() {
@@ -531,6 +572,10 @@ std::string GTK_ViewContainer::classname() {
 
 void GTK_ViewContainer::setGUIManager(IGUIManager* manager) {
 	guiManager_=manager;
+}
+
+IGUIManager* GTK_ViewContainer::getGUIManager() {
+	return guiManager_;
 }
 
 }//namespace erebus

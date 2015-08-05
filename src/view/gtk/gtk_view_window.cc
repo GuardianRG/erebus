@@ -79,6 +79,10 @@ void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
 	presenter_=std::move(presenter);
 }
 
+bool GTK_ViewWindow::containsWidget(std::size_t id) {
+	return false;
+}
+
 IViewContainer& GTK_ViewWindow::getBasicViewContainer() {
 	return *container_;
 }

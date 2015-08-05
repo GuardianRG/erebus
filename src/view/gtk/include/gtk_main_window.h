@@ -2,6 +2,7 @@
 
 #include <gtkmm/builder.h>
 #include <glibmm/refptr.h>
+#include <gtkmm/viewport.h>
 
 #include <memory>
 #include <string>
@@ -13,6 +14,7 @@
 namespace erebus {
 class IMainWindowPresenter;
 class GTK_ViewContainer;
+class IGUIManager;
 }
 
 namespace erebus {
@@ -22,9 +24,11 @@ namespace erebus {
  */
 class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	std::unique_ptr<IMainWindowPresenter>	presenter_;
-
-
+	
+	Gtk::Viewport* 				base_;
 	std::unique_ptr<GTK_ViewContainer>	basicView_;
+	
+	bool 					isInitialized_;
 
 	//void on_menu_view_save_click();
 	//void on_menu_view_show_tabs_click();
@@ -75,6 +79,11 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 * Destructor.
 	 */
 	~GTK_MainWindow();
+	
+	/**
+	 * See IMainWindow::containsWidget
+	 */
+	bool containsWidget(std::size_t id)override;
 
 	/**
 	 * See IMainWindow::classname
@@ -89,5 +98,10 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 * See IMainWindow::close
 	 */
 	void close() override;
+	
+	/**
+	 * Initializes the window.
+	 */
+	void initialize(IGUIManager& manager);
 };
 }//namespace erebus

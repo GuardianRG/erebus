@@ -5,6 +5,7 @@
 #include <gtkmm/viewport.h>
 
 #include <presenter/interfaces/i_main_window_presenter.h>
+#include <view/interfaces/i_gui_manager.h>
 
 #include <gtk_logger.h>
 #include <gtk_view_container_factory.h>
@@ -17,14 +18,12 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder)
 	: GTK_Window(cobject) {
 
-	Gtk::Viewport *base;
-	refBuilder->get_widget("base_view",base);
-
-	basicView_=std::move(GTK_ViewContainerFactory::createViewContainer(base->get_hadjustment(),
-	                     base->get_vadjustment()));
-
-	base->add(*(basicView_.get()));
-
+	isInitialized_=false;
+	
+	base_=nullptr;
+	refBuilder->get_widget("base_view",base_);
+	LOG_ASSERT(gtk_l::get(),base_!=nullptr);
+	
 	show_all_children();
 
 
@@ -47,6 +46,31 @@ GTK_MainWindow::~GTK_MainWindow() {
 
 }
 
+void GTK_MainWindow::initialize(IGUIManager& manager) {
+	LOG_ASSERT(gtk_l::get(),!isInitialized_);
+	
+	setGUIManager(manager);
+	
+	
+	basicView_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,base_->get_hadjustment(),
+									   base_->get_vadjustment()));
+	
+	base_->add(*(basicView_.get()));
+	
+	show_all_children();
+	
+	isInitialized_=true;
+}
+
+bool GTK_MainWindow::containsWidget(std::size_t id) {
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
+	
+	if(id==getID())
+		return true;
+	
+	return basicView_->containsWidget(id);
+}
+
 /*void GTK_MainWindow::on_menu_view_save_click() {
 	//presenter_->on_menu_view_save_click();
 }
@@ -61,6 +85,7 @@ void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter>
 }
 
 void GTK_MainWindow::close() {
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
 	GTK_Window::close();
 }
 

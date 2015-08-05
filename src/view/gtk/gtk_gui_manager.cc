@@ -14,6 +14,7 @@
 #include <glade_files.h>
 #include <presenter/main_window_presenter.h>
 #include <gtk_main_window.h>
+#include <gtk_window.h>
 #include <gtk_logger.h>
 #include <gtk_window_factory.h>
 
@@ -39,12 +40,18 @@ void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secon
 	showMessageDialogPr(*(dummyWindow_.get()),primaryText,secondaryText,errorLevel);
 }
 
-void GTK_GUIManager::showMessageDialog(IWindow& window,std::string primaryText,
+void GTK_GUIManager::showMessageDialog(long id,std::string primaryText,
                                        std::string secondaryText,
                                        ErrorLevel errorLevel) {
 	try {
-		auto& c_window=dynamic_cast<Gtk::Window&>(window);
-		showMessageDialogPr(c_window,primaryText,secondaryText,errorLevel);
+		
+		Gtk::Window* window=nullptr;
+		window=getWindow(id);
+		if(window==nullptr) {
+			BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"Could not find widget. Will use dummy window for showing the message dialog.";
+			window=dummyWindow_.get();
+		}
+		showMessageDialogPr(*window,primaryText,secondaryText,errorLevel);
 	} catch(const std::bad_cast& e) {
 		BOOST_LOG_SEV(gtk_l::get(),warning)
 		        <<LOCATION<<"Could not show MessageDialog :"<<primaryText<<":"
@@ -52,27 +59,51 @@ void GTK_GUIManager::showMessageDialog(IWindow& window,std::string primaryText,
 	}
 }
 
+GTK_Window* GTK_GUIManager::getWindow(long id) {
+	for(auto& window:windows_) {
+		if(window->containsWidget(id)) {
+			auto c_window=dynamic_cast<GTK_Window*>(window.get());
+			if(c_window==0) {
+				return nullptr;
+			}
+			return c_window;
+		}
+	}
+	return nullptr;
+}
+
 void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primaryText,
         std::string secondaryText,
         ErrorLevel errorLevel) {
+	
+	
+	
 	Gtk::MessageType type=Gtk::MESSAGE_INFO;
 
 	switch(errorLevel) {
 	case ErrorLevel::INFO:
 		type=Gtk::MESSAGE_INFO;
 		break;
+	case ErrorLevel::WARNING:
+		type=Gtk::MESSAGE_WARNING;
+		break;
 	case ErrorLevel::ERROR:
 		type=Gtk::MESSAGE_ERROR;
 		break;
 	default:
+		//This should never happen.
 		type=Gtk::MESSAGE_OTHER;
 		break;
 	};
-
-	Gtk::MessageDialog dialog(window,primaryText,false,type,Gtk::BUTTONS_OK,true);
+	//TODO:an ugly error message gets shown when a dialog is shown... fix this
+	Gtk::MessageDialog dialog(window,primaryText,type);
 	dialog.set_secondary_text(secondaryText);
-
+	
 	dialog.run();
+}
+
+void GTK_GUIManager::joinContainer(long id) {
+	
 }
 
 void GTK_GUIManager::initialize(int argc, char** argv) {

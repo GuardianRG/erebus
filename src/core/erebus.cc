@@ -84,7 +84,6 @@ void initLogging() {
 int main(int argc, char *argv[]) {
 	{
 		auto guiManager=std::unique_ptr<erebus::IGUIManager>(nullptr);
-
 		//Initializing everything
 #ifndef _DEBUG_
 		try {

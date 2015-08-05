@@ -8,6 +8,7 @@
 namespace erebus {
 class IViewContainerPresenter;
 class GTK_ViewContainer;
+class IGUIManager;
 }
 
 namespace erebus {
@@ -17,6 +18,7 @@ class GTK_ViewContainerFactory {
 	~GTK_ViewContainerFactory();
 
 	static std::unique_ptr<GTK_ViewContainer> createViewContainer(
+		IGUIManager& manager,
 	    std::unique_ptr<IViewContainerPresenter> presenter,
 	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
@@ -24,18 +26,21 @@ class GTK_ViewContainerFactory {
 	);
 
 	static std::unique_ptr<GTK_ViewContainer> createViewContainer(
+		IGUIManager& manager,
 	    std::unique_ptr<IViewContainerPresenter> presenter,
 	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	    Glib::RefPtr<Gtk::Adjustment> v_adjustment
 	);
 
 	static std::unique_ptr<GTK_ViewContainer> createViewContainer(
+		IGUIManager& manager,
 	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
 	    std::unique_ptr<Gtk::Notebook> notebook
 	);
 
 	static std::unique_ptr<GTK_ViewContainer> createViewContainer(
+		IGUIManager& manager,
 	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	    Glib::RefPtr<Gtk::Adjustment> v_adjustment
 	);

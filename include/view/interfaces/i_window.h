@@ -1,15 +1,16 @@
 #pragma once
 
-
 #include <string>
+
 #include <view/interfaces/i_gui_manager.h>
+#include <view/interfaces/i_gui_object.h>
 
 namespace erebus {
 
 /**
  * This class is the interface for very window.
  */
-class IWindow {
+class IWindow :virtual public IGUIObject {
   public:
 	/**
 	 * Destructor.
@@ -35,7 +36,7 @@ class IWindow {
 	 *
 	 * @param manager the guin manager
 	 */
-	virtual void setGUIManager(IGUIManager* manager)=0;
+	virtual void setGUIManager(IGUIManager& manager)=0;
 
 	/**
 	 * Sets the preferred size of the window.
@@ -54,20 +55,15 @@ class IWindow {
 	 * unmaximizes the window.
 	 */
 	virtual void unmaximize()=0;
-
+	
 	/**
-	 * Returns an unique id for that object.
-	 *
-	 * @return unqiue id of that object.
+	 * Whether this window contains the given widget.
+	 * 
+	 * Is even true if thw window itsel has the id.
+	 * 
+	 * @return true if the window contains this widget
 	 */
-	virtual long getID()=0;
-
-	/**
-	 * Returns the class name.
-	 *
-	 * @return the classname
-	 */
-	virtual std::string classname()=0;
+	virtual bool containsWidget(std::size_t id)=0;
 
 	/**
 	 * Closes the window.

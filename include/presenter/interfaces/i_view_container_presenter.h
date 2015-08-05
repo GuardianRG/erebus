@@ -47,17 +47,17 @@ class IViewContainerPresenter {
 	/**
 	 * Handels the join in the context menu.
 	 */
-	//virtual void on_context_menu_join_click()=0;
+	virtual void on_context_menu_join_click()=0;
 
 	/**
 	 * Handels the split view horizontal in the context menu.
 	 */
-	//virtual void on_context_menu_split_horizontal_click()=0;
+	virtual void on_context_menu_split_horizontal_click()=0;
 
 	/**
 	 * Handels the split view vertical in the context menu.
 	 */
-	//virtual void on_context_menu_split_vertical_click()=0;
+	virtual void on_context_menu_split_vertical_click()=0;
 
 	/**
 	 * Handels a click on a view to add in the context menu.

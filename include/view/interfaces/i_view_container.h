@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include <view/interfaces/i_gui_object.h>
+
 namespace erebus {
 
 class IGUIManager;
@@ -13,7 +15,7 @@ namespace erebus {
 /**
  * This class is the interface for a view container.
  */
-class IViewContainer {
+class IViewContainer:public IGUIObject {
   public:
 	/**
 	 * Destructor.
@@ -25,14 +27,14 @@ class IViewContainer {
 	 *
 	 * If the container is already splitted nothings happens.
 	 */
-	//virtual void splitHorizontal()=0;
+	virtual void splitHorizontal()=0;
 
 	/**
 	 * Splits the container vertically.
 	 *
 	 * If the container is already splitted nothings happens.
 	 */
-	//virtual void splitVertical()=0;
+	virtual void splitVertical()=0;
 
 	/**
 	 * Sets if the tabs of the view should be show.
@@ -51,11 +53,11 @@ class IViewContainer {
 	//virtual bool isEmpty(bool recursive) const=0;
 
 	/**
-	 * Wether the container is split or not.
+	 * Wether the container is splitted or not.
 	 *
 	 * @return true, when the container is split
 	 */
-	//virtual bool isSplit() const=0;
+	virtual bool isSplitted() const=0;
 
 	/**
 	 * Sets the manager.
@@ -63,20 +65,29 @@ class IViewContainer {
 	 * @param manager the manager
 	 */
 	virtual void setGUIManager(IGUIManager* manager)=0;
+	
+	/**
+	 * Returns the gui Manager.
+	 * 
+	 * @return the gui manager
+	 */
+	virtual IGUIManager* getGUIManager()=0;
 
 	/**
 	 * Wether this container contains container.
 	 *
 	 * @return is true when this container contains no containers
 	 */
-	//virtual bool isTopLevel() const=0;
+	virtual bool isTopLevel() const=0;
+	
+	virtual bool containsWidget(std::size_t id)=0;
 
 	/**
 	 * Joins the container if it was split.
 	 *
 	 * If the container is not split nothing happens.
 	 */
-	//virtual void joinContainer()=0;
+	virtual void join()=0;
 
 	/**
 	 * Shows the standard context menu.
@@ -110,20 +121,6 @@ class IViewContainer {
 	 * @param view the view to pop out
 	 */
 	//virtual void popOutView(IView& view)=0;
-
-	/**
-	 * Returns a unique id for a instance.
-	 *
-	 * @return a unique id for a instance
-	 */
-	virtual long getID()=0;
-
-	/**
-	 * Returns the classname.
-	 *
-	 * @return the classname
-	 */
-	virtual std::string classname()=0;
 
 	/**
 	 * Closes a view.

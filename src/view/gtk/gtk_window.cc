@@ -43,16 +43,16 @@ void GTK_Window::maximize() {
 }
 
 
-void GTK_Window::setGUIManager(IGUIManager* manager) {
-	guiManager_=manager;
+void GTK_Window::setGUIManager(IGUIManager& manager) {
+	guiManager_=&manager;
 }
 
 void GTK_Window::unmaximize() {
 	Gtk::Window::unmaximize();
 }
 
-long GTK_Window::getID() {
-	return reinterpret_cast<long>(this);
+std::size_t GTK_Window::getID() {
+	return reinterpret_cast<std::size_t>(this);
 }
 
 std::string GTK_Window::classname() {

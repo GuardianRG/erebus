@@ -105,6 +105,11 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	 * See IViewWindow::isEmpty
 	 */
 	bool isEmpty()const override;
+	
+	/**
+	 * See IViewWindow::containsWidget
+	 */
+	bool containsWidget(std::size_t id)override;
 
 	/**
 	 * See IViewWindow::close
