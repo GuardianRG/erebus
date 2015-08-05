@@ -29,8 +29,8 @@ class GTK_GUIManager:public IGUIManager {
 
 	void showMessageDialogPr(Gtk::Window& window,std::string primaryText,std::string secondaryText,
 	                         ErrorLevel errorLevel);
-	
-	GTK_Window* getWindow(long id);
+
+	GTK_Window* getWindow(std::size_t id);
 
   public:
 	/**
@@ -88,6 +88,11 @@ class GTK_GUIManager:public IGUIManager {
 	void initialize(int argc,char** argv);
 
 	/**
+	 * See IGUIManager::getParentOf
+	 */
+	IGUIObject* getParentOf(std::size_t id)override;
+
+	/**
 	 * See IGUIManager::showMessageDialog
 	 */
 	void showMessageDialog(std::string primaryText,std::string secondaryText,
@@ -96,18 +101,18 @@ class GTK_GUIManager:public IGUIManager {
 	/**
 	 * See IGUIManager::showMessageDialog
 	 */
-	void showMessageDialog(long id,std::string primaryText,std::string secondaryText,
+	void showMessageDialog(std::size_t id,std::string primaryText,std::string secondaryText,
 	                       ErrorLevel errorLevel)override;
 
 	/**
 	 * See IGUIManager::runGUI
 	 */
 	void runGUI()override;
-	
+
 	/**
 	 * See IGUIManager::joinContainer
 	 */
-	void joinContainer(long id)override;
+	void joinContainer(std::size_t id)override;
 
 	/**
 	 * See IGUIManager::addWindow

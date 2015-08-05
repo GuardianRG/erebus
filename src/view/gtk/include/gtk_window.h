@@ -98,18 +98,16 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 * See IWindow::maximize
 	 */
 	void maximize() override;
-	
-	/**
-	 * See IWindow::containsWindget
-	 */
-	virtual bool containsWidget(std::size_t id)=0;
 
 	/**
-	 * Sets the gui manager.
-	 *
-	 * @param manager the gui manager to set
+	 * See IWindow::setGUIManager
 	 */
 	void setGUIManager(IGUIManager& manager)override;
+
+	/**
+	 * See IWindow::getGUIManager
+	 */
+	IGUIManager& getGUIManager()override;
 
 	/**
 	 * See IWindow::unmaximize

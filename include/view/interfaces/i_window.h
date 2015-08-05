@@ -2,15 +2,18 @@
 
 #include <string>
 
-#include <view/interfaces/i_gui_manager.h>
-#include <view/interfaces/i_gui_object.h>
+#include <view/interfaces/i_container.h>
+
+namespace erebus {
+class IGUIManager;
+}
 
 namespace erebus {
 
 /**
  * This class is the interface for very window.
  */
-class IWindow :virtual public IGUIObject {
+class IWindow :public IContainer {
   public:
 	/**
 	 * Destructor.
@@ -32,13 +35,6 @@ class IWindow :virtual public IGUIObject {
 	virtual std::string getTitle() const=0;
 
 	/**
-	 * Sets the gui manager that this window holds.
-	 *
-	 * @param manager the guin manager
-	 */
-	virtual void setGUIManager(IGUIManager& manager)=0;
-
-	/**
 	 * Sets the preferred size of the window.
 	 *
 	 * @param width preferred width
@@ -55,15 +51,6 @@ class IWindow :virtual public IGUIObject {
 	 * unmaximizes the window.
 	 */
 	virtual void unmaximize()=0;
-	
-	/**
-	 * Whether this window contains the given widget.
-	 * 
-	 * Is even true if thw window itsel has the id.
-	 * 
-	 * @return true if the window contains this widget
-	 */
-	virtual bool containsWidget(std::size_t id)=0;
 
 	/**
 	 * Closes the window.

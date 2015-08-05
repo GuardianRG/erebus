@@ -14,16 +14,19 @@
 INIT_LOCATION;
 
 namespace erebus {
+
+const std::string GTK_MainWindow::CLASSNAME="GTK_MainWindow";
+
 GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder)
 	: GTK_Window(cobject) {
 
 	isInitialized_=false;
-	
+
 	base_=nullptr;
 	refBuilder->get_widget("base_view",base_);
 	LOG_ASSERT(gtk_l::get(),base_!=nullptr);
-	
+
 	show_all_children();
 
 
@@ -46,28 +49,44 @@ GTK_MainWindow::~GTK_MainWindow() {
 
 }
 
+IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
+	if(!containsWidget(id))
+		return nullptr;
+
+	if(id==getID())
+		return this;
+
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
+	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
+
+	if(basicView_->getID()==id)
+		return this;
+	return basicView_->getParentOf(id);
+}
+
 void GTK_MainWindow::initialize(IGUIManager& manager) {
 	LOG_ASSERT(gtk_l::get(),!isInitialized_);
-	
+
 	setGUIManager(manager);
-	
-	
+
+
 	basicView_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,base_->get_hadjustment(),
-									   base_->get_vadjustment()));
-	
+	                     base_->get_vadjustment()));
+
 	base_->add(*(basicView_.get()));
-	
+
 	show_all_children();
-	
+
 	isInitialized_=true;
 }
 
 bool GTK_MainWindow::containsWidget(std::size_t id) {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
-	
+	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
+
 	if(id==getID())
 		return true;
-	
+
 	return basicView_->containsWidget(id);
 }
 
@@ -90,7 +109,7 @@ void GTK_MainWindow::close() {
 }
 
 std::string GTK_MainWindow::classname() {
-	return "GTK_MainWindow";
+	return CLASSNAME;
 }
 
 IWindowPresenter& GTK_MainWindow::getPresenter() {

@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <view/interfaces/i_view_container.h>
+#include <view/interfaces/i_gui_manager.h>
 
 #include <presenter/presenter_logger.h>
 
@@ -48,12 +49,12 @@ void ViewContainerPresenter::setSettingsPropagator(
 */
 void ViewContainerPresenter::on_context_menu_split_horizontal_click() {
 	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
-	
+
 	container_->splitHorizontal();
 }
 void ViewContainerPresenter::on_context_menu_split_vertical_click() {
 	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
-	
+
 	container_->splitVertical();
 }
 /*
@@ -69,8 +70,8 @@ void ViewContainerPresenter::setViewContainer(IViewContainer* container) {
 
 void ViewContainerPresenter::on_context_menu_join_click() {
 	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
-	
-	//container_->getGUIManager()->joinContainer(container_->getID());
+
+	container_->getGUIManager().joinContainer(container_->getID());
 }
 
 }//namespace erbus

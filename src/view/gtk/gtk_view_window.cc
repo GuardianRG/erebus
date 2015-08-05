@@ -83,6 +83,10 @@ bool GTK_ViewWindow::containsWidget(std::size_t id) {
 	return false;
 }
 
+IGUIObject* GTK_ViewWindow::getParentOf(std::size_t id) {
+	return nullptr;
+}
+
 IViewContainer& GTK_ViewWindow::getBasicViewContainer() {
 	return *container_;
 }

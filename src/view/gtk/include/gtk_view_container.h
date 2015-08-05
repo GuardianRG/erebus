@@ -15,6 +15,7 @@
 namespace erebus {
 class IViewContainerPresenter;
 class IGUIManager;
+class IGUIObject;
 }
 
 namespace erebus {
@@ -31,11 +32,11 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	std::unique_ptr<Gtk::Paned>			paned_;
 	std::unique_ptr<GTK_ViewContainer>		child1_;
 	std::unique_ptr<GTK_ViewContainer>		child2_;
-	
+
 	int 						timeBuffer_;
 	int 						clickBuffer_;
 	bool						isSplitted_;
-	
+
 	void buildContextMenu();
 
 	bool on_button_press_event(GdkEventButton *ev) override;
@@ -58,6 +59,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	//void on_context_menu_add_view_hex_view_click();
 
   public:
+	static const std::string CLASSNAME;
 	/**
 	 * Constructor.
 	 *
@@ -107,18 +109,23 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::setGUIManager
 	 */
-	void setGUIManager(IGUIManager* manager)override;
-	
+	void setGUIManager(IGUIManager& manager)override;
+
 	/**
 	 * See IViewContainer::getGUIManager
 	 */
-	IGUIManager* getGUIManager()override;
+	IGUIManager& getGUIManager()override;
 
 	/**
 	 * See IViewContainer::getID
 	 */
 	std::size_t getID()override;
-	
+
+	/**
+	 * See IViewContainer::getParentOf
+	 */
+	IGUIObject* getParentOf(std::size_t id)override;
+
 	/**
 	 * See IViewContainer::containsWidget
 	 */

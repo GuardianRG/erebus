@@ -47,6 +47,11 @@ void GTK_Window::setGUIManager(IGUIManager& manager) {
 	guiManager_=&manager;
 }
 
+IGUIManager& GTK_Window::getGUIManager() {
+	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
+	return *guiManager_;
+}
+
 void GTK_Window::unmaximize() {
 	Gtk::Window::unmaximize();
 }

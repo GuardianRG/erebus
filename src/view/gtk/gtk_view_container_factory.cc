@@ -25,7 +25,7 @@ GTK_ViewContainerFactory::~GTK_ViewContainerFactory() {
 }
 
 std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer(
-	IGUIManager& manager,
+    IGUIManager& manager,
     std::unique_ptr<IViewContainerPresenter> presenter,
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
@@ -35,13 +35,13 @@ std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer
 	                   std::move(notebook));
 	presenter->setViewContainer(viewContainer.get());
 	viewContainer->setPresenter(std::move(presenter));
-	viewContainer->setGUIManager(&manager);
+	viewContainer->setGUIManager(manager);
 
 	return std::move(viewContainer);
 }
 
 std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer(
-	IGUIManager& manager,
+    IGUIManager& manager,
     std::unique_ptr<IViewContainerPresenter> presenter,
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment
@@ -53,7 +53,7 @@ std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer
 }
 
 std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer(
-	IGUIManager& manager,
+    IGUIManager& manager,
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
     std::unique_ptr<Gtk::Notebook> notebook
@@ -64,7 +64,7 @@ std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer
 }
 
 std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer(
-	IGUIManager& manager,
+    IGUIManager& manager,
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment
 ) {

@@ -1,16 +1,21 @@
 #pragma once
 
-#include <gtkmm.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
 
 #include <string>
 #include <memory>
 
 #include <view/interfaces/i_view_window.h>
-#include <view/interfaces/i_view.h>
-#include <presenter/interfaces/i_view_window_presenter.h>
 
 #include <gtk_window.h>
-#include <gtk_view_container.h>
+
+namespace erebus {
+class IGUIObject;
+class IViewContainer;
+class IViewWindowPresenter;
+class GTK_ViewContainer;
+}
 
 namespace erebus {
 
@@ -105,11 +110,13 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	 * See IViewWindow::isEmpty
 	 */
 	bool isEmpty()const override;
-	
+
 	/**
 	 * See IViewWindow::containsWidget
 	 */
 	bool containsWidget(std::size_t id)override;
+
+	IGUIObject* getParentOf(std::size_t id)override;
 
 	/**
 	 * See IViewWindow::close

@@ -5,6 +5,7 @@
 
 namespace erebus {
 class IWindow;
+class IGUIObject;
 }
 
 namespace erebus {
@@ -53,7 +54,7 @@ class IGUIManager {
 	* @param secondaryText the secondary text
 	* @param errorLevel the error level
 	*/
-	virtual void showMessageDialog(long id,std::string primaryText,std::string secondaryText,
+	virtual void showMessageDialog(std::size_t id,std::string primaryText,std::string secondaryText,
 	                               ErrorLevel errorLevel)=0;
 	/**
 	 * Runs the gui aka makes the main window to show up.
@@ -76,13 +77,15 @@ class IGUIManager {
 	 * @param window the window to destroy
 	 */
 	virtual void destroyWindow(IWindow& window)=0;
-	
+
 	/**
 	 * Joins the container which contains the widget with the ID id.
-	 * 
+	 *
 	 * @param id the id which parent container should get joined
 	 */
-	virtual void joinContainer(long id)=0;
+	virtual void joinContainer(std::size_t id)=0;
+
+	virtual IGUIObject* getParentOf(std::size_t id)=0;
 
 	/**
 	 * Returns a unqiue id for the gui manager.

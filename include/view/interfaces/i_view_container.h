@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include <view/interfaces/i_gui_object.h>
+#include <view/interfaces/i_container.h>
 
 namespace erebus {
 
@@ -15,7 +15,7 @@ namespace erebus {
 /**
  * This class is the interface for a view container.
  */
-class IViewContainer:public IGUIObject {
+class IViewContainer:public IContainer {
   public:
 	/**
 	 * Destructor.
@@ -60,27 +60,11 @@ class IViewContainer:public IGUIObject {
 	virtual bool isSplitted() const=0;
 
 	/**
-	 * Sets the manager.
-	 *
-	 * @param manager the manager
-	 */
-	virtual void setGUIManager(IGUIManager* manager)=0;
-	
-	/**
-	 * Returns the gui Manager.
-	 * 
-	 * @return the gui manager
-	 */
-	virtual IGUIManager* getGUIManager()=0;
-
-	/**
 	 * Wether this container contains container.
 	 *
 	 * @return is true when this container contains no containers
 	 */
 	virtual bool isTopLevel() const=0;
-	
-	virtual bool containsWidget(std::size_t id)=0;
 
 	/**
 	 * Joins the container if it was split.
