@@ -84,7 +84,7 @@ bool GTK_MainWindow::containsWidget(std::size_t id) {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
 
-	if(id==getID())
+	if(id==getID()||basicView_->getID()==id)
 		return true;
 
 	return basicView_->containsWidget(id);

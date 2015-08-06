@@ -25,12 +25,12 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
 	                   std::make_unique<ViewContainerPresenter>()
 	               );
 
-	container_=Gtk::manage(new GTK_ViewContainer(
+	/*container_=Gtk::manage(new GTK_ViewContainer(
 	                           base->get_hadjustment(),
 	                           base->get_vadjustment(),
 	                           nullptr)
 	                      );
-
+	*/
 	presenter->setViewContainer(container_);
 	container_->setPresenter(std::move(presenter));
 

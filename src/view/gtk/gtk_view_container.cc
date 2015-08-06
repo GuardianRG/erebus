@@ -29,10 +29,12 @@ const std::string GTK_ViewContainer::CLASSNAME="GTK_ViewContainer";
 GTK_ViewContainer::GTK_ViewContainer(
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-    std::unique_ptr<Gtk::Notebook> notebook):
-	Gtk::Viewport(h_adjustment,v_adjustment) {
+    std::unique_ptr<Gtk::Notebook> notebook,IGUIManager& manager):
+	Gtk::Viewport(h_adjustment,v_adjustment),timeBuffer_(0),clickBuffer_(0),isSplitted_(false) {
 
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
+
+	setGUIManager(manager);
 
 	set_shadow_type(Gtk::SHADOW_NONE);
 
@@ -83,10 +85,6 @@ GTK_ViewContainer::GTK_ViewContainer(
 	isSplit_=false;
 	paned_=nullptr;*/
 
-	isSplitted_=false;
-	clickBuffer_=0;
-	timeBuffer_=0;
-	guiManager_=nullptr;
 
 	show_all_children();
 }
@@ -130,7 +128,18 @@ void GTK_ViewContainer::on_context_menu_split_vertical_click() {
 
 void GTK_ViewContainer::showContextMenu() {
 	LOG_ASSERT(gtk_l::get(), popupMenu_.get()!=nullptr);
-
+	static bool init=false;
+	if(!init) {
+		auto parent=guiManager_->getParentOf(getID());
+		if(parent!=nullptr) {
+			if(parent->classname()!=GTK_ViewContainer::CLASSNAME)
+				joinItem_->set_sensitive(false);
+		} else {
+			BOOST_LOG_SEV(gtk_l::get(),warning)
+			        <<LOCATION<<"There is somewehere a bug in the getParentOf() method";
+		}
+		init=true;
+	}
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 /*
@@ -155,6 +164,7 @@ void GTK_ViewContainer::removeView(IView& view) {
 */
 void GTK_ViewContainer::buildContextMenu() {
 	LOG_ASSERT(gtk_l::get(),popupMenu_.get()==nullptr);
+	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
 
 	popupMenu_=std::make_unique<Gtk::Menu>();
 
@@ -169,8 +179,17 @@ void GTK_ViewContainer::buildContextMenu() {
 	control->set_submenu(*control_menu);
 
 	//Join item
-	auto join=Gtk::manage(new Gtk::MenuItem{"Join"});
-	join->signal_activate().
+	joinItem_=std::make_unique<Gtk::MenuItem>("Join");
+	/*auto parent=guiManager_->getParentOf(getID());
+	if(parent!=nullptr) {
+		BOOST_LOG_SEV(gtk_l::get(),normal)<<parent->classname();
+	if(!(parent->classname()==GTK_ViewContainer::CLASSNAME)) {
+		joinItem_->set_sensitive(false);
+	}
+	}else {
+		BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"There is a bug in the getParentOf() method";
+	}*/
+	joinItem_->signal_activate().
 	connect(
 	    sigc::mem_fun(*this,
 	                  &GTK_ViewContainer::on_context_menu_join_click)
@@ -209,7 +228,7 @@ void GTK_ViewContainer::buildContextMenu() {
 
 	//Add everything to the menu
 	popupMenu_->append(*sep);
-	control_menu->append(*join);
+	control_menu->append(*joinItem_);
 	control_menu->append(*sep1);
 	control_menu->append(*split_h);
 	control_menu->append(*split_v);
@@ -359,10 +378,13 @@ bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
 }
 
 bool GTK_ViewContainer::containsWidget(std::size_t id) {
-	if(id==getID()) {
-		return true;
-	}
 	if(isSplitted()) {
+		LOG_ASSERT(gtk_l::get(),child1_.get()!=nullptr);
+		LOG_ASSERT(gtk_l::get(),child2_.get()!=nullptr);
+
+		if(child1_->getID()==id||child2_->getID()==id)
+			return true;
+
 		return child1_->containsWidget(id)||child2_->containsWidget(id);
 	} else {
 		//TODO::check for views
@@ -575,12 +597,19 @@ IGUIObject* GTK_ViewContainer::getParentOf(std::size_t id) {
 	if(isSplitted()) {
 		LOG_ASSERT(gtk_l::get(),child1_.get()!=nullptr);
 		LOG_ASSERT(gtk_l::get(),child2_.get()!=nullptr);
-		if(child1_->getID()==id||child2_->getID()==id) {
+
+		auto ch1=child1_->getParentOf(id);
+		auto ch2=child2_->getParentOf(id);
+
+		if(ch1==nullptr&&ch2==nullptr) {
 			return this;
 		}
+
+		return ch1==nullptr?ch2:ch1;
 	} else {
 		//TODO:check for views
 	}
+
 	return nullptr;
 }
 std::size_t GTK_ViewContainer::getID() {

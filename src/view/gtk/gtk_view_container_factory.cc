@@ -32,10 +32,9 @@ std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer
     std::unique_ptr<Gtk::Notebook> notebook
 ) {
 	auto viewContainer=std::make_unique<GTK_ViewContainer>(h_adjustment,v_adjustment,
-	                   std::move(notebook));
+	                   std::move(notebook),manager);
 	presenter->setViewContainer(viewContainer.get());
 	viewContainer->setPresenter(std::move(presenter));
-	viewContainer->setGUIManager(manager);
 
 	return std::move(viewContainer);
 }

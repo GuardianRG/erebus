@@ -116,7 +116,8 @@ void GTK_GUIManager::joinContainer(std::size_t id) {
 		                  std::string("There has been a problem with the object hierachy. (")+e.what(),ErrorLevel::ERROR);
 	}
 	if(parent==nullptr) {
-		BOOST_LOG_SEV(gtk_l::get(),warning)<<LOCATION<<"'"<<id<<"' was not found";
+		BOOST_LOG_SEV(gtk_l::get(),warning)
+		        <<LOCATION<<"'"<<id<<"' was not found. There is most likely a bug somwhere in the code.";
 		return;
 	}
 	if(parent->classname()==GTK_ViewContainer::CLASSNAME) {

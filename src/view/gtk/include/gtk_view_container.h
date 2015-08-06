@@ -5,6 +5,7 @@
 #include <gtkmm/adjustment.h>
 #include <gdk/gdk.h>
 #include <gtkmm/paned.h>
+#include <gtkmm/menuitem.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/viewport.h>
 
@@ -32,6 +33,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	std::unique_ptr<Gtk::Paned>			paned_;
 	std::unique_ptr<GTK_ViewContainer>		child1_;
 	std::unique_ptr<GTK_ViewContainer>		child2_;
+	std::unique_ptr<Gtk::MenuItem>			joinItem_;
 
 	int 						timeBuffer_;
 	int 						clickBuffer_;
@@ -71,7 +73,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	GTK_ViewContainer(
 	    Glib::RefPtr<Gtk::Adjustment> h_adjustment,
 	    Glib::RefPtr<Gtk::Adjustment> v_adjustment,
-	    std::unique_ptr<Gtk::Notebook> notebook);
+	    std::unique_ptr<Gtk::Notebook> notebook,IGUIManager& manager);
 
 	/**
 	 * Copy constructor.
