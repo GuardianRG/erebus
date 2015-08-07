@@ -1,6 +1,10 @@
 #include <gtk_view.h>
 
-
+#include <gtkmm/menu.h>
+#include <gtkmm/menuitem.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
+#include <gtkmm/viewport.h>
 
 #include <memory>
 #include <string>
@@ -17,20 +21,20 @@ namespace erebus {
 GTK_View::GTK_View(BaseObjectType* cobject,
                    const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Viewport(cobject) {
 
-/*	add_events(Gdk::BUTTON_PRESS_MASK );
+	/*	add_events(Gdk::BUTTON_PRESS_MASK );
 
-#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
-	signal_button_press_event().
-	connect(sigc::mem_fun(*this, &GTK_View::on_button_press_event), false);
-#endif
-	signal_parent_changed().
-	connect(sigc::mem_fun(*this, &GTK_View::on_my_parent_changed), false);
-*/
+	#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
+		signal_button_press_event().
+		connect(sigc::mem_fun(*this, &GTK_View::on_button_press_event), false);
+	#endif
+		signal_parent_changed().
+		connect(sigc::mem_fun(*this, &GTK_View::on_my_parent_changed), false);
+	*/
 
 	title_="";
 	guiManager_=nullptr;
-/*	parent_=nullptr;
-	popupMenu_=std::make_unique<Gtk::Menu>();*/
+	/*	parent_=nullptr;
+		popupMenu_=std::make_unique<Gtk::Menu>();*/
 }
 
 GTK_View::~GTK_View() {
@@ -55,13 +59,21 @@ void GTK_View::setGUIManager(IGUIManager& manager) {
 	guiManager_=&manager;
 }
 
+std::unique_ptr<Gtk::Menu> GTK_View::createContextMenu() {
+	auto contextMenu=std::make_unique<Gtk::Menu>();
+	auto emptyItem=new Gtk::MenuItem("(no entries)");
+	emptyItem->set_sensitive(false);
+	contextMenu->append(*emptyItem);
+	return std::move(contextMenu);
+}
+
 std::string GTK_View::getTitle() const {
 	return title_;
 }
 
 IGUIManager& GTK_View::getGUIManager() {
 	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
-	
+
 	return *guiManager_;
 }
 

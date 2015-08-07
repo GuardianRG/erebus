@@ -1,15 +1,21 @@
 #include <gtk_view_window.h>
 
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
+#include <gtkmm/viewport.h>
+
 #include <string>
 #include <memory>
 #include <iostream>
 
 #include <presenter/interfaces/i_view_window_presenter.h>
 #include <presenter/interfaces/i_view_container_presenter.h>
+#include <view/interfaces/i_view.h>
 
 #include <gtk_view_container.h>
 #include <presenter/view_container_presenter.h>
 #include <view/view_type.h>
+#include <gtk_view_container_factory.h>
 #include <gtk_logger.h>
 
 INIT_LOCATION;
@@ -18,57 +24,40 @@ namespace erebus  {
 GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder
                               ):GTK_Window(cobject) {
-	Gtk::Viewport *base;
-	refBuilder->get_widget("basic_viewport",base);
+	LOG_CONSTRUCTOR;
 
-	auto presenter=std::unique_ptr<IViewContainerPresenter>(
-	                   std::make_unique<ViewContainerPresenter>()
-	               );
+	isInitialized_=false;
 
-	/*container_=Gtk::manage(new GTK_ViewContainer(
-	                           base->get_hadjustment(),
-	                           base->get_vadjustment(),
-	                           nullptr)
-	                      );
-	*/
-	presenter->setViewContainer(container_);
-	container_->setPresenter(std::move(presenter));
+	base_=nullptr;
+	refBuilder->get_widget("basic_viewport",base_);
+	LOG_ASSERT_GTK(base_!=nullptr);
 
-	base->add(*container_);
+	setPreferredSize(600,400);
 
-	setPreferredSize(300,200);
+}
+
+void GTK_ViewWindow::initialize(IGUIManager& manager) {
+	LOG_ASSERT(gtk_l::get(),!isInitialized_);
+
+	setGUIManager(manager);
+
+
+	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,
+	                              base_->get_hadjustment(),
+	                              base_->get_vadjustment()));
+
+	base_->add(*(basicViewContainer_.get()));
 
 	show_all_children();
 
-	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
-
-	BOOST_LOG_SEV(gtk_l::get(),
-	              normal)<<LOCATION<<"Creating view window '"<<this<<"'";
+	isInitialized_=true;
 }
 
 GTK_ViewWindow::~GTK_ViewWindow() {
-
+	LOG_DESTRUCTOR;
 }
 
-void GTK_ViewWindow::setTitle(std::string title) {
-	GTK_Window::setTitle(title);
-}
 
-std::string GTK_ViewWindow::getTitle() const {
-	return GTK_Window::getTitle();
-}
-
-void GTK_ViewWindow::setPreferredSize(int width,int height) {
-	GTK_Window::setPreferredSize(width,height);
-}
-
-void GTK_ViewWindow::maximize() {
-	GTK_Window::maximize();
-}
-
-void GTK_ViewWindow::unmaximize() {
-	GTK_Window::unmaximize();
-}
 
 std::string GTK_ViewWindow::classname() {
 	return "GTK_ViewWindow";
@@ -79,27 +68,36 @@ void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
 	presenter_=std::move(presenter);
 }
 
+void GTK_ViewWindow::addView(IView& view) {
+	LOG_ASSERT_GTK(isInitialized_);
+	LOG_ASSERT_GTK(basicViewContainer_.get()!=nullptr);
+	LOG_ASSERT_GTK(basicViewContainer_->isTopLevel());
+
+	basicViewContainer_->addView(view);
+}
+
 bool GTK_ViewWindow::containsWidget(std::size_t id) {
-	return false;
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
+	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
+
+	if(basicViewContainer_->getID()==id)
+		return true;
+
+	return basicViewContainer_->containsWidget(id);
 }
 
 IGUIObject* GTK_ViewWindow::getParentOf(std::size_t id) {
-	return nullptr;
+	if(!containsWidget(id))
+		return nullptr;
+
+	LOG_ASSERT(gtk_l::get(),isInitialized_);
+	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
+
+	if(basicViewContainer_->getID()==id)
+		return this;
+	return basicViewContainer_->getParentOf(id);
 }
 
-IViewContainer& GTK_ViewWindow::getBasicViewContainer() {
-	return *container_;
-}
-
-bool GTK_ViewWindow::isEmpty() const {
-	return true;//container_->isEmpty(true);
-}
-
-void GTK_ViewWindow::close() {
-	BOOST_LOG_SEV(gtk_l::get(),
-	              normal)<<LOCATION<<"Closing view window '"<<this<<"'";
-	GTK_Window::close();
-}
 
 IWindowPresenter& GTK_ViewWindow::getPresenter() {
 	return *presenter_;

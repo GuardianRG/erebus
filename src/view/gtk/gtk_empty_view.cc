@@ -15,7 +15,7 @@
 INIT_LOCATION;
 
 namespace erebus {
-	
+
 const std::string 	GTK_EmptyView::CLASSNAME="GTK_EmptyView";
 
 GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
@@ -24,7 +24,7 @@ GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
-	
+
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
 }
 

@@ -59,9 +59,26 @@ void ViewContainerPresenter::on_context_menu_split_vertical_click() {
 	container_->splitVertical();
 }
 
+void ViewContainerPresenter::on_context_menu_close_click() {
+	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
+
+	container_->closeActiveView();
+}
+
+
+void ViewContainerPresenter::on_context_menu_pop_out_click() {
+	LOG_ASSERT_PRESENTER(container_!=nullptr);
+
+	auto view=container_->getActiveView();
+	if(view!=nullptr) {
+		container_->removeView(*view);
+		container_->getGUIManager().moveViewToNewWindow(*view);
+	}
+}
+
 void ViewContainerPresenter::on_context_menu_add_view_click(ViewType type) {
 	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
-	
+
 	container_->addView(type);
 }
 

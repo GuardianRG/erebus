@@ -11,12 +11,15 @@
 
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <view/interfaces/i_gui_object.h>
+#include <view/interfaces/i_view.h>
+#include <view/interfaces/i_view_window.h>
 
 #include <presenter/main_window_presenter.h>
 #include <gtk_main_window.h>
 #include <gtk_window.h>
 #include <gtk_logger.h>
 #include <gtk_view_container.h>
+#include <gtk_view_window.h>
 #include <gtk_window_factory.h>
 #include <exceptions/invalid_parent.h>
 
@@ -165,6 +168,13 @@ long GTK_GUIManager::getID() {
 	return reinterpret_cast<long>(this);
 }
 
+IViewWindow& GTK_GUIManager::createNewViewWindow() {
+	auto viewWindow=GTK_WindowFactory::createViewWindow(*this);
+	viewWindow->show();
+	auto& window=addWindow(std::move(viewWindow),false);
+	return dynamic_cast<GTK_ViewWindow&>(window);
+}
+
 void GTK_GUIManager::runGUI() {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
@@ -226,27 +236,12 @@ void GTK_GUIManager::destroyWindow(IWindow& window) {
 		                                   <<"). It will be destroyed when closing the application";
 	}
 }
-/*
-void GUIManager::moveViewToNewWindow(IView& view) {
-	auto builder=GTK_BuilderFactory::getBuilder(Windows::VIEW_WINDOW);
 
-	GTK_ViewWindow* viewWindow;
-	builder->get_widget_derived("view_window", viewWindow);
-
-	auto presenter=std::unique_ptr<IViewWindowPresenter>(
-	                   std::make_unique<ViewWindowPresenter>());
-
-	presenter->setWindow(viewWindow);
-
-	viewWindow->setPresenter(std::move(presenter));
-
-	BOOST_LOG_SEV(gtk_l::get(),normal)
-		<<LOCATION<<"Moving view '"<<&view<<"' to a new view window '"<<viewWindow<<"'";
-	viewWindow->getBasicViewContainer().addView(view);
-
-	viewWindow->show();
-
-	windows_.push_back(std::unique_ptr<IWindow>(viewWindow));
+void GTK_GUIManager::moveViewToNewWindow(IView& view) {
+	auto& window=createNewViewWindow();
+	LOG_GTK(normal)<<"Moving "<<view.classname()<<" '"<<view.getID()<<"' to "<<window.classname()
+	               <<" '"<<window.getID()<<"'";
+	window.addView(view);
 }
-*/
+
 }//namespace erebus

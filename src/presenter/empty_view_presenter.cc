@@ -32,9 +32,9 @@ EmptyViewPresenter& EmptyViewPresenter::operator=(EmptyViewPresenter&& obj) {
 }
 
 void EmptyViewPresenter::setView(IView& view) {
-	try{
-	view_=&(dynamic_cast<IEmptyView&>(view));
-	}catch(const std::bad_cast& e) {
+	try {
+		view_=&(dynamic_cast<IEmptyView&>(view));
+	} catch(const std::bad_cast& e) {
 		LOG_ASSERT(presenter_l::get(),false);
 	}
 }

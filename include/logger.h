@@ -35,6 +35,10 @@
 							<<#X<<") !";\
 			}
 
+#define LOG(X,Y) BOOST_LOG_SEV(X,Y)<<LOCATION
+
+#define MAIN_LOG(X) LOG(main_l::get(),X)
+
 //The different serevrity levels
 enum severity_level {
 	normal,

@@ -6,6 +6,8 @@
 namespace erebus {
 class IWindow;
 class IGUIObject;
+class IView;
+class IViewWindow;
 }
 
 namespace erebus {
@@ -84,6 +86,10 @@ class IGUIManager {
 	 * @param id the id which parent container should get joined
 	 */
 	virtual void joinContainer(std::size_t id)=0;
+
+	virtual IViewWindow& createNewViewWindow()=0;
+
+	virtual void moveViewToNewWindow(IView& view)=0;
 
 	virtual IGUIObject* getParentOf(std::size_t id)=0;
 

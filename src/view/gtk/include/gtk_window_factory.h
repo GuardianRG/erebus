@@ -5,9 +5,10 @@
 namespace erebus {
 
 class IMainWindowPresenter;
+class IViewWindowPresenter;
 class IGUIManager;
 class GTK_MainWindow;
-
+class GTK_ViewWindow;
 }
 
 namespace erebus {
@@ -38,6 +39,22 @@ class GTK_WindowFactory {
 	 * @param manager the manager this window belongs to
 	 */
 	static std::unique_ptr<GTK_MainWindow> createMainWindow(IGUIManager& manager);
+
+	/**
+	 * Creats a GTK_ViewWindow.
+	 *
+	 * @param manager the manager this window belongs to
+	 * @param presenter the presenter to use
+	 */
+	static std::unique_ptr<GTK_ViewWindow> createViewWindow(IGUIManager& manager,
+	        std::unique_ptr<IViewWindowPresenter> presenter);
+
+	/**
+	 * Creates a GTK_ViewWindow.
+	 *
+	 * @param manager the manager this window belongs to
+	 */
+	static std::unique_ptr<GTK_ViewWindow> createViewWindow(IGUIManager& manager);
 
 };
 

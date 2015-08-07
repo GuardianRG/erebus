@@ -55,6 +55,13 @@ class IViewContainerPresenter {
 	virtual void on_context_menu_split_horizontal_click()=0;
 
 	/**
+	 * Handels the close click.
+	 */
+	virtual void on_context_menu_close_click()=0;
+
+	virtual void on_context_menu_pop_out_click()=0;
+
+	/**
 	 * Handels the split view vertical in the context menu.
 	 */
 	virtual void on_context_menu_split_vertical_click()=0;

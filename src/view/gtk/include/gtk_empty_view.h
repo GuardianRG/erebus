@@ -27,7 +27,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
   protected:
 	//IViewPresenter& getPresenter() const override;
 
-public:
+  public:
 	static const std::string CLASSNAME;
 	/**
 	 * Constructor.
@@ -82,7 +82,7 @@ public:
 	 * @param presenter the presenter of this view.
 	 */
 	void setPresenter(std::unique_ptr<IEmptyViewPresenter> presenter);
-	
+
 	std::string classname()override;
 	std::size_t getID()override;
 

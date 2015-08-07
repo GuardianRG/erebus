@@ -7,6 +7,7 @@
 namespace erebus {
 enum class ViewType;
 class IGUIManager;
+class IView;
 
 }
 
@@ -66,6 +67,10 @@ class IViewContainer:public IContainer {
 	 */
 	virtual bool isTopLevel() const=0;
 
+	virtual IView* getActiveView()=0;
+
+	virtual void removeView(IView& view)=0;
+
 	/**
 	 * Joins the container if it was split.
 	 *
@@ -90,7 +95,9 @@ class IViewContainer:public IContainer {
 	 *
 	 * @param view the view to remove
 	 */
-	//virtual void removeView(IView& view)=0;
+	virtual void closeView(IView& view)=0;
+
+	virtual void closeActiveView()=0;
 
 	/**
 	 * Adds a view.
@@ -98,6 +105,9 @@ class IViewContainer:public IContainer {
 	 * @param type type of the view to add
 	 */
 	virtual void addView(ViewType type)=0;
+
+
+	virtual void addView(IView& view)=0;
 
 	/**
 	 * Pops the view out to a new window.

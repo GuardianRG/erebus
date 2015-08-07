@@ -15,7 +15,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	//IViewPresenter& getPresenter() const override;
   public:
 	static const std::string CLASSNAME;
-	  
+
 	GTK_HexView(BaseObjectType* cobject,
 	            const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
@@ -79,7 +79,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	//void close()override;
 
 
-	
+
 	std::string classname()override;
 	std::size_t getID()override;
 	/**

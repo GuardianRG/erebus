@@ -2,6 +2,7 @@
 
 #include <gtkmm/builder.h>
 #include <glibmm/refptr.h>
+#include <gtkmm/viewport.h>
 
 #include <string>
 #include <memory>
@@ -12,17 +13,20 @@
 
 namespace erebus {
 class IGUIObject;
-class IViewContainer;
 class IViewWindowPresenter;
+class IView;
 class GTK_ViewContainer;
 }
 
 namespace erebus {
 
-class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
+class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	std::unique_ptr<IViewWindowPresenter>	presenter_;
 
-	GTK_ViewContainer*	container_;
+	Gtk::Viewport* 				base_;
+	std::unique_ptr<GTK_ViewContainer>	basicViewContainer_;
+
+	bool 					isInitialized_;
   protected:
 	IWindowPresenter& getPresenter();
   public:
@@ -70,16 +74,9 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	 */
 	void setPresenter(std::unique_ptr<IViewWindowPresenter> presenter);
 
-	/**
-	 * See IViewWindow::setTitle
-	 */
-	void setTitle(std::string title) override;
+	void initialize(IGUIManager& manager);
 
-
-	/**
-	 * IViewWindow::getTitle
-	 */
-	std::string getTitle() const override;
+	void addView(IView& view)override;
 
 	/**
 	 * See IViewWindow::classname
@@ -87,41 +84,11 @@ class GTK_ViewWindow:virtual public GTK_Window,virtual public IViewWindow {
 	virtual std::string classname()override;
 
 	/**
-	 * See IViewWindow::setPreferredSize
-	 */
-	void setPreferredSize(int width,int height) override;
-
-	/**
-	 * See IViewWindow::maximize
-	 */
-	void maximize() override;
-
-	/**
-	 * See IViewWindow::unmaximize
-	 */
-	void unmaximize() override;
-
-	/**
-	 * See IViewWindow::addView
-	 */
-	IViewContainer& getBasicViewContainer()override;
-
-	/**
-	 * See IViewWindow::isEmpty
-	 */
-	bool isEmpty()const override;
-
-	/**
 	 * See IViewWindow::containsWidget
 	 */
 	bool containsWidget(std::size_t id)override;
 
 	IGUIObject* getParentOf(std::size_t id)override;
-
-	/**
-	 * See IViewWindow::close
-	 */
-	void close()override;
 };
 
 

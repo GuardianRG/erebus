@@ -18,40 +18,41 @@
 INIT_LOCATION;
 
 namespace erebus {
-	
-	GTK_ViewFactory::GTK_ViewFactory() {
-		
-	}
-	
-	GTK_ViewFactory::~GTK_ViewFactory() {
-		
-	}
-	
-	GTK_EmptyView* GTK_ViewFactory::createEmptyView(IGUIManager& manager) {
-		auto presenter=std::unique_ptr<IEmptyViewPresenter>(std::make_unique<EmptyViewPresenter>());
-		
-		return createEmptyView(manager,std::move(presenter));
-	}
-	
-	GTK_EmptyView* GTK_ViewFactory::createEmptyView(IGUIManager& manager,std::unique_ptr<IEmptyViewPresenter> presenter) {
-		
-		//The static is kind of a hack to prevent the builder from getting destroyed
-		//and the view with it. For some reason i dont get the ownership of the 
-		//pointer im requesting... To be honest i think this is a bug in gtkmm.
-		static Glib::RefPtr<Gtk::Builder> builder;
-		builder=GTK_BuilderFactory::getBuilder(GladeFile::getFile(ViewType::EMPTY_VIEW));
-		
-		GTK_EmptyView* view=nullptr;
-		
-		builder->get_widget_derived("empty_view", view);
-		LOG_ASSERT(gtk_l::get(),view!=nullptr);
-		
-		presenter->setView(*view);
-		
-		view->setPresenter(std::move(presenter));
-		view->setGUIManager(manager);
-		
-		return view;
-	}
+
+GTK_ViewFactory::GTK_ViewFactory() {
+
+}
+
+GTK_ViewFactory::~GTK_ViewFactory() {
+
+}
+
+GTK_EmptyView* GTK_ViewFactory::createEmptyView(IGUIManager& manager) {
+	auto presenter=std::unique_ptr<IEmptyViewPresenter>(std::make_unique<EmptyViewPresenter>());
+
+	return createEmptyView(manager,std::move(presenter));
+}
+
+GTK_EmptyView* GTK_ViewFactory::createEmptyView(IGUIManager& manager,
+        std::unique_ptr<IEmptyViewPresenter> presenter) {
+
+	//The static is kind of a hack to prevent the builder from getting destroyed
+	//and the view with it. For some reason i dont get the ownership of the
+	//pointer im requesting... To be honest i think this is a bug in gtkmm.
+	static Glib::RefPtr<Gtk::Builder> builder;
+	builder=GTK_BuilderFactory::getBuilder(GladeFile::getFile(ViewType::EMPTY_VIEW));
+
+	GTK_EmptyView* view=nullptr;
+
+	builder->get_widget_derived("empty_view", view);
+	LOG_ASSERT(gtk_l::get(),view!=nullptr);
+
+	presenter->setView(*view);
+
+	view->setPresenter(std::move(presenter));
+	view->setGUIManager(manager);
+
+	return view;
+}
 
 }//namespace erebus

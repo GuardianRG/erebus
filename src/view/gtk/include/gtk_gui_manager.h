@@ -12,6 +12,7 @@
 namespace erebus {
 class IWindow;
 class GTK_Window;
+class IViewWindow;
 }
 
 namespace erebus {
@@ -104,6 +105,8 @@ class GTK_GUIManager:public IGUIManager {
 	void showMessageDialog(std::size_t id,std::string primaryText,std::string secondaryText,
 	                       ErrorLevel errorLevel)override;
 
+
+	void moveViewToNewWindow(IView& view)override;
 	/**
 	 * See IGUIManager::runGUI
 	 */
@@ -113,6 +116,8 @@ class GTK_GUIManager:public IGUIManager {
 	 * See IGUIManager::joinContainer
 	 */
 	void joinContainer(std::size_t id)override;
+
+	IViewWindow& createNewViewWindow()override;
 
 	/**
 	 * See IGUIManager::addWindow

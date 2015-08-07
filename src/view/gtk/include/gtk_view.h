@@ -1,6 +1,9 @@
 #pragma once
 
-#include <gtkmm.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
+#include <gtkmm/viewport.h>
+#include <gtkmm/menu.h>
 
 #include <string>
 
@@ -90,10 +93,12 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 */
 	virtual ~GTK_View();
 
+	virtual std::unique_ptr<Gtk::Menu> createContextMenu();
+
 
 
 	void setGUIManager(IGUIManager& manager)override;
-	
+
 	IGUIManager& getGUIManager()override;
 	/**
 	 * See IView::setViewContainer

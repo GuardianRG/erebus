@@ -9,32 +9,37 @@
 INIT_LOCATION;
 
 namespace erebus {
-	GladeFile::GladeFile() {
-		
+GladeFile::GladeFile() {
+
+}
+
+GladeFile::~GladeFile() {
+
+}
+
+std::string GladeFile::getFile(ViewType type) {
+	switch(type) {
+	case ViewType::EMPTY_VIEW:
+		return "resources/empty_view.glade";
+		break;
+	default:
+		LOG_ASSERT(gtk_l::get(),false);
 	}
-	
-	GladeFile::~GladeFile() {
-		
+	return "";
+}
+
+std::string GladeFile::getFile(WindowType type) {
+	switch(type) {
+	case WindowType::MAIN_WINDOW:
+		return "resources/main_window.glade";
+		break;
+	case WindowType::VIEW_WINDOW:
+		return "resources/view_window.glade";
+		break;
+	default:
+		LOG_ASSERT(gtk_l::get(),false);
 	}
-	
-	std::string GladeFile::getFile(ViewType type) {
-		switch(type) {
-			case ViewType::EMPTY_VIEW:
-				return "resources/empty_view.glade";
-				break;
-			default:
-				LOG_ASSERT(gtk_l::get(),false);
-		}
-	}
-	
-	std::string GladeFile::getFile(WindowType type) {
-		switch(type) {
-			case WindowType::MAIN_WINDOW:
-				return "resources/main_window.glade";
-				break;
-			default:
-				LOG_ASSERT(gtk_l::get(),false);
-		}
-	}
+	return "";
+}
 
 }//namespace erebus

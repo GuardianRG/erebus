@@ -20,13 +20,20 @@ const std::string GTK_MainWindow::CLASSNAME="GTK_MainWindow";
 GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder)
 	: GTK_Window(cobject) {
-		
-		BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
+
+	LOG_CONSTRUCTOR;
+
 	isInitialized_=false;
 
 	base_=nullptr;
 	refBuilder->get_widget("base_view",base_);
 	LOG_ASSERT(gtk_l::get(),base_!=nullptr);
+
+	Gtk::MenuItem* view_save;
+	refBuilder->get_widget("view_new_window",view_save);
+	view_save->signal_activate().
+	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_new_window_click) );
+
 
 	show_all_children();
 
@@ -34,10 +41,7 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 
 	/*signal_hide().connect(sigc::mem_fun(*this,&GTK_MainWindow::close) );
 
-	Gtk::MenuItem* view_save;
-	refBuilder->get_widget("view_save",view_save);
-	view_save->signal_activate().
-	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_save_click) );
+
 
 	Gtk::MenuItem* view_show_tabs;
 	refBuilder->get_widget("view_show_tabs",view_show_tabs);
@@ -47,8 +51,7 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
-	
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
+	LOG_DESTRUCTOR;
 }
 
 IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
@@ -56,11 +59,17 @@ IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
 		return nullptr;
 
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
-	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
 
-	if(basicView_->getID()==id)
+	if(basicViewContainer_->getID()==id)
 		return this;
-	return basicView_->getParentOf(id);
+	return basicViewContainer_->getParentOf(id);
+}
+
+void GTK_MainWindow::on_menu_view_new_window_click() {
+	LOG_ASSERT(gtk_l::get(),presenter_.get()!=nullptr);
+
+	presenter_->on_menu_view_new_window_click();
 }
 
 void GTK_MainWindow::initialize(IGUIManager& manager) {
@@ -69,10 +78,11 @@ void GTK_MainWindow::initialize(IGUIManager& manager) {
 	setGUIManager(manager);
 
 
-	basicView_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,base_->get_hadjustment(),
-	                     base_->get_vadjustment()));
+	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,
+	                              base_->get_hadjustment(),
+	                              base_->get_vadjustment()));
 
-	base_->add(*(basicView_.get()));
+	base_->add(*(basicViewContainer_.get()));
 
 	show_all_children();
 
@@ -81,12 +91,12 @@ void GTK_MainWindow::initialize(IGUIManager& manager) {
 
 bool GTK_MainWindow::containsWidget(std::size_t id) {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
-	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
 
-	if(basicView_->getID()==id)
+	if(basicViewContainer_->getID()==id)
 		return true;
 
-	return basicView_->containsWidget(id);
+	return basicViewContainer_->containsWidget(id);
 }
 
 /*void GTK_MainWindow::on_menu_view_save_click() {

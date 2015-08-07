@@ -21,6 +21,7 @@ class IViewContainerPresenter;
 class IGUIManager;
 class IGUIObject;
 class GTK_View;
+class IView;
 }
 
 namespace erebus {
@@ -58,14 +59,15 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	//
 
 
-	void addView(GTK_View& view);
+	void addViewPr(GTK_View& view);
 	void split();
-	//void sanityCheck();
 
+	void on_context_menu_close_click();
+	void on_context_menu_pop_out_click();
 	void on_context_menu_join_click();
 	void on_context_menu_split_horizontal_click();
 	void on_context_menu_split_vertical_click();
-	
+
 	void on_context_menu_add_empty_view_click();
 	//void on_context_menu_add_view_hex_view_click();
 
@@ -137,6 +139,10 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 */
 	IGUIObject* getParentOf(std::size_t id)override;
 
+	IView* getActiveView()override;
+
+	void removeView(IView& view)override;
+
 	/**
 	 * See IViewContainer::containsWidget
 	 */
@@ -162,10 +168,12 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 */
 	void splitVertical() override;
 
+	void closeActiveView()override;
+
 	/**
 	 * See IViewContainer::addView(IView* view)
 	 */
-	//void addView(IView& view)override;
+	void addView(IView& view)override;
 
 	/**
 	 * See IViewContainer::addView(ViewType view)
@@ -176,6 +184,11 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * See IViewContainer::isSplitted
 	 */
 	bool isSplitted()const override;
+
+	/**
+	 * See IViewContainer::closeView
+	 */
+	void closeView(IView& view)override;
 
 	/**
 	 * See IViewContainer::showTabs

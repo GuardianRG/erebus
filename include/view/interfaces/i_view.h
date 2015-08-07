@@ -6,7 +6,7 @@
 #include <view/interfaces/i_gui_object.h>
 
 namespace erebus {
-	class IGUIManager;
+class IGUIManager;
 }
 
 namespace erebus {

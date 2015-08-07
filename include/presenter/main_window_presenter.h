@@ -58,15 +58,17 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	 */
 	virtual void setWindow(IWindow& window) override;
 
+	virtual void on_menu_view_new_window_click()override;
+
 	/**
 	 * See IMainWindowPresenter::on_menu_view_save_click
 	 */
-	virtual void on_menu_view_save_click()override;
+	//virtual void on_menu_view_save_click()override;
 
 	/**
 	 * See IMainWindowPresenter::on_menu_view_show_tabs_click
 	 */
-	virtual void on_menu_view_show_tabs_click()override;
+	//virtual void on_menu_view_show_tabs_click()override;
 };
 
 }//namespace erbus

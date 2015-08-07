@@ -78,6 +78,12 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	virtual void on_left_button_click()override;
 
 	/**
+	 * See IViewContainerPresenter::on_context_menu_close_click
+	 */
+	virtual void on_context_menu_close_click()override;
+	virtual void on_context_menu_pop_out_click()override;
+
+	/**
 	 * See IViewContainerPresenter::on_context_menu_split_view_vertical_click
 	 */
 	virtual void on_context_menu_split_vertical_click()override;

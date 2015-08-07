@@ -1,9 +1,10 @@
-#pragma once 
+#pragma once
 
 namespace erebus {
-	
-	enum class WindowType {
-		MAIN_WINDOW
-	};
+
+enum class WindowType {
+	MAIN_WINDOW,
+	VIEW_WINDOW
+};
 
 }//namespace erebus

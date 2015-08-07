@@ -16,6 +16,7 @@
 #include <presenter/interfaces/i_view_container_presenter.h>
 #include <view/interfaces/i_gui_manager.h>
 #include <view/interfaces/i_gui_object.h>
+#include <view/interfaces/i_view.h>
 
 #include <gtk_logger.h>
 #include <gtk_view_container_factory.h>
@@ -36,7 +37,7 @@ GTK_ViewContainer::GTK_ViewContainer(
     std::unique_ptr<Gtk::Notebook> notebook,IGUIManager& manager):
 	Gtk::Viewport(h_adjustment,v_adjustment),timeBuffer_(0),clickBuffer_(0),isSplitted_(false) {
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
+	LOG_CONSTRUCTOR;
 
 	setGUIManager(manager);
 
@@ -50,7 +51,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 #endif
 	if(notebook.get()==nullptr) {
 		notebook_=std::make_unique<Gtk::Notebook>();
-	}else {
+	} else {
 		notebook_=std::move(notebook);
 	}
 	notebook_->set_group_name("notebooks");
@@ -60,58 +61,12 @@ GTK_ViewContainer::GTK_ViewContainer(
 	buildContextMenu();
 	updateContextMenu();
 
-	/*//Set up the notebook which contains the views.
-	if(notebook==nullptr) {
-		notebook_=std::make_unique<Gtk::Notebook>();
-		notebook_->set_group_name("notebooks");
-		//showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
-	} else {
-		assert(notebook.get()!=nullptr);
-		notebook_=std::move(notebook);
-		//Rebind the function pointers of the context menu
-		for(auto w:notebook_->get_children()) {
-			auto buffer=dynamic_cast<GTK_View*>(w);
-			assert(buffer!=0);
-
-			buffer->setParent(this);
-			buffer->createContextMenu();
-
-		}
-
-	}
-
-	
-
-	*/
-
-
 	show_all_children();
 }
 
 GTK_ViewContainer::~GTK_ViewContainer() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
+	LOG_DESTRUCTOR;
 }
-
-/*bool GTK_ViewContainer::isEmpty(bool recursive) const {
-	if(isSplit_) {
-		if(recursive) {
-			assert(paned_!=nullptr);
-
-			auto ch1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
-			auto ch2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
-
-			assert(ch1!=0);
-			assert(ch2!=0);
-
-			return ch1->isEmpty(true)&&ch2->isEmpty(true);
-		}
-		return false;
-	}
-	assert(notebook_.get()!=nullptr);
-
-	return notebook_->get_n_pages()==0;
-}
-*/
 
 void GTK_ViewContainer::on_context_menu_split_horizontal_click() {
 	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
@@ -139,6 +94,7 @@ void GTK_ViewContainer::showContextMenu() {
 		}
 		init=true;
 	}
+	updateContextMenu();
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
@@ -146,39 +102,54 @@ void GTK_ViewContainer::updateContextMenu() {
 	if(isSplitted())
 		LOG_ASSERT(gtk_l::get(),false);
 	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
-	
+
+	static int currentPage=-2;
 	if(notebook_->get_n_pages()>=1) {
-		viewItem_->show();
-		separator_->show();
-	}
-	else {
+
+
+		if(currentPage!=notebook_->get_current_page()) {
+			buildContextMenu();
+			currentPage=notebook_->get_current_page();
+			auto child=dynamic_cast<GTK_View*>(notebook_->get_nth_page(currentPage));
+
+			if(child!=0) {
+				auto child_menu=std::move(child->createContextMenu());
+				auto menu_entries=child_menu->get_children();
+				for(std::size_t i=0; i<menu_entries.size(); i++) {
+					auto item=dynamic_cast<Gtk::MenuItem*>(menu_entries.at(i));
+					if(item!=0) {
+						child_menu->remove(*item);
+						item->show();
+						popupMenu_->insert(*Gtk::manage(item),i);
+					} else {
+						LOG_GTK(error)<<"Cast failed.";
+					}
+				}
+			} else {
+				LOG_GTK(error)<<"Cast failed.";
+			}
+
+			viewItem_->show();
+			separator_->show();
+		}
+	} else {
+		currentPage=-2;
+		buildContextMenu();
 		viewItem_->hide();
 		separator_->hide();
 	}
-	
 }
-/*
-void GTK_ViewContainer::closeView(IView& view) {
+
+void GTK_ViewContainer::addView(IView& view) {
 	try {
-		auto& buffer=dynamic_cast<GTK_View&>(view);
-		notebook_->remove_page(buffer);
-	} catch(std::bad_cast e) {
-		assert(false);
+		auto& view_c=dynamic_cast<GTK_View&>(view);
+		addViewPr(view_c);
+	} catch(const std::bad_cast& e) {
+		LOG_GTK(error)<<"Cast failed.";
 	}
 }
 
-void GTK_ViewContainer::removeView(IView& view) {
-	try {
-		auto& buffer=dynamic_cast<Gtk::Viewport&>(view);
-		notebook_->remove(buffer);
-	} catch(std::bad_cast e) {
-		assert(false);
-	}
-	show_all_children();
-}
-*/
 void GTK_ViewContainer::buildContextMenu() {
-	LOG_ASSERT(gtk_l::get(),popupMenu_.get()==nullptr);
 	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
 
 	popupMenu_=std::make_unique<Gtk::Menu>();
@@ -187,14 +158,28 @@ void GTK_ViewContainer::buildContextMenu() {
 	auto sep=Gtk::manage(new Gtk::SeparatorMenuItem);
 	auto sep1=Gtk::manage(new Gtk::SeparatorMenuItem);
 	auto sep2=Gtk::manage(new Gtk::SeparatorMenuItem);
+	auto sep3=Gtk::manage(new Gtk::SeparatorMenuItem);
 	separator_=std::make_unique<Gtk::SeparatorMenuItem>();
-	
+
 	viewItem_=std::make_unique<Gtk::MenuItem>("View");
 	auto view_c_menu=Gtk::manage(new Gtk::Menu);
 	viewItem_->set_submenu(*view_c_menu);
-	
+
+
+	auto popout_item=Gtk::manage(new Gtk::MenuItem("Pop out"));
+	popout_item->signal_activate().
+	connect(
+	    sigc::mem_fun(*this,
+	                  &GTK_ViewContainer::on_context_menu_pop_out_click)
+	);
+
 	auto close_item=Gtk::manage(new Gtk::MenuItem("Close"));
-	
+	close_item->signal_activate().
+	connect(
+	    sigc::mem_fun(*this,
+	                  &GTK_ViewContainer::on_context_menu_close_click)
+	);
+
 	//Control submenu
 	auto control=Gtk::manage(new Gtk::MenuItem{"Control"});
 	auto control_menu=Gtk::manage(new Gtk::Menu);
@@ -208,8 +193,6 @@ void GTK_ViewContainer::buildContextMenu() {
 	                  &GTK_ViewContainer::on_context_menu_join_click)
 	);
 
-	//Split submenu
-
 	auto split_h = Gtk::manage(new Gtk::MenuItem{"Split Horizontal"});
 	auto split_v = Gtk::manage(new Gtk::MenuItem{"Split Vertical"});
 
@@ -221,29 +204,19 @@ void GTK_ViewContainer::buildContextMenu() {
 	connect(sigc::mem_fun(*this,
 	                      &GTK_ViewContainer::on_context_menu_split_vertical_click) );
 
-	//View submenu
 	auto add_view = Gtk::manage(new Gtk::MenuItem{"Add View"});
 	auto view_menu=Gtk::manage(new Gtk::Menu);
-	
+
 	auto empty_view = Gtk::manage(new Gtk::MenuItem{"Empty View"});
 	view_menu->append(*empty_view);
 	empty_view->signal_activate().
 	connect(sigc::mem_fun(*this,
 	                      &GTK_ViewContainer::on_context_menu_add_empty_view_click) );
 	add_view->set_submenu(*view_menu);
-	
-	/*
 
-	auto hex_view = Gtk::manage(new Gtk::MenuItem{"Hex View"});
-	hex_view->signal_activate().
-	connect(sigc::mem_fun(*this,
-	                      &GTK_ViewContainer::on_context_menu_add_view_hex_view_click) );
-	view_menu->append(*hex_view);
-
-	*/
-
-	//Add everything to the menu
 	popupMenu_->append(*separator_);
+	view_c_menu->append(*popout_item);
+	view_c_menu->append(*sep3);
 	view_c_menu->append(*close_item);
 	popupMenu_->append(*viewItem_);
 	popupMenu_->append(*sep);
@@ -259,19 +232,37 @@ void GTK_ViewContainer::buildContextMenu() {
 	popupMenu_->show_all();
 }
 
+void GTK_ViewContainer::on_context_menu_close_click() {
+	LOG_ASSERT(gtk_l::get(),presenter_.get()!=nullptr);
+
+	presenter_->on_context_menu_close_click();
+}
+
+void GTK_ViewContainer::closeActiveView() {
+	LOG_ASSERT(gtk_l::get(),!isSplitted());
+	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(),notebook_->get_n_pages()>=1);
+
+	auto activeView=notebook_->get_nth_page(notebook_->get_current_page());
+	auto activeViewC=dynamic_cast<IView*>(activeView);
+	if(activeViewC==0) {
+		LOG_GTK(error)<<"Cast failed.";
+		return;
+	}
+	closeView(*activeViewC);
+}
+
 void GTK_ViewContainer::join() {
 	if(!isSplitted())
 		return;
 	isSplitted_=false;
 
-	BOOST_LOG_SEV(gtk_l::get(),
-	              normal)<<LOCATION<<"Joining view container '"<<getID()<<"'";
+	LOG_GTK(normal)<<"Joining view container '"<<getID()<<"'";
 	try {
 		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
 		LOG_ASSERT(gtk_l::get(),child1_.get()!=nullptr);
 		LOG_ASSERT(gtk_l::get(),child2_.get()!=nullptr);
 
-		//If one of the containers is splitted join them too
 		if(!child1_->isTopLevel()) {
 			child1_->join();
 		}
@@ -279,21 +270,14 @@ void GTK_ViewContainer::join() {
 			child2_->join();
 		}
 
-		//assert(container1->notebook_.get()!=nullptr);
-		//assert(container2->notebook_.get()!=nullptr);
-
-		//Create the new notebook
 		notebook_=std::make_unique<Gtk::Notebook>();
 		notebook_->set_group_name("notebooks");
 
-		//auto children=container1->notebook_->get_children();
-
-		//Put the views of container 1 into the notebook
 		LOG_ASSERT(gtk_l::get(),child1_->notebook_.get()!=nullptr);
-		
+
 		for(auto it:child1_->notebook_->get_children()) {
 			auto buffer=dynamic_cast<GTK_View*>(it);
-			
+
 			if(buffer==0) {
 				BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed.";
 				continue;
@@ -303,39 +287,21 @@ void GTK_ViewContainer::join() {
 
 			addView(*buffer);
 		}
-		
+
 		LOG_ASSERT(gtk_l::get(),child2_->notebook_.get()!=nullptr);
-		
+
 		for(auto it:child2_->notebook_->get_children()) {
 			auto buffer=dynamic_cast<GTK_View*>(it);
-			
+
 			if(buffer==0) {
 				BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed.";
 				continue;
 			}
-			
+
 			child2_->notebook_->remove(*it);
-			
+
 			addView(*buffer);
 		}
-
-/*
-		children=container2->notebook_->get_children();
-		//Put the views of container 2 into the notebook
-		for(auto it:children) {
-			auto buffer=dynamic_cast<GTK_View*>(it);
-			assert(buffer!=0);
-
-			container2->notebook_->remove(*it);
-
-			//Rebind pointers of the context menu
-			buffer->setParent(this);
-			buffer->createContextMenu();
-
-			notebook_->append_page(*buffer,buffer->getTitle());
-			notebook_->set_tab_reorderable(*buffer);
-			notebook_->set_tab_detachable(*buffer);
-		}*/
 
 		paned_->remove(*(child1_.get()));
 		paned_->remove(*(child2_.get()));
@@ -343,10 +309,8 @@ void GTK_ViewContainer::join() {
 		paned_=std::unique_ptr<Gtk::Paned>(nullptr);
 		child1_=std::unique_ptr<GTK_ViewContainer>(nullptr);
 		child2_=std::unique_ptr<GTK_ViewContainer>(nullptr);
-		
-		show_all_children();
 
-		//showTabs(ViewPreferences::getInstance().getAlwaysShowTabs());
+		show_all_children();
 
 		add(*notebook_);
 	} catch(const std::exception& e) {
@@ -368,13 +332,7 @@ void GTK_ViewContainer::on_context_menu_add_empty_view_click() {
 
 	presenter_->on_context_menu_add_view_click(ViewType::EMPTY_VIEW);
 }
-/*
-void GTK_ViewContainer::on_context_menu_add_view_hex_view_click() {
-	assert( presenter_.get()!=nullptr);
 
-	presenter_->on_context_menu_add_view_click(ViewType::HEX_VIEW);
-}
-*/
 void GTK_ViewContainer::on_context_menu_join_click() {
 	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
 
@@ -385,6 +343,37 @@ void GTK_ViewContainer::setPresenter(std::unique_ptr<IViewContainerPresenter> pr
 	LOG_ASSERT(gtk_l::get(),presenter.get()!=nullptr);
 
 	presenter_=std::move(presenter);
+}
+
+void GTK_ViewContainer::on_context_menu_pop_out_click() {
+	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
+
+	presenter_->on_context_menu_pop_out_click();
+}
+
+IView* GTK_ViewContainer::getActiveView() {
+	LOG_ASSERT_GTK(notebook_.get()!=nullptr);
+
+	if(notebook_->get_n_pages()==0)
+		return nullptr;
+
+	auto view=dynamic_cast<IView*>(notebook_->get_nth_page(notebook_->get_current_page()));
+
+	if(view==0) {
+		LOG_GTK(error)<<"Cast failed.";
+		return nullptr;
+	}
+	return view;
+}
+
+void GTK_ViewContainer::removeView(IView& view) {
+	try {
+		auto& buffer=dynamic_cast<Gtk::Viewport&>(view);
+		notebook_->remove(buffer);
+	} catch(std::bad_cast e) {
+		LOG_GTK(error)<<"Cast failed.";
+	}
+	show_all_children();
 }
 
 bool GTK_ViewContainer::on_button_press_event(GdkEventButton *ev) {
@@ -424,19 +413,27 @@ bool GTK_ViewContainer::containsWidget(std::size_t id) {
 		return child1_->containsWidget(id)||child2_->containsWidget(id);
 	} else {
 		LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
-		
+
 		for(auto it:notebook_->get_children()) {
 			auto buffer=dynamic_cast<IGUIObject*>(it);
 			if(buffer==0) {
 				BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed.";
 				continue;
-			}
-			else if(buffer->getID()==id) {
+			} else if(buffer->getID()==id) {
 				return true;
 			}
 		}
 	}
 	return false;
+}
+
+void GTK_ViewContainer::closeView(IView& view) {
+	try {
+		auto& buffer=dynamic_cast<GTK_View&>(view);
+		notebook_->remove_page(buffer);
+	} catch(std::bad_cast e) {
+		LOG_GTK(error)<<"Cast failed.";
+	}
 }
 
 bool GTK_ViewContainer::isTopLevel() const {
@@ -452,7 +449,7 @@ void GTK_ViewContainer::split() {
 		LOG_ASSERT(gtk_l::get(),false);
 		return;
 	}
-	
+
 	isSplitted_=true;
 	try {
 		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
@@ -465,7 +462,7 @@ void GTK_ViewContainer::split() {
 		        get_vadjustment(),std::move(notebook_));
 		child2_=GTK_ViewContainerFactory::createViewContainer(*guiManager_,get_hadjustment(),
 		        get_vadjustment());
-		
+
 		paned_->pack1(*(child1_.get()),true,false);
 		paned_->pack2(*(child2_.get()),true,false);
 
@@ -486,14 +483,7 @@ void GTK_ViewContainer::split() {
 	}
 	show_all_children();
 }
-/*
-void GTK_ViewContainer::popOutView(IView& view) {
-	if(!isTopLevel())
-		return;
-	removeView(view);
-	//GUIManager::getInstance().moveViewToNewWindow(view);
-}
-*/
+
 void GTK_ViewContainer::splitHorizontal() {
 	if(isSplitted())
 		return;
@@ -523,75 +513,38 @@ void GTK_ViewContainer::splitVertical() {
 
 
 void GTK_ViewContainer::addView(ViewType type) {
-	//I really would love to outsource the creation of the views into
-	//a factory class but unfortunatly his is not possible since the buildrt
-	//has to exist until ownership of the view is transferred to this container.
-	//This would lead to unnecessary moving of objects so it will stay this way
-	//until i found a suitible solution.
 
 	switch(type) {
 	case ViewType::EMPTY_VIEW: {
 		auto title=std::string{"Empty View"};
-		
+
 		auto view=GTK_ViewFactory::createEmptyView(*guiManager_);
 		view->setTitle(title);
-		addView(*view);
+		addViewPr(*view);
 		break;
 	}
-	/*case ViewType::HEX_VIEW: {
-		auto title=std::string{"Hex View"};
 
-		auto presenter=std::unique_ptr<IHexViewPresenter>(
-		                   std::make_unique<HexViewPresenter>()
-		               );
-
-		auto builder=GTK_BuilderFactory::getBuilder(Views::HEX_VIEW);
-		GTK_HexView* view;
-		builder->get_widget_derived("hex_view",view);
-		presenter->setView(view);
-		view->setPresenter(std::move(presenter));
-		view->setTitle(title);
-		view->setParent(this);
-		view->createContextMenu();
-		addView(*view);
-		break;
-	}*/
 	default:
 		;
 	}
 }
 
-void GTK_ViewContainer::addView(GTK_View& view) {
+void GTK_ViewContainer::addViewPr(GTK_View& view) {
 	if(!isTopLevel()) {
 		LOG_ASSERT(gtk_l::get(),false);
-	} 
-		LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
-
-		if(notebook_->get_n_pages()>=1)
-			notebook_->set_show_tabs(true);
-
-			notebook_->append_page(view,view.getTitle());
-			notebook_->set_tab_reorderable(view);
-			notebook_->set_tab_detachable(view);
-		
-		updateContextMenu();
-		show_all_children();
-}
-/*
-void GTK_ViewContainer::showTabs(bool showTabs) {
-	if(notebook_.get()!=nullptr) {
-		notebook_->set_show_tabs(showTabs);
-	} else {
-		assert(paned_!=nullptr);
-		auto container1=dynamic_cast<GTK_ViewContainer*>(paned_->get_child1());
-		auto container2=dynamic_cast<GTK_ViewContainer*>(paned_->get_child2());
-		assert(container1!=0);
-		assert(container2!=0);
-		container1->showTabs(showTabs);
-		container2->showTabs(showTabs);
 	}
+	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
+
+	if(notebook_->get_n_pages()>=1)
+		notebook_->set_show_tabs(true);
+
+	notebook_->append_page(view,view.getTitle());
+	notebook_->set_tab_reorderable(view);
+	notebook_->set_tab_detachable(view);
+
+	show_all_children();
 }
-*/
+
 IGUIObject* GTK_ViewContainer::getParentOf(std::size_t id) {
 	if(!containsWidget(id))
 		return nullptr;
