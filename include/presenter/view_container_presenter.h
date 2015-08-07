@@ -3,8 +3,10 @@
 #include <presenter/interfaces/i_view_container_presenter.h>
 
 namespace erebus {
+	
 class IViewContainer;
 enum class ViewType;
+
 }
 
 namespace erebus {
@@ -14,7 +16,7 @@ namespace erebus {
  */
 class ViewContainerPresenter:public IViewContainerPresenter {
 	IViewContainer*			container_;
-	//std::unique_ptr<IViewContainerSettingsPropagator>	propagator_;
+	
   public:
 	/**
 	 * Constructor.
@@ -52,12 +54,6 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 
 
 	/**
-	 * IViewContainerPresenter::setSettingsPropagator
-	 */
-	//virtual void setSettingsPropagator(
-	//  std::unique_ptr<IViewContainerSettingsPropagator> p)override;
-
-	/**
 	 * See IViewContainerPresenter::setViewContainer
 	 */
 	virtual void setViewContainer(IViewContainer* container) override;
@@ -81,15 +77,19 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	 * See IViewContainerPresenter::on_context_menu_close_click
 	 */
 	virtual void on_context_menu_close_click()override;
+	
+	/**
+	 * See IViewContainerPresenter::on_context_menu_pop_out_click
+	 */
 	virtual void on_context_menu_pop_out_click()override;
 
 	/**
-	 * See IViewContainerPresenter::on_context_menu_split_view_vertical_click
+	 * See IViewContainerPresenter::on_context_menu_split_vertical_click
 	 */
 	virtual void on_context_menu_split_vertical_click()override;
 
 	/**
-	 * See IViewContainerPresenter::on_context_menu_split_view_horizontal_click
+	 * See IViewContainerPresenter::on_context_menu_split_horizontal_click
 	 */
 	virtual void on_context_menu_split_horizontal_click()override;
 
@@ -97,5 +97,7 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	 * See IViewContainerPresenter::on_context_menu_add_view_click
 	 */
 	virtual void on_context_menu_add_view_click(ViewType type)override;
+	
 };
+
 }//namespace erbus

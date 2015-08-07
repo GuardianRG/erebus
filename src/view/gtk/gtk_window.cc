@@ -23,7 +23,7 @@ GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
 GTK_Window::~GTK_Window() {
 }
 
-void GTK_Window::setTitle(std::string title) {
+void GTK_Window::setTitle(const std::string& title) {
 	set_title(title);
 }
 

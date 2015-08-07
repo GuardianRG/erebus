@@ -35,13 +35,6 @@ std::size_t GTK_HexView::getID() {
 	return reinterpret_cast<std::size_t>(this);
 }
 
-std::string GTK_HexView::getTitle() const {
-	return GTK_View::getTitle();
-}
-
-void GTK_HexView::setTitle(std::string title) {
-	GTK_View::setTitle(title);
-}
 /*
 void GTK_HexView::showContextMenu() {
 	GTK_View::showContextMenu();

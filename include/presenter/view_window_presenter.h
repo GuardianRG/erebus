@@ -1,9 +1,14 @@
 #pragma once
 
 #include <presenter/interfaces/i_view_window_presenter.h>
-#include <view/interfaces/i_view_window.h>
 
 namespace erebus {
+	class IViewWindow;
+	class IWindow;
+}
+
+namespace erebus {
+	
 /**
  * This class is a concrete view window presenter.
  */

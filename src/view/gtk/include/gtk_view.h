@@ -118,7 +118,7 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	/**
 	 * See IView::setTitle
 	 */
-	void setTitle(std::string title) override;
+	void setTitle(const std::string& title) override;
 
 	/**
 	 * See IView::getTitle

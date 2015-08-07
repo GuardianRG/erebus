@@ -72,7 +72,7 @@ void GTK_ViewWindow::addView(IView& view) {
 	LOG_ASSERT_GTK(isInitialized_);
 	LOG_ASSERT_GTK(basicViewContainer_.get()!=nullptr);
 
-	if(isTopLevel())
+	if(basicViewContainer_->isTopLevel())
 		basicViewContainer_->addView(view);
 }
 

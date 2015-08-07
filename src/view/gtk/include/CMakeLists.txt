@@ -9,7 +9,6 @@ set(HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container_factory.h
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container_settings_propagator.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_window.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_gui_manager.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window.h

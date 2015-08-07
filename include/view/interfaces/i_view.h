@@ -38,7 +38,7 @@ class IView:public IGUIObject {
 	 *
 	 * @param title new title for the view
 	 */
-	virtual void setTitle(std::string title)=0;
+	virtual void setTitle(const std::string& title)=0;
 
 };
 

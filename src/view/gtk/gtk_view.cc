@@ -51,7 +51,7 @@ GTK_View::~GTK_View() {
 		}
 	}
 }*/
-void GTK_View::setTitle(std::string title) {
+void GTK_View::setTitle(const std::string& title) {
 	title_=title;
 }
 

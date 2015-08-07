@@ -17,16 +17,16 @@
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/support/date_time.hpp>
 
-#include <view/interfaces/i_gui_manager.h>
-
+#include <i_gui_manager.h>
 #include <logger.h>
-#include <view/view_preferences_loader.h>
-//#include <model.h>
+#include <view_preferences_loader.h>
 #include <file_system.h>
 
 #ifdef _GTKMM_
+
 #include <gtk_gui_manager.h>
 #include <glibmm/exception.h>
+
 #endif
 
 namespace logging = boost::log;
@@ -84,6 +84,7 @@ void initLogging() {
 int main(int argc, char *argv[]) {
 	{
 		auto guiManager=std::unique_ptr<erebus::IGUIManager>(nullptr);
+		
 		//Initializing everything
 #ifndef _DEBUG_
 		try {
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]) {
 			initLogging();
 			BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Boost logger initialized";
 
-			//auto model = std::make_shared<erebus::Model>();
+			//Here the model should be initialized.
 			BOOST_LOG_SEV(main_l::get(), normal) << LOCATION << "Model initialized";
 
 #ifdef _GTKMM_

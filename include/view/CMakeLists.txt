@@ -1,5 +1,7 @@
 #include/view/CMakeLists.txt
 
+add_subdirectory(interfaces)
+
 set(VIEW_HEADERS
 	${VIEW_HEADERS}
 	${CMAKE_CURRENT_SOURCE_DIR}/view_type.h

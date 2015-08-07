@@ -15,6 +15,7 @@ namespace erebus {
  * This class is the interface for a view container presenter.
  */
 class IViewContainerPresenter {
+	
   public:
 	/**
 	 * Destructor.
@@ -24,16 +25,10 @@ class IViewContainerPresenter {
 	/**
 	 * Sets the view container.
 	 *
-	 * @param container the container
+	 * @param container the container to set
 	 */
 	virtual void setViewContainer(IViewContainer* container)=0;
-
-	/**
-	 * Sets the settings propagator for the view container.
-	 */
-	//virtual void setSettingsPropagator(
-	//  std::unique_ptr<IViewContainerSettingsPropagator> p)=0;
-
+	
 	/**
 	 * Handels a right mouse button click.
 	 */
@@ -45,29 +40,32 @@ class IViewContainerPresenter {
 	virtual void on_left_button_click()=0;
 
 	/**
-	 * Handels the join in the context menu.
+	 * Handels a click on the context menu etry "Join".
 	 */
 	virtual void on_context_menu_join_click()=0;
 
 	/**
-	 * Handels the split view horizontal in the context menu.
+	 * Handels a click on the context menu etry "Split horizontal".
 	 */
 	virtual void on_context_menu_split_horizontal_click()=0;
 
 	/**
-	 * Handels the close click.
+	 * Handels a click on the context menu etry "Close".
 	 */
 	virtual void on_context_menu_close_click()=0;
-
+	
+	/**
+	 * Handels a click on the context menu etry "Pop out".
+	 */
 	virtual void on_context_menu_pop_out_click()=0;
 
 	/**
-	 * Handels the split view vertical in the context menu.
+	 * Handels a click on the context menu etry "Split vertically".
 	 */
 	virtual void on_context_menu_split_vertical_click()=0;
 
 	/**
-	 * Handels a click on a view to add in the context menu.
+	 * Handels a click on any of the context menu etries in the submenu "Add view".
 	 *
 	 * @param type the type of the view to add
 	 */

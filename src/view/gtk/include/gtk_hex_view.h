@@ -58,15 +58,6 @@ class GTK_HexView:public GTK_View,public IHexView {
 	 */
 	void setPresenter(std::unique_ptr<IHexViewPresenter> presenter);
 
-	/**
-	 * See IHexView::getTitle
-	 */
-	std::string getTitle()const override;
-
-	/**
-	 * See IHexView::setTitle
-	 */
-	void setTitle(std::string title)override;
 
 	/**
 	 * See IHexView::showContextMenu

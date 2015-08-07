@@ -77,7 +77,7 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	/**
 	 * See IWindow::setTitle
 	 */
-	void setTitle(std::string title) override;
+	void setTitle(const std::string& title) override;
 
 	/**
 	 * See IWindow::getTitle

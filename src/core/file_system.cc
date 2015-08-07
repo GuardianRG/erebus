@@ -8,6 +8,7 @@
 #include <iostream>
 #include <fstream>
 
+
 void createDirectory(const std::string& path) {
 	boost::filesystem::create_directories(path);
 }
@@ -22,7 +23,9 @@ bool doesFileExist(const std::string& path) {
 }
 
 void createFile(const std::string& path) {
+	if(!doesFileExist(path)) {
 	std::ofstream outfile (path);
 	outfile <<"";
 	outfile.close();
+	}
 }

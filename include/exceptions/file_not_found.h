@@ -5,7 +5,7 @@
 namespace erebus {
 
 /**
- * This is a exception for the case a stated file doenst exist.
+ * This is a exception for the case a stated file does not exist.
  */
 class file_not_found : public std::runtime_error {
 

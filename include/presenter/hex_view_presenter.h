@@ -2,13 +2,19 @@
 
 #include <presenter/interfaces/i_hex_view_presenter.h>
 
-#include <view/interfaces/i_view.h>
-#include <view/interfaces/i_hex_view.h>
+namespace erebus {
+	class IHexView;
+	class IView;
+}
 
 namespace erebus {
 
+	/**
+	 * This class is a concrete HexView presenter
+	 */
 class HexViewPresenter:public IHexViewPresenter {
 	IHexView*	view_;
+	
   public:
 	/**
 	 * Constructor.
@@ -17,6 +23,8 @@ class HexViewPresenter:public IHexViewPresenter {
 
 	/**
 	 * Copy constructor.
+	 * 
+	 * Cant be copied.
 	 */
 	HexViewPresenter(const HexViewPresenter &obj)=delete;
 
@@ -43,31 +51,10 @@ class HexViewPresenter:public IHexViewPresenter {
 	virtual ~HexViewPresenter();
 
 
-
 	/**
-	 * See IHexViewPresenter::setView
+	 * See IHexViewPresenter::setView.
 	 */
 	virtual void setView(IView& view)override;
-
-	/**
-	 * See IHexViewPresenter::on_right_button_click
-	 */
-	//virtual void on_right_button_click()override;
-
-	/**
-	 * See IHexViewPresenter::on_left_button_click
-	 */
-	//virtual void on_left_button_click()override;
-
-	/**
-	 * See IHexViewPresenter::on_context_menu_close_click
-	 */
-	//virtual void on_context_menu_close_click()override;
-
-	/**
-	 * See IHexViewPresenter::on_context_menu_pop_out_click
-	 */
-	//virtual void on_context_menu_pop_out_click()override;
 
 };
 

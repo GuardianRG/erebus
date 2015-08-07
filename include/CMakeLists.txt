@@ -10,6 +10,7 @@ set(PRESENTER_HEADERS
 
 add_subdirectory(exceptions)
 add_subdirectory(interfaces)
+add_subdirectory(presenter)
 add_subdirectory(view)
 
 set(HEADER_FILES 

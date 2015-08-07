@@ -28,7 +28,7 @@ class IWindow :public IContainer {
 	 *
 	 * @param title title of the window
 	 */
-	virtual void setTitle(std::string title)=0;
+	virtual void setTitle(const std::string& title)=0;
 
 	/**
 	 * Returns the title of the window.
