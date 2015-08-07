@@ -1,6 +1,10 @@
 #pragma once
 
 namespace erebus {
+
+}
+
+namespace erebus {
 class IViewContainerSettingsPropagator {
   public:
 	virtual ~IViewContainerSettingsPropagator() {}

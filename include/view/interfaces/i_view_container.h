@@ -5,6 +5,7 @@
 #include <view/interfaces/i_container.h>
 
 namespace erebus {
+
 enum class ViewType;
 class IGUIManager;
 class IView;
@@ -17,6 +18,7 @@ namespace erebus {
  * This class is the interface for a view container.
  */
 class IViewContainer:public IContainer {
+
   public:
 	/**
 	 * Destructor.
@@ -38,22 +40,6 @@ class IViewContainer:public IContainer {
 	virtual void splitVertical()=0;
 
 	/**
-	 * Sets if the tabs of the view should be show.
-	 *
-	 * @param showTabs true, if the tabs should be shown
-	 */
-	//virtual void showTabs(bool showTabs)=0;
-
-	/**
-	 * Wether this container is empty.
-	 *
-	 * @param recursive when true, this call will be forwarded if the container is split
-	 *
-	 * @return true if the container is empty
-	 */
-	//virtual bool isEmpty(bool recursive) const=0;
-
-	/**
 	 * Wether the container is splitted or not.
 	 *
 	 * @return true, when the container is split
@@ -67,61 +53,72 @@ class IViewContainer:public IContainer {
 	 */
 	virtual bool isTopLevel() const=0;
 
+	/**
+	 * Returns the view that is currently visible to the user.
+	 *
+	 * If no view was yet created, nullptr is returned.
+	 *
+	 * @return the view that is currently visible to the user
+	 */
 	virtual IView* getActiveView()=0;
 
+	/**
+	 * Removes the view from this container.
+	 *
+	 * Removes the view but does not delete it. This resposibility lies with the caller.
+	 *
+	 * @param view the view to be removed from the container
+	 */
 	virtual void removeView(IView& view)=0;
 
 	/**
-	 * Joins the container if it was split.
+	 * Joins the container if it was splitted.
 	 *
-	 * If the container is not split nothing happens.
+	 * If the container is not splitted nothing happens.
 	 */
 	virtual void join()=0;
 
 	/**
-	 * Shows the standard context menu.
+	 * Shows the context menu.
+	 *
+	 * This method asks the currently visible view (if one exists) for the entries for
+	 * the context menu and shows the too.
 	 */
 	virtual void showContextMenu()=0;
 
 	/**
-	 * Adds a view.
+	 * Closes the given view.
 	 *
-	 * @param view view to add
-	 */
-	//virtual void addView(IView& view)=0;
-
-	/**
-	 * Removs a view.
+	 * Caution: This method also deletes the view.
 	 *
-	 * @param view the view to remove
+	 * @param view the view to close
 	 */
 	virtual void closeView(IView& view)=0;
 
+	/**
+	 * Closes the view that is currently visible to the user.
+	 *
+	 * See IViewContainer::closeView
+	 */
 	virtual void closeActiveView()=0;
 
 	/**
-	 * Adds a view.
+	 * Adds a view to the container and shows it.
 	 *
 	 * @param type type of the view to add
 	 */
 	virtual void addView(ViewType type)=0;
 
-
+	/**
+	 * Adds the view to the container and shows it.
+	 *
+	 * It has to be ensured that the view is ready to be added to the container.
+	 * (no other parent etc.)
+	 *
+	 * @param view the view to add to the container
+	 */
 	virtual void addView(IView& view)=0;
 
-	/**
-	 * Pops the view out to a new window.
-	 *
-	 * @param view the view to pop out
-	 */
-	//virtual void popOutView(IView& view)=0;
-
-	/**
-	 * Closes a view.
-	 *
-	 * @param view the view to close
-	 */
-	//virtual void closeView(IView& view)=0;
-
 };
+
 }//namespace erbus

@@ -4,16 +4,18 @@
 #include <memory>
 
 namespace erebus {
+
 class IWindow;
 class IGUIObject;
 class IView;
 class IViewWindow;
+
 }
 
 namespace erebus {
 
 /**
- * This enum holds the dirfferent error levels for the message boxes.
+ * This enum holds the different error levels for the message boxes.
  */
 enum class ErrorLevel {
 	/**
@@ -34,11 +36,12 @@ enum class ErrorLevel {
  * This class is the interface for a gui manager.
  */
 class IGUIManager {
+
   public:
 	virtual ~IGUIManager() {}
 
 	/**
-	 * Shows a Messagedialog without locking any window.
+	 * Shows a Messagedialog without locking any specific window.
 	 *
 	 * @param primaryText the main text
 	 * @param secondaryText the secondary text
@@ -51,15 +54,18 @@ class IGUIManager {
 	/**
 	* Shows a Messagedialog.
 	*
-	* @param id id of the thing that requests a messagedialog
+	* The window which contains the widget with the given id gets locked.
+	*
+	* @param id id of the object that requests a messagedialog
 	* @param primaryText the main text
 	* @param secondaryText the secondary text
 	* @param errorLevel the error level
 	*/
 	virtual void showMessageDialog(std::size_t id,std::string primaryText,std::string secondaryText,
 	                               ErrorLevel errorLevel)=0;
+
 	/**
-	 * Runs the gui aka makes the main window to show up.
+	 * Shows the gui.
 	 */
 	virtual void runGUI()=0;
 
@@ -67,12 +73,15 @@ class IGUIManager {
 	 * Adds a window to the application.
 	 *
 	 * @param window the window to add
-	 * @param makePersistent if true, the application will close if this window as closed
+	 * @param makePersistent if true, the application will close if this window is closed aswell
 	 */
 	virtual IWindow& addWindow(std::unique_ptr<IWindow> window,bool makePersistent)=0;
 
 	/**
-	 * Destroys the reference the application has to this window.
+	 * Destroys the window.
+	 *
+	 * This method needs to be called since this object has ownership of every window
+	 * created.
 	 *
 	 * The window should be properly closed before calling this method.
 	 *
@@ -81,24 +90,34 @@ class IGUIManager {
 	virtual void destroyWindow(IWindow& window)=0;
 
 	/**
-	 * Joins the container which contains the widget with the ID id.
+	 * Joins the container which contains the container which contains the widget with the given id.
 	 *
-	 * @param id the id which parent container should get joined
+	 * @param id the id of the widget
 	 */
 	virtual void joinContainer(std::size_t id)=0;
 
+	/**
+	 * Creates a new view window and shows it.
+	 */
 	virtual IViewWindow& createNewViewWindow()=0;
 
+	/**
+	 * Creats a new view window and moves the given view to this new window.
+	 *
+	 * It should be ensured that the view is ready for getting moved to the new window.
+	 * (is not contained in any other container)
+	 *
+	 * @param view the view to be moved
+	 */
 	virtual void moveViewToNewWindow(IView& view)=0;
 
+	/**
+	 * Returns the parent container of the widget with the given id.
+	 *
+	 * @param id the id of the widget whose parent is to be determined
+	 */
 	virtual IGUIObject* getParentOf(std::size_t id)=0;
 
-	/**
-	 * Returns a unqiue id for the gui manager.
-	 *
-	 * @return unqiue id for the gui manager
-	 */
-	virtual long getID()=0;
 };
 
 }//namespace erebus

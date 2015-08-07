@@ -41,6 +41,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	std::unique_ptr<Gtk::MenuItem>			joinItem_;
 	std::unique_ptr<Gtk::MenuItem>			viewItem_;
 	std::unique_ptr<Gtk::SeparatorMenuItem>		separator_;
+	std::unique_ptr<Gtk::SeparatorMenuItem>		separator1_;
 	std::unique_ptr<Gtk::Notebook>			notebook_;
 
 	int 						timeBuffer_;

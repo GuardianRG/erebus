@@ -6,17 +6,18 @@
 #include <view/interfaces/i_gui_object.h>
 
 namespace erebus {
+
 class IGUIManager;
+
 }
 
 namespace erebus {
 
-class IViewPresenter;
-
 /**
- * This class is the interface for every view.
+ * This class is the base interface for every view.
  */
 class IView:public IGUIObject {
+
   public:
 	/**
 	 * Destructor.
@@ -26,7 +27,7 @@ class IView:public IGUIObject {
 	/**
 	 * Returns the title of the view.
 	 *
-	 * The title is the string that gets show e.g. in the tab's head
+	 * The title is the string that gets show e.g. in the tab's head.
 	 *
 	 * @return title of the view
 	 */
@@ -35,42 +36,10 @@ class IView:public IGUIObject {
 	/**
 	 * Sets the title of the view.
 	 *
-	 * @param title new title of the view
+	 * @param title new title for the view
 	 */
 	virtual void setTitle(std::string title)=0;
 
-	/**
-	 * Shows the context menu.
-	 *
-	 * The context menu contains the special entries for the view
-	 * as well as the standard entries.
-	 */
-	//virtual void showContextMenu()=0;
-
-
-	/**
-	 * Closes the view.
-	 */
-	//virtual void close()=0;
-
-	/**
-	 * Sets the container in which the view is contained.
-	 *
-	 * @param container container of the view
-	 */
-	//virtual void setParent(IViewContainer* container)=0;
-
-	/**
-	 * Returns the container in which the view is contained.
-	 *
-	 * @return container in which the view is contained.
-	 */
-	//virtual IViewContainer* getParent() const=0;
-
-	/**
-	 * Moves the view to a new window.
-	 */
-	//virtual void popOut()=0;
 };
 
 }//namespace erbus

@@ -5,28 +5,35 @@
 #include <view/interfaces/i_gui_object.h>
 
 namespace erebus {
+
+/**
+ * This class is the base interface for all gui elements that can contain
+ * other gui elements.
+ */
 class IContainer :public IGUIObject {
+
   public:
+	/**
+	 * Destructor.
+	 */
 	~IContainer() {}
 
 	/**
-	 * Whether this window contains the given widget.
+	 * Whether this container contains the widget with the given id.
 	 *
-	 * Is even true if thw window itsel has the id.
-	 *
-	 * @return true if the window contains this widget
+	 * @return true if the container contains this widget
 	 */
 	virtual bool containsWidget(std::size_t id)=0;
 
 	/**
-	 * Returns the parent of the id.
+	 * Returns the parent container of the the widget with the given id.
 	 *
-	 * If the parent isnt found nullptr is returned and if
-	 * id is a window the window will be returned.
+	 * If this container does not contain the widget, nullptr is returned.
 	 *
-	 * @return the parent of id
+	 * @return the parent container of the widget with the given id
 	 */
 	virtual IGUIObject* getParentOf(std::size_t id)=0;
 
 };
+
 }//namespace erebus

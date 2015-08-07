@@ -82,19 +82,16 @@ void GTK_ViewContainer::on_context_menu_split_vertical_click() {
 
 void GTK_ViewContainer::showContextMenu() {
 	LOG_ASSERT(gtk_l::get(), popupMenu_.get()!=nullptr);
-	static bool init=false;
-	if(!init) {
-		auto parent=guiManager_->getParentOf(getID());
-		if(parent!=nullptr) {
-			if(parent->classname()!=GTK_ViewContainer::CLASSNAME)
-				joinItem_->set_sensitive(false);
-		} else {
-			BOOST_LOG_SEV(gtk_l::get(),warning)
-			        <<LOCATION<<"There is somewehere a bug in the getParentOf() method";
-		}
-		init=true;
-	}
+
 	updateContextMenu();
+	auto parent=guiManager_->getParentOf(getID());
+	if(parent!=nullptr) {
+		if(parent->classname()!=GTK_ViewContainer::CLASSNAME)
+			joinItem_->set_sensitive(false);
+	} else {
+		BOOST_LOG_SEV(gtk_l::get(),warning)
+		        <<LOCATION<<"There is somewehere a bug in the getParentOf() method";
+	}
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
@@ -131,12 +128,14 @@ void GTK_ViewContainer::updateContextMenu() {
 
 			viewItem_->show();
 			separator_->show();
+			separator1_->show();
 		}
 	} else {
 		currentPage=-2;
 		buildContextMenu();
 		viewItem_->hide();
 		separator_->hide();
+		separator1_->hide();
 	}
 }
 
@@ -155,7 +154,7 @@ void GTK_ViewContainer::buildContextMenu() {
 	popupMenu_=std::make_unique<Gtk::Menu>();
 
 	//Separator Item
-	auto sep=Gtk::manage(new Gtk::SeparatorMenuItem);
+	separator1_=std::make_unique<Gtk::SeparatorMenuItem>();
 	auto sep1=Gtk::manage(new Gtk::SeparatorMenuItem);
 	auto sep2=Gtk::manage(new Gtk::SeparatorMenuItem);
 	auto sep3=Gtk::manage(new Gtk::SeparatorMenuItem);
@@ -219,7 +218,7 @@ void GTK_ViewContainer::buildContextMenu() {
 	view_c_menu->append(*sep3);
 	view_c_menu->append(*close_item);
 	popupMenu_->append(*viewItem_);
-	popupMenu_->append(*sep);
+	popupMenu_->append(*separator1_);
 	control_menu->append(*joinItem_);
 	control_menu->append(*sep1);
 	control_menu->append(*split_h);

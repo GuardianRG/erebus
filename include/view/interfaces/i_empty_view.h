@@ -5,9 +5,10 @@
 namespace erebus {
 
 /**
- * This class is the interface for a empty view.
+ * This class is the interface for an empty view.
  */
 class IEmptyView:virtual public IView {
+
   public:
 	/**
 	 * Destructor.

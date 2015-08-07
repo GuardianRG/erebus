@@ -71,9 +71,9 @@ void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
 void GTK_ViewWindow::addView(IView& view) {
 	LOG_ASSERT_GTK(isInitialized_);
 	LOG_ASSERT_GTK(basicViewContainer_.get()!=nullptr);
-	LOG_ASSERT_GTK(basicViewContainer_->isTopLevel());
 
-	basicViewContainer_->addView(view);
+	if(isTopLevel())
+		basicViewContainer_->addView(view);
 }
 
 bool GTK_ViewWindow::containsWidget(std::size_t id) {
