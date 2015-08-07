@@ -5,6 +5,10 @@
 #include <view/interfaces/i_view.h>
 
 namespace erebus {
+	class IViewContainer;
+}
+
+namespace erebus {
 
 /**
  * This class is the interface for a view window.

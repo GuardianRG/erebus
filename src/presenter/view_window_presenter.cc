@@ -26,9 +26,9 @@ ViewWindowPresenter& ViewWindowPresenter::operator=(ViewWindowPresenter&& obj) {
 	return *this;
 }
 
-void ViewWindowPresenter::setWindow(IWindow* window) {
-	viewWindow_=dynamic_cast<IViewWindow*>(window);
-	assert(viewWindow_!=0);
+void ViewWindowPresenter::setWindow(IWindow& window) {
+	//viewWindow_=dynamic_cast<IViewWindow*>(window);
+	//assert(viewWindow_!=0);
 }
 
 

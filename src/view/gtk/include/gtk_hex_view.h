@@ -1,4 +1,6 @@
 #pragma once
+#include <gtkmm.h>
+#include <string>
 
 #include <presenter/interfaces/i_hex_view_presenter.h>
 #include <presenter/interfaces/i_view_presenter.h>
@@ -10,8 +12,10 @@ namespace erebus {
 class GTK_HexView:public GTK_View,public IHexView {
 	std::unique_ptr<IHexViewPresenter>	presenter_;
   protected:
-	IViewPresenter& getPresenter() const override;
+	//IViewPresenter& getPresenter() const override;
   public:
+	static const std::string CLASSNAME;
+	  
 	GTK_HexView(BaseObjectType* cobject,
 	            const Glib::RefPtr<Gtk::Builder>& refBuilder);
 
@@ -48,7 +52,7 @@ class GTK_HexView:public GTK_View,public IHexView {
 	 */
 	~GTK_HexView();
 
-	void createContextMenu()override;
+	//void createContextMenu()override;
 	/**
 	 * See IHexView::setPresenter
 	 */
@@ -67,28 +71,30 @@ class GTK_HexView:public GTK_View,public IHexView {
 	/**
 	 * See IHexView::showContextMenu
 	 */
-	void showContextMenu()override;
+	//void showContextMenu()override;
 
 	/**
 	 * See IHexView::close
 	 */
-	void close()override;
+	//void close()override;
 
 
-
+	
+	std::string classname()override;
+	std::size_t getID()override;
 	/**
 	 * See IHexView::setParent
 	 */
-	void setParent(IViewContainer* container)override;
+	//void setParent(IViewContainer* container)override;
 
 	/**
 	 * See IHexView::getParent
 	 */
-	IViewContainer* getParent()const override;
+	//IViewContainer* getParent()const override;
 
 	/**
 	 * See IHexView::popOut
 	 */
-	void popOut()override;
+	//void popOut()override;
 };
 }//namespace erebus

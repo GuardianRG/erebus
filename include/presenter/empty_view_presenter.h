@@ -51,27 +51,27 @@ class EmptyViewPresenter :public IEmptyViewPresenter {
 	/**
 	 * See IEmptyViewPresenter::setView
 	 */
-	virtual void setView(IView* view) override;
+	virtual void setView(IView& view) override;
 
 	/**
 	 * See IEmptyViewPresenter::on_right_button_click
 	 */
-	virtual void on_right_button_click() override;
+	//virtual void on_right_button_click() override;
 
 	/**
 	 * See IEmptyViewPresenter::on_left_button_click
 	 */
-	virtual void on_left_button_click() override;
+	//virtual void on_left_button_click() override;
 
 	/**
 	 * See IEmptyViewPresenter::on_context_menu_close_click
 	 */
-	virtual void on_context_menu_close_click() override;
+	//virtual void on_context_menu_close_click() override;
 
 	/**
 	 * See IEmptyViewPresenter::on_context_menu_pop_out_click
 	 */
-	virtual void on_context_menu_pop_out_click() override;
+	//virtual void on_context_menu_pop_out_click() override;
 
 };
 }//namespace erbus

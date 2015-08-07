@@ -20,7 +20,8 @@ const std::string GTK_MainWindow::CLASSNAME="GTK_MainWindow";
 GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder)
 	: GTK_Window(cobject) {
-
+		
+		BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
 	isInitialized_=false;
 
 	base_=nullptr;
@@ -46,15 +47,13 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
-
+	
+	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
 }
 
 IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
 	if(!containsWidget(id))
 		return nullptr;
-
-	if(id==getID())
-		return this;
 
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
@@ -84,7 +83,7 @@ bool GTK_MainWindow::containsWidget(std::size_t id) {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 	LOG_ASSERT(gtk_l::get(),basicView_.get()!=nullptr);
 
-	if(id==getID()||basicView_->getID()==id)
+	if(basicView_->getID()==id)
 		return true;
 
 	return basicView_->containsWidget(id);

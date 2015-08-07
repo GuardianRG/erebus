@@ -9,6 +9,8 @@
 INIT_LOCATION;
 
 namespace erebus {
+	const std::string GTK_HexView::CLASSNAME="GTK_HexView";
+	
 GTK_HexView::GTK_HexView(BaseObjectType* cobject,
                          const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject,refBuilder) {
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating hex view '"<<this<<"'";
@@ -21,9 +23,16 @@ GTK_HexView::~GTK_HexView() {
 void GTK_HexView::setPresenter(std::unique_ptr<IHexViewPresenter> presenter) {
 	presenter_=std::move(presenter);
 }
-
+/*
 IViewPresenter& GTK_HexView::getPresenter() const {
 	return *(presenter_.get());
+}*/
+std::string GTK_HexView::classname() {
+	return CLASSNAME;
+}
+
+std::size_t GTK_HexView::getID() {
+	return reinterpret_cast<std::size_t>(this);
 }
 
 std::string GTK_HexView::getTitle() const {
@@ -33,7 +42,7 @@ std::string GTK_HexView::getTitle() const {
 void GTK_HexView::setTitle(std::string title) {
 	GTK_View::setTitle(title);
 }
-
+/*
 void GTK_HexView::showContextMenu() {
 	GTK_View::showContextMenu();
 }
@@ -62,5 +71,5 @@ void GTK_HexView::popOut() {
 
 void GTK_HexView::createContextMenu() {
 	GTK_View::createContextMenu();
-}
+}*/
 }//namespace erebus

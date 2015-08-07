@@ -16,7 +16,8 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_container_settings_propagator.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window_factory.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/glade_files.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_factory.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/glade_file.cc
 	PARENT_SCOPE
 )
 

@@ -50,7 +50,7 @@ class ViewWindowPresenter:public IViewWindowPresenter {
 	/**
 	 * See IViewWindowPresenter::setWindow
 	 */
-	virtual void setWindow(IWindow* window) override;
+	virtual void setWindow(IWindow& window) override;
 
 };
 

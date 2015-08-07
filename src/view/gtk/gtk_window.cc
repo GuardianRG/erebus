@@ -17,13 +17,10 @@ class IGUIManager;
 namespace erebus {
 
 GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Constructing "<<classname()<<" '"<<getID()<<"'";
-
 	guiManager_=nullptr;
 }
 
 GTK_Window::~GTK_Window() {
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Destructing "<<classname()<<" '"<<getID()<<"'";
 }
 
 void GTK_Window::setTitle(std::string title) {

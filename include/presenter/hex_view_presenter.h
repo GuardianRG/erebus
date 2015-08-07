@@ -47,27 +47,27 @@ class HexViewPresenter:public IHexViewPresenter {
 	/**
 	 * See IHexViewPresenter::setView
 	 */
-	virtual void setView(IView* view)override;
+	virtual void setView(IView& view)override;
 
 	/**
 	 * See IHexViewPresenter::on_right_button_click
 	 */
-	virtual void on_right_button_click()override;
+	//virtual void on_right_button_click()override;
 
 	/**
 	 * See IHexViewPresenter::on_left_button_click
 	 */
-	virtual void on_left_button_click()override;
+	//virtual void on_left_button_click()override;
 
 	/**
 	 * See IHexViewPresenter::on_context_menu_close_click
 	 */
-	virtual void on_context_menu_close_click()override;
+	//virtual void on_context_menu_close_click()override;
 
 	/**
 	 * See IHexViewPresenter::on_context_menu_pop_out_click
 	 */
-	virtual void on_context_menu_pop_out_click()override;
+	//virtual void on_context_menu_pop_out_click()override;
 
 };
 

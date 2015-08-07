@@ -59,7 +59,7 @@ std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer
 ) {
 	auto presenter=std::unique_ptr<IViewContainerPresenter>(std::make_unique<ViewContainerPresenter>());
 
-	return std::move(createViewContainer(manager,std::move(presenter),h_adjustment,v_adjustment));
+	return std::move(createViewContainer(manager,std::move(presenter),h_adjustment,v_adjustment,std::move(notebook)));
 }
 
 std::unique_ptr<GTK_ViewContainer> GTK_ViewContainerFactory::createViewContainer(

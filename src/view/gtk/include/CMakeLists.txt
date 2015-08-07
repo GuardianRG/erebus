@@ -14,6 +14,7 @@ set(HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_gui_manager.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window.h
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window_factory.h
-	${CMAKE_CURRENT_SOURCE_DIR}/glade_files.h
+	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_factory.h
+	${CMAKE_CURRENT_SOURCE_DIR}/glade_file.h
 	PARENT_SCOPE
 )

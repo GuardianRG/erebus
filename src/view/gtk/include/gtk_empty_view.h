@@ -25,9 +25,10 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	std::unique_ptr<IEmptyViewPresenter>	presenter_;
 
   protected:
-	IViewPresenter& getPresenter() const override;
+	//IViewPresenter& getPresenter() const override;
 
-  public:
+public:
+	static const std::string CLASSNAME;
 	/**
 	 * Constructor.
 	 *
@@ -73,7 +74,7 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	/**
 	 * See GTK_View::createContextMenu
 	 */
-	void createContextMenu() override;
+	//void createContextMenu() override;
 
 	/**
 	 * Sets the presenter.
@@ -81,41 +82,34 @@ class GTK_EmptyView:public GTK_View,public IEmptyView  {
 	 * @param presenter the presenter of this view.
 	 */
 	void setPresenter(std::unique_ptr<IEmptyViewPresenter> presenter);
-
-	/**
-	 * See IEmptyView::getTitle
-	 */
-	std::string getTitle()const override;
-
-	/**
-	 * See IEmptyView::setTitle
-	 */
-	void setTitle(std::string title)override;
+	
+	std::string classname()override;
+	std::size_t getID()override;
 
 	/**
 	 * See IEmptyView::showContextMenu
 	 */
-	void showContextMenu()override;
+	//void showContextMenu()override;
 
 	/**
 	 * See IEmptyView::close
 	 */
-	void close()override;
+	//void close()override;
 
 	/**
 	 * See IEmptyView::setParent
 	 */
-	void setParent(IViewContainer* container)override;
+	//void setParent(IViewContainer* container)override;
 
 	/**
 	 * See IEmptyView::getParent
 	 */
-	IViewContainer* getParent() const override;
+	//IViewContainer* getParent() const override;
 
 	/**
 	 * See IEmptyView::popOut
 	 */
-	void popOut()override;
+	//void popOut()override;
 
 
 };

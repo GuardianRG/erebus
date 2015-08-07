@@ -56,7 +56,7 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	/**
 	 * See IMainWindowPresenter::setWindow
 	 */
-	virtual void setWindow(IWindow* window) override;
+	virtual void setWindow(IWindow& window) override;
 
 	/**
 	 * See IMainWindowPresenter::on_menu_view_save_click

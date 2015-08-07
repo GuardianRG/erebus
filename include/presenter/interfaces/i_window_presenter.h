@@ -23,6 +23,6 @@ class IWindowPresenter {
 	 *
 	 * @param window to operate on
 	 */
-	virtual void setWindow(IWindow* window) =0;
+	virtual void setWindow(IWindow& window) =0;
 };
 }//namespace erbus

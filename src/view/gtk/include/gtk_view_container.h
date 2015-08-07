@@ -8,15 +8,19 @@
 #include <gtkmm/menuitem.h>
 #include <gtkmm/notebook.h>
 #include <gtkmm/viewport.h>
+#include <gtkmm/separatormenuitem.h>
 
 #include <memory>
 
 #include <view/interfaces/i_view_container.h>
 
+#include <view/view_type.h>
+
 namespace erebus {
 class IViewContainerPresenter;
 class IGUIManager;
 class IGUIObject;
+class GTK_View;
 }
 
 namespace erebus {
@@ -34,30 +38,35 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	std::unique_ptr<GTK_ViewContainer>		child1_;
 	std::unique_ptr<GTK_ViewContainer>		child2_;
 	std::unique_ptr<Gtk::MenuItem>			joinItem_;
+	std::unique_ptr<Gtk::MenuItem>			viewItem_;
+	std::unique_ptr<Gtk::SeparatorMenuItem>		separator_;
+	std::unique_ptr<Gtk::Notebook>			notebook_;
 
 	int 						timeBuffer_;
 	int 						clickBuffer_;
 	bool						isSplitted_;
 
 	void buildContextMenu();
+	void updateContextMenu();
 
 	bool on_button_press_event(GdkEventButton *ev) override;
 
 
 
-	//std::unique_ptr<Gtk::Notebook>			notebook_;
+	//
 
 	//
 
 
-
+	void addView(GTK_View& view);
 	void split();
 	//void sanityCheck();
 
 	void on_context_menu_join_click();
 	void on_context_menu_split_horizontal_click();
 	void on_context_menu_split_vertical_click();
-	//void on_context_menu_add_view_empty_view_click();
+	
+	void on_context_menu_add_empty_view_click();
 	//void on_context_menu_add_view_hex_view_click();
 
   public:
@@ -161,7 +170,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	/**
 	 * See IViewContainer::addView(ViewType view)
 	 */
-	//void addView(ViewType type)override;
+	void addView(ViewType type)override;
 
 	/**
 	 * See IViewContainer::isSplitted

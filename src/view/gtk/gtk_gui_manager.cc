@@ -12,7 +12,6 @@
 #include <presenter/interfaces/i_main_window_presenter.h>
 #include <view/interfaces/i_gui_object.h>
 
-#include <glade_files.h>
 #include <presenter/main_window_presenter.h>
 #include <gtk_main_window.h>
 #include <gtk_window.h>

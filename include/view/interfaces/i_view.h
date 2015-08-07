@@ -3,9 +3,11 @@
 #include <string>
 #include <memory>
 
-#include <view/interfaces/i_view.h>
-#include <view/interfaces/i_view_container.h>
-#include <view/interfaces/i_gui_manager.h>
+#include <view/interfaces/i_gui_object.h>
+
+namespace erebus {
+	class IGUIManager;
+}
 
 namespace erebus {
 
@@ -14,7 +16,7 @@ class IViewPresenter;
 /**
  * This class is the interface for every view.
  */
-class IView {
+class IView:public IGUIObject {
   public:
 	/**
 	 * Destructor.
@@ -43,33 +45,32 @@ class IView {
 	 * The context menu contains the special entries for the view
 	 * as well as the standard entries.
 	 */
-	virtual void showContextMenu()=0;
+	//virtual void showContextMenu()=0;
 
-	virtual void setGUIManager(IGUIManager* manager)=0;
 
 	/**
 	 * Closes the view.
 	 */
-	virtual void close()=0;
+	//virtual void close()=0;
 
 	/**
 	 * Sets the container in which the view is contained.
 	 *
 	 * @param container container of the view
 	 */
-	virtual void setParent(IViewContainer* container)=0;
+	//virtual void setParent(IViewContainer* container)=0;
 
 	/**
 	 * Returns the container in which the view is contained.
 	 *
 	 * @return container in which the view is contained.
 	 */
-	virtual IViewContainer* getParent() const=0;
+	//virtual IViewContainer* getParent() const=0;
 
 	/**
 	 * Moves the view to a new window.
 	 */
-	virtual void popOut()=0;
+	//virtual void popOut()=0;
 };
 
 }//namespace erbus

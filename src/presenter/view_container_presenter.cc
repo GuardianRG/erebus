@@ -6,6 +6,7 @@
 #include <view/interfaces/i_gui_manager.h>
 
 #include <presenter/presenter_logger.h>
+#include <view/view_type.h>
 
 INIT_LOCATION;
 
@@ -57,12 +58,13 @@ void ViewContainerPresenter::on_context_menu_split_vertical_click() {
 
 	container_->splitVertical();
 }
-/*
+
 void ViewContainerPresenter::on_context_menu_add_view_click(ViewType type) {
-	assert(container_!=nullptr);
+	LOG_ASSERT(presenter_l::get(),container_!=nullptr);
+	
 	container_->addView(type);
 }
-*/
+
 void ViewContainerPresenter::setViewContainer(IViewContainer* container) {
 	LOG_ASSERT(presenter_l::get(),container!=nullptr);
 	container_=container;

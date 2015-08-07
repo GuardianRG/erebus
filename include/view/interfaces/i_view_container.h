@@ -5,7 +5,7 @@
 #include <view/interfaces/i_container.h>
 
 namespace erebus {
-
+enum class ViewType;
 class IGUIManager;
 
 }
@@ -97,7 +97,7 @@ class IViewContainer:public IContainer {
 	 *
 	 * @param type type of the view to add
 	 */
-	//virtual void addView(ViewType type)=0;
+	virtual void addView(ViewType type)=0;
 
 	/**
 	 * Pops the view out to a new window.

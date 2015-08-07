@@ -1,5 +1,7 @@
 #include <presenter/main_window_presenter.h>
 
+#include <stdexcept>
+
 #include <view/interfaces/i_window.h>
 #include <view/interfaces/i_main_window.h>
 
@@ -30,9 +32,13 @@ MainWindowPresenter& MainWindowPresenter::operator=(MainWindowPresenter&& obj) {
 	return *this;
 }
 
-void MainWindowPresenter::setWindow(IWindow* window) {
-	mainWindow_=dynamic_cast<IMainWindow*>(window);
-	LOG_ASSERT(presenter_l::get(),mainWindow_!=0);
+void MainWindowPresenter::setWindow(IWindow& window) {
+	try {
+		mainWindow_=&(dynamic_cast<IMainWindow&>(window));
+	}
+	catch(const std::bad_cast& e) {
+		LOG_ASSERT(presenter_l::get(),false);
+	}
 }
 
 void MainWindowPresenter::on_menu_view_save_click() {

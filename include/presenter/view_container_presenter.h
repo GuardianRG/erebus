@@ -4,6 +4,7 @@
 
 namespace erebus {
 class IViewContainer;
+enum class ViewType;
 }
 
 namespace erebus {
@@ -89,6 +90,6 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	/**
 	 * See IViewContainerPresenter::on_context_menu_add_view_click
 	 */
-	//virtual void on_context_menu_add_view_click(ViewType type)override;
+	virtual void on_context_menu_add_view_click(ViewType type)override;
 };
 }//namespace erbus

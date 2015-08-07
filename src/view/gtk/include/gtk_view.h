@@ -19,15 +19,15 @@ namespace erebus {
  * that allows it to be created by a builder.
  */
 class GTK_View:public Gtk::Viewport,virtual public IView {
-	IViewContainer*			parent_;
+	//IViewContainer*			parent_;
 
 	std::string 			title_;
 
-	int 				timeBuffer_;
-	int				clickBuffer_;
+	//int 				timeBuffer_;
+	//int				clickBuffer_;
 
-	void on_context_menu_pop_out_click();
-	void on_context_menu_close_click();
+	//void on_context_menu_pop_out_click();
+	//void on_context_menu_close_click();
 
   protected:
 	IGUIManager*	guiManager_;
@@ -35,12 +35,12 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	/**
 	 * The context menu to show.
 	 */
-	std::unique_ptr<Gtk::Menu>	popupMenu_;
+	//std::unique_ptr<Gtk::Menu>	popupMenu_;
 
 	/**
 	 * Returns the presenter.
 	 */
-	virtual IViewPresenter& getPresenter() const=0;
+	//virtual IViewPresenter& getPresenter() const=0;
 
   public:
 	/**
@@ -92,41 +92,43 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 
 
 
-	void setGUIManager(IGUIManager* manager)override;
+	void setGUIManager(IGUIManager& manager)override;
+	
+	IGUIManager& getGUIManager()override;
 	/**
 	 * See IView::setViewContainer
 	 */
-	virtual void setParent(IViewContainer* container) override;
+	//virtual void setParent(IViewContainer* container) override;
 
 	/**
 	 * See IView::close
 	 */
-	virtual void close() override;
+	//virtual void close() override;
 
 	/**
 	 * See IView::popOut
 	 */
-	virtual void popOut() override;
+	//virtual void popOut() override;
 
 	/**
 	 * See IView::setTitle
 	 */
-	virtual void setTitle(std::string title) override;
+	void setTitle(std::string title) override;
 
 	/**
 	 * See IView::getTitle
 	 */
-	virtual std::string getTitle() const override;
+	std::string getTitle() const override;
 
 	/**
 	 * See IView::getViewContainer
 	 */
-	virtual IViewContainer* getParent() const;
+	//virtual IViewContainer* getParent() const;
 
 	/**
 	 * See IView::showContextMenu
 	 */
-	virtual void showContextMenu()override;
+	//virtual void showContextMenu()override;
 
 
 	/**
@@ -158,17 +160,17 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 * popupMenu_->show_all()
 	 *
 	 */
-	virtual void createContextMenu();
+	//virtual void createContextMenu();
 
 	/**
 	 * Gets called by a click on the view.
 	 */
-	bool on_button_press_event(GdkEventButton *ev);
+	//bool on_button_press_event(GdkEventButton *ev);
 
 	/**
 	 * Gets called when the parent has changed (it was dragged)
 	 */
-	void on_my_parent_changed(Gtk::Widget* previous_parent);
+	//void on_my_parent_changed(Gtk::Widget* previous_parent);
 
 };
 
