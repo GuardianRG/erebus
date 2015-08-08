@@ -23,6 +23,9 @@ std::string GladeFile::getFile(ViewType type) {
 	case ViewType::EMPTY_VIEW:
 		return "resources/empty_view.glade";
 		break;
+	case ViewType::HEX_VIEW:
+		return "resources/hex_view.glade";
+		break;
 	default:
 		//The default case gets asserted because if control flow comes to this
 		//it means i forgot a case.

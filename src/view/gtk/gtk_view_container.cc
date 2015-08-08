@@ -25,6 +25,8 @@
 #include <empty_view_presenter.h>
 #include <gtk_view.h>
 #include <gtk_view_factory.h>
+#include <gtk_hex_view.h>
+#include <hex_view_presenter.h>
 #include <gtk_empty_view.h>
 
 INIT_LOCATION;
@@ -218,6 +220,13 @@ void GTK_ViewContainer::buildContextMenu() {
 	empty_view->signal_activate().
 	connect(sigc::mem_fun(*this,
 	                      &GTK_ViewContainer::on_context_menu_add_empty_view_click) );
+	
+	auto hex_view = Gtk::manage(new Gtk::MenuItem{"Hex View"});
+	view_menu->append(*hex_view);
+	hex_view->signal_activate().
+	connect(sigc::mem_fun(*this,
+			      &GTK_ViewContainer::on_context_menu_add_hex_view_click) );
+	
 	add_view->set_submenu(*view_menu);
 
 	popupMenu_->append(*separator_);
@@ -327,6 +336,12 @@ void GTK_ViewContainer::on_context_menu_add_empty_view_click() {
 	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
 
 	presenter_->on_context_menu_add_view_click(ViewType::EMPTY_VIEW);
+}
+
+void GTK_ViewContainer::on_context_menu_add_hex_view_click() {
+	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
+	
+	presenter_->on_context_menu_add_view_click(ViewType::HEX_VIEW);
 }
 
 void GTK_ViewContainer::on_context_menu_join_click() {
@@ -505,6 +520,15 @@ void GTK_ViewContainer::addView(ViewType type) {
 
 		auto view=GTK_ViewFactory::createView<GTK_EmptyView,EmptyViewPresenter>(*guiManager_,
 		          ViewType::EMPTY_VIEW);
+		view->setTitle(title);
+		addViewPr(*view);
+		break;
+	}
+	case ViewType::HEX_VIEW: {
+		auto title=std::string{"Hex View"};
+		
+		auto view=GTK_ViewFactory::createView<GTK_HexView,HexViewPresenter>(*guiManager_,
+											ViewType::HEX_VIEW);
 		view->setTitle(title);
 		addViewPr(*view);
 		break;
