@@ -9,13 +9,13 @@
 #include <memory>
 #include <iostream>
 
-#include <presenter/interfaces/i_view_window_presenter.h>
-#include <presenter/interfaces/i_view_container_presenter.h>
-#include <view/interfaces/i_view.h>
+#include <i_view_window_presenter.h>
+#include <i_view_container_presenter.h>
+#include <i_view.h>
 
 #include <gtk_view_container.h>
 #include <view_container_presenter.h>
-#include <view/view_type.h>
+#include <view_type.h>
 #include <gtk_view_container_factory.h>
 #include <gtk_logger.h>
 
@@ -23,8 +23,8 @@ INIT_LOCATION;
 
 namespace erebus  {
 
-
 const std::string 	GTK_ViewWindow::CLASSNAME="GTK_ViewWindow";
+
 GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder
                               ):GTK_Window(cobject) {
@@ -37,14 +37,19 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
 	LOG_ASSERT_GTK(base_!=nullptr);
 
 	setPreferredSize(600,400);
-
+	
+	//This handler has to be connected since when clicking on the close button
+	//only the hide method gets called. this way the window and its constructors
+	//and views would be destroyed only after the whole application gets closed.
+	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
+	
+	show_all_children();
 }
 
 void GTK_ViewWindow::initialize(IGUIManager& manager) {
 	LOG_ASSERT(gtk_l::get(),!isInitialized_);
 
 	setGUIManager(manager);
-
 
 	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>
 	                              (manager,
@@ -62,14 +67,14 @@ GTK_ViewWindow::~GTK_ViewWindow() {
 	LOG_DESTRUCTOR;
 }
 
-
-
 std::string GTK_ViewWindow::classname() {
 	return "GTK_ViewWindow";
 }
 
 void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
                                   presenter) {
+	LOG_ASSERT_GTK(presenter.get()!=nullptr);
+	
 	presenter_=std::move(presenter);
 }
 

@@ -13,7 +13,6 @@ set(SOURCE
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_gui_manager.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_view_window.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window.cc
-	${CMAKE_CURRENT_SOURCE_DIR}/gtk_window_factory.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/glade_file.cc
 	PARENT_SCOPE
 )

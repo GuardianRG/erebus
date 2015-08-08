@@ -1,11 +1,13 @@
 #include <gtk_main_window.h>
 
+#include <gtkmm/viewport.h>
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
+
 #include <memory>
 
-#include <gtkmm/viewport.h>
-
-#include <presenter/interfaces/i_main_window_presenter.h>
-#include <view/interfaces/i_gui_manager.h>
+#include <i_main_window_presenter.h>
+#include <i_gui_manager.h>
 
 #include <gtk_logger.h>
 #include <gtk_view_container_factory.h>
@@ -27,7 +29,7 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 	isInitialized_=false;
 
 	base_=nullptr;
-	refBuilder->get_widget("base_view",base_);
+	refBuilder->get_widget("basic_viewport",base_);
 	LOG_ASSERT(gtk_l::get(),base_!=nullptr);
 
 	Gtk::MenuItem* view_save;
@@ -37,18 +39,6 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 
 
 	show_all_children();
-
-
-
-	/*signal_hide().connect(sigc::mem_fun(*this,&GTK_MainWindow::close) );
-
-
-
-	Gtk::MenuItem* view_show_tabs;
-	refBuilder->get_widget("view_show_tabs",view_show_tabs);
-	view_show_tabs->signal_activate().
-	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_show_tabs_click));*/
-
 }
 
 GTK_MainWindow::~GTK_MainWindow() {
@@ -56,10 +46,11 @@ GTK_MainWindow::~GTK_MainWindow() {
 }
 
 IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
+	LOG_ASSERT_GTK(isInitialized_);
+	
 	if(!containsWidget(id))
 		return nullptr;
 
-	LOG_ASSERT(gtk_l::get(),isInitialized_);
 	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
 
 	if(basicViewContainer_->getID()==id)
@@ -68,6 +59,7 @@ IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
 }
 
 void GTK_MainWindow::on_menu_view_new_window_click() {
+	LOG_ASSERT_GTK(isInitialized_);
 	LOG_ASSERT(gtk_l::get(),presenter_.get()!=nullptr);
 
 	presenter_->on_menu_view_new_window_click();
@@ -78,9 +70,7 @@ void GTK_MainWindow::initialize(IGUIManager& manager) {
 
 	setGUIManager(manager);
 
-
-	basicViewContainer_=std::move(GTK_ViewContainerFactory::template
-	                              createViewContainer<ViewContainerPresenter>
+	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>
 	                              (manager,
 	                               base_->get_hadjustment(),
 	                               base_->get_vadjustment()));
@@ -102,19 +92,10 @@ bool GTK_MainWindow::containsWidget(std::size_t id) {
 	return basicViewContainer_->containsWidget(id);
 }
 
-/*void GTK_MainWindow::on_menu_view_save_click() {
-	//presenter_->on_menu_view_save_click();
-}
-
-void GTK_MainWindow::on_menu_view_show_tabs_click() {
-	//presenter_->on_menu_view_show_tabs_click();
-}*/
-
 void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter>
                                   presenter) {
 	presenter_=std::move(presenter);
 }
-
 
 std::string GTK_MainWindow::classname() {
 	return CLASSNAME;

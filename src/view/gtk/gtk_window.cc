@@ -21,6 +21,7 @@ GTK_Window::GTK_Window(BaseObjectType* cobject):Gtk::Window(cobject) {
 }
 
 GTK_Window::~GTK_Window() {
+	
 }
 
 void GTK_Window::setTitle(const std::string& title) {
@@ -64,7 +65,7 @@ std::string GTK_Window::classname() {
 void GTK_Window::close() {
 	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Closing window '"<<getID()<<"'";
+	LOG_GTK(normal)<<"Closing window '"<<getID()<<"'";
 	Gtk::Window::close();
 	guiManager_->destroyWindow(*this);
 }

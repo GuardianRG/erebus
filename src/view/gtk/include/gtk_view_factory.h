@@ -33,7 +33,7 @@ class GTK_ViewFactory {
 	 * The ownership behavior is a little bit weird because of gtkmm. As long you do not
 	 * have added the view to a container the ownership remains to this function (it is saved
 	 * within a static variable inside this function). Therefore you have to add the created view to
-	 * ca ontainer before calling this method again. Otherwise the view will be deleted and the pointer
+	 * a container before calling this method again. Otherwise the view will be deleted and the pointer
 	 * points to deleted memory.
 	 *
 	 * First template argument: The view you want to create. Must be derived From GTK_View.

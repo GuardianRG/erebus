@@ -51,6 +51,7 @@ GTK_ViewContainer::GTK_ViewContainer(
 	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event),
 	                                    false);
 #endif
+	
 	if(notebook.get()==nullptr) {
 		notebook_=std::make_unique<Gtk::Notebook>();
 	} else {
@@ -71,13 +72,13 @@ GTK_ViewContainer::~GTK_ViewContainer() {
 }
 
 void GTK_ViewContainer::on_context_menu_split_horizontal_click() {
-	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
+	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
 
 	presenter_->on_context_menu_split_horizontal_click();
 }
 
 void GTK_ViewContainer::on_context_menu_split_vertical_click() {
-	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
+	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
 
 	presenter_->on_context_menu_split_vertical_click();
 }
@@ -86,26 +87,28 @@ void GTK_ViewContainer::showContextMenu() {
 	LOG_ASSERT(gtk_l::get(), popupMenu_.get()!=nullptr);
 
 	updateContextMenu();
+	
+	//The following has to be here and not in updateContextMenu
+	//since it should only get executed when an actual click was performed
 	auto parent=guiManager_->getParentOf(getID());
 	if(parent!=nullptr) {
 		if(parent->classname()!=GTK_ViewContainer::CLASSNAME)
 			joinItem_->set_sensitive(false);
 	} else {
-		BOOST_LOG_SEV(gtk_l::get(),warning)
-		        <<LOCATION<<"There is somewehere a bug in the getParentOf() method";
+		LOG_GTK(warning)<<"There is somewehere a bug in the getParentOf() method";
 	}
+	
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
 void GTK_ViewContainer::updateContextMenu() {
 	if(isSplitted())
 		LOG_ASSERT(gtk_l::get(),false);
+	
 	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
 
 	static int currentPage=-2;
 	if(notebook_->get_n_pages()>=1) {
-
-
 		if(currentPage!=notebook_->get_current_page()) {
 			buildContextMenu();
 			currentPage=notebook_->get_current_page();
@@ -139,6 +142,7 @@ void GTK_ViewContainer::updateContextMenu() {
 		separator_->hide();
 		separator1_->hide();
 	}
+	
 }
 
 void GTK_ViewContainer::addView(IView& view) {
@@ -147,6 +151,7 @@ void GTK_ViewContainer::addView(IView& view) {
 		addViewPr(view_c);
 	} catch(const std::bad_cast& e) {
 		LOG_GTK(error)<<"Cast failed.";
+		throw;
 	}
 }
 
@@ -259,7 +264,7 @@ void GTK_ViewContainer::join() {
 	isSplitted_=false;
 
 	LOG_GTK(normal)<<"Joining view container '"<<getID()<<"'";
-	try {
+	
 		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
 		LOG_ASSERT(gtk_l::get(),child1_.get()!=nullptr);
 		LOG_ASSERT(gtk_l::get(),child2_.get()!=nullptr);
@@ -314,17 +319,7 @@ void GTK_ViewContainer::join() {
 		show_all_children();
 
 		add(*notebook_);
-	} catch(const std::exception& e) {
-		isSplitted_=true;
-		BOOST_LOG_SEV(gtk_l::get(),error)<<"Joining the view container '"<<getID()<<"' failed. ("<<e.what()
-		                                 <<")";
-		guiManager_->showMessageDialog(getID(),"Joining the container failes!",e.what(),ErrorLevel::ERROR);
-	} catch(const Glib::Exception& e) {
-		isSplitted_=true;
-		BOOST_LOG_SEV(gtk_l::get(),error)<<"Joining the view container '"<<getID()<<"' failed. ("<<e.what()
-		                                 <<")";
-		guiManager_->showMessageDialog(getID(),"Joining the container failes!",e.what(),ErrorLevel::ERROR);
-	}
+		
 	show_all_children();
 }
 
@@ -373,6 +368,7 @@ void GTK_ViewContainer::removeView(IView& view) {
 		notebook_->remove(buffer);
 	} catch(std::bad_cast e) {
 		LOG_GTK(error)<<"Cast failed.";
+		throw;
 	}
 	show_all_children();
 }
@@ -418,7 +414,7 @@ bool GTK_ViewContainer::containsWidget(std::size_t id) {
 		for(auto it:notebook_->get_children()) {
 			auto buffer=dynamic_cast<IGUIObject*>(it);
 			if(buffer==0) {
-				BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed.";
+				LOG_GTK(error)<<"Cast failed.";
 				continue;
 			} else if(buffer->getID()==id) {
 				return true;
@@ -434,6 +430,7 @@ void GTK_ViewContainer::closeView(IView& view) {
 		notebook_->remove_page(buffer);
 	} catch(std::bad_cast e) {
 		LOG_GTK(error)<<"Cast failed.";
+		throw;
 	}
 }
 
@@ -452,7 +449,7 @@ void GTK_ViewContainer::split() {
 	}
 
 	isSplitted_=true;
-	try {
+	
 		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
 		LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
 		LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
@@ -470,20 +467,7 @@ void GTK_ViewContainer::split() {
 		paned_->pack2(*(child2_.get()),true,false);
 
 		add(*paned_);
-
-	} catch(const std::exception& e) {
-		isSplitted_=false;
-		BOOST_LOG_SEV(gtk_l::get(),error)<<"Splitting the view container '"<<getID()
-		                                 <<"' failed. ("<<e.what()<<")";
-		guiManager_->showMessageDialog(getID(),"Splitting the container failes!",e.what(),
-		                               ErrorLevel::ERROR);
-	} catch(const Glib::Exception& e) {
-		isSplitted_=false;
-		BOOST_LOG_SEV(gtk_l::get(),error)<<"Splitting the view container '"<<getID()
-		                                 <<"' failed. ("<<e.what()<<")";
-		guiManager_->showMessageDialog(getID(),"Splitting the container failes!",e.what(),
-		                               ErrorLevel::ERROR);
-	}
+		
 	show_all_children();
 }
 
@@ -491,8 +475,7 @@ void GTK_ViewContainer::splitHorizontal() {
 	if(isSplitted())
 		return;
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)
-	        <<LOCATION<<"Splitting "<<classname()<<" '"<<getID()<<"' horizontally";
+	LOG_GTK(normal)<<"Splitting "<<classname()<<" '"<<getID()<<"' horizontally";
 
 	paned_=std::make_unique<Gtk::Paned>( Gtk::ORIENTATION_HORIZONTAL);
 	auto rec=get_allocation();
@@ -504,8 +487,7 @@ void GTK_ViewContainer::splitVertical() {
 	if(isSplitted())
 		return;
 
-	BOOST_LOG_SEV(gtk_l::get(),normal)
-	        <<LOCATION<<"Splitting "<<classname()<<" '"<<getID()<<"' vertically";
+	LOG_GTK(normal)<<"Splitting "<<classname()<<" '"<<getID()<<"' vertically";
 
 	paned_=std::make_unique<Gtk::Paned>( Gtk::ORIENTATION_VERTICAL);
 	auto rec=get_allocation();
@@ -521,7 +503,6 @@ void GTK_ViewContainer::addView(ViewType type) {
 	case ViewType::EMPTY_VIEW: {
 		auto title=std::string{"Empty View"};
 
-		//auto view=GTK_ViewFactory::createEmptyView(*guiManager_);
 		auto view=GTK_ViewFactory::createView<GTK_EmptyView,EmptyViewPresenter>(*guiManager_,
 		          ViewType::EMPTY_VIEW);
 		view->setTitle(title);
@@ -574,6 +555,7 @@ IGUIObject* GTK_ViewContainer::getParentOf(std::size_t id) {
 
 	return nullptr;
 }
+
 std::size_t GTK_ViewContainer::getID() {
 	return reinterpret_cast<std::size_t>(this);
 }
