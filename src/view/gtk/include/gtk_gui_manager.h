@@ -7,12 +7,14 @@
 #include <vector>
 #include <memory>
 
-#include <view/interfaces/i_gui_manager.h>
+#include <i_gui_manager.h>
 
 namespace erebus {
+
 class IWindow;
 class GTK_Window;
 class IViewWindow;
+
 }
 
 namespace erebus {
@@ -36,6 +38,8 @@ class GTK_GUIManager:public IGUIManager {
   public:
 	/**
 	 * The package name of this application.
+	 *
+	 * This is needed to make this application a single instance or not.
 	 */
 	static const std::string STD_APP_ID;
 
@@ -47,28 +51,28 @@ class GTK_GUIManager:public IGUIManager {
 	/**
 	 * Copy constructor.
 	 *
-	 * Copying the whole gui has no sense.
+	 * Copying the whole gui makes no sense.
 	 */
 	GTK_GUIManager(const GTK_GUIManager &obj)=delete;
 
 	/**
 	 * Move Constructor.
 	 *
-	 * Moving the whole gui has no sense.
+	 * Moving the whole gui makes no sense.
 	 */
 	GTK_GUIManager( GTK_GUIManager&& )=delete;
 
 	/**
 	 * Copy assignment operator.
 	 *
-	 * Copying the whole gui has no sense.
+	 * Copying the whole gui makes no sense.
 	 */
 	GTK_GUIManager& operator=(const GTK_GUIManager&)=delete;
 
 	/**
 	 * Move assignment operator.
 	 *
-	 * Moving the whole gui has no sense.
+	 * Moving the whole gui makes no sense.
 	 */
 	GTK_GUIManager& operator=(GTK_GUIManager&&)=delete;
 
@@ -89,45 +93,56 @@ class GTK_GUIManager:public IGUIManager {
 	void initialize(int argc,char** argv);
 
 	/**
-	 * See IGUIManager::getParentOf
+	 * See IGUIManager::getParentOf.
 	 */
 	IGUIObject* getParentOf(std::size_t id)override;
 
 	/**
-	 * See IGUIManager::showMessageDialog
+	 * See IGUIManager::showMessageDialog.
+	 *
+	 * The purpose of this method is originally that no window is locked when
+	 * a message box is shown. but gtkmm does not allow such behavior. So all windows will be
+	 * blocked.
 	 */
 	void showMessageDialog(std::string primaryText,std::string secondaryText,
 	                       ErrorLevel errorLevel)override;
 
 	/**
-	 * See IGUIManager::showMessageDialog
+	 * See IGUIManager::showMessageDialog.
 	 */
 	void showMessageDialog(std::size_t id,std::string primaryText,std::string secondaryText,
 	                       ErrorLevel errorLevel)override;
 
-
-	void moveViewToNewWindow(IView& view)override;
 	/**
-	 * See IGUIManager::runGUI
+	 * See IGUIManager::moveViewToNewWindow.
+	 */
+	void moveViewToNewWindow(IView& view)override;
+
+	/**
+	 * See IGUIManager::runGUI.
 	 */
 	void runGUI()override;
 
 	/**
-	 * See IGUIManager::joinContainer
+	 * See IGUIManager::joinContainer.
 	 */
 	void joinContainer(std::size_t id)override;
 
+	/**
+	 * See IGUIManager::createNewViewWindow.
+	 */
 	IViewWindow& createNewViewWindow()override;
 
 	/**
-	 * See IGUIManager::addWindow
+	 * See IGUIManager::addWindow.
 	 */
 	IWindow& addWindow(std::unique_ptr<IWindow> window,bool makePersistent)override;
 
 	/**
-	 * See IGUIManager::destroyWindow
+	 * See IGUIManager::destroyWindow.
 	 */
 	void destroyWindow(IWindow& window)override;
 
 };
+
 }//namespace erebus

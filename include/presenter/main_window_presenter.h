@@ -16,7 +16,7 @@ namespace erebus {
  */
 class MainWindowPresenter:public IMainWindowPresenter {
 	IMainWindow*	mainWindow_;
-	
+
   public:
 	/**
 	 * Constructor.
@@ -57,12 +57,12 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	 * See IMainWindowPresenter::setWindow.
 	 */
 	virtual void setWindow(IWindow& window) override;
-	
+
 	/**
 	 * See IMainWindowPresenter::on_menu_view_new_window_click.
 	 */
 	virtual void on_menu_view_new_window_click()override;
-	
+
 };
 
 }//namespace erbus

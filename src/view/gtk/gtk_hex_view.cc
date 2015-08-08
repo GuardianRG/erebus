@@ -5,6 +5,7 @@
 
 #include <gtk_view.h>
 #include <gtk_logger.h>
+#include <view_type.h>
 
 INIT_LOCATION;
 
@@ -12,7 +13,7 @@ namespace erebus {
 const std::string GTK_HexView::CLASSNAME="GTK_HexView";
 
 GTK_HexView::GTK_HexView(BaseObjectType* cobject,
-                         const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject,refBuilder) {
+                         const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject) {
 	BOOST_LOG_SEV(gtk_l::get(),normal)<<LOCATION<<"Creating hex view '"<<this<<"'";
 }
 
@@ -34,6 +35,7 @@ std::string GTK_HexView::classname() {
 std::size_t GTK_HexView::getID() {
 	return reinterpret_cast<std::size_t>(this);
 }
+
 
 /*
 void GTK_HexView::showContextMenu() {

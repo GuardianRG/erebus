@@ -3,8 +3,8 @@
 #include <presenter/interfaces/i_empty_view_presenter.h>
 
 namespace erebus {
-	class IView;
-	class IEmptyView;
+class IView;
+class IEmptyView;
 }
 
 namespace erebus {
@@ -14,7 +14,7 @@ namespace erebus {
  */
 class EmptyViewPresenter :public IEmptyViewPresenter {
 	IEmptyView* view_;
-	
+
   public:
 	/**
 	 * Constructor.

@@ -7,12 +7,13 @@
 
 #include <string>
 
-#include <view/interfaces/i_view.h>
-#include <presenter/interfaces/i_view_presenter.h>
-#include <view/interfaces/i_view_container.h>
-#include <view/interfaces/i_gui_manager.h>
+#include <i_view.h>
 
-#include <gtk_view_container.h>
+namespace erebus {
+
+class IGUIManager;
+
+}
 
 namespace erebus {
 
@@ -22,28 +23,10 @@ namespace erebus {
  * that allows it to be created by a builder.
  */
 class GTK_View:public Gtk::Viewport,virtual public IView {
-	//IViewContainer*			parent_;
-
 	std::string 			title_;
-
-	//int 				timeBuffer_;
-	//int				clickBuffer_;
-
-	//void on_context_menu_pop_out_click();
-	//void on_context_menu_close_click();
 
   protected:
 	IGUIManager*	guiManager_;
-
-	/**
-	 * The context menu to show.
-	 */
-	//std::unique_ptr<Gtk::Menu>	popupMenu_;
-
-	/**
-	 * Returns the presenter.
-	 */
-	//virtual IViewPresenter& getPresenter() const=0;
 
   public:
 	/**
@@ -52,12 +35,12 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 * This contructor is needed to create this widget from a builder.
 	 *
 	 * When derived this constructor should be called and not the constructor
-	 * of viewport. Otherwise import initilization cant be done.
+	 * of viewport.
 	 *
 	 * @param cobject used for creating this widget from a builder
 	 * @param refBuilder used for created this widget from a builder
 	 */
-	GTK_View(BaseObjectType* cobject, const Glib::RefPtr<Gtk::Builder>& refBuilder);
+	GTK_View(BaseObjectType* cobject);
 
 	/**
 	 * Copy constructor.
@@ -93,27 +76,25 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 */
 	virtual ~GTK_View();
 
+	/**
+	 * Creates a context menu and returns it.
+	 *
+	 * The created context menu gets shown by the container that this view is contained in.
+	 * This method should be overwritten.
+	 *
+	 * @return the context menu
+	 */
 	virtual std::unique_ptr<Gtk::Menu> createContextMenu();
 
-
-
+	/**
+	 * See IView::setGUIManager.
+	 */
 	void setGUIManager(IGUIManager& manager)override;
 
+	/**
+	 * See IView::getGUIManager.
+	 */
 	IGUIManager& getGUIManager()override;
-	/**
-	 * See IView::setViewContainer
-	 */
-	//virtual void setParent(IViewContainer* container) override;
-
-	/**
-	 * See IView::close
-	 */
-	//virtual void close() override;
-
-	/**
-	 * See IView::popOut
-	 */
-	//virtual void popOut() override;
 
 	/**
 	 * See IView::setTitle
@@ -124,58 +105,6 @@ class GTK_View:public Gtk::Viewport,virtual public IView {
 	 * See IView::getTitle
 	 */
 	std::string getTitle() const override;
-
-	/**
-	 * See IView::getViewContainer
-	 */
-	//virtual IViewContainer* getParent() const;
-
-	/**
-	 * See IView::showContextMenu
-	 */
-	//virtual void showContextMenu()override;
-
-
-	/**
-	 * Builds the custom context menu.
-	 *
-	 * This method should be overwritten by the derived class.
-	 *
-	 * In this method custom items can be added to the popup menu.
-	 * In order to do so you have to call the super createContextMenu method first,
-	 * e.g. GTK_View::createContextMenu.
-	 *
-	 * If you want to create a context menu like this:
-	 * -------
-	 * |Copy |
-	 * -------
-	 * |Paste|
-	 * ------------------
-	 * |standard entries|
-	 * ------------------
-	 *
-	 * The methode should look like this:
-	 *
-	 * GTK_View::createContextMenu()
-	 *
-	 * popupMenu_->prepend(paste)
-	 * popupMenu_->prepend(copy)
-	 *
-	 * popupMenu_->accelerate(*this)
-	 * popupMenu_->show_all()
-	 *
-	 */
-	//virtual void createContextMenu();
-
-	/**
-	 * Gets called by a click on the view.
-	 */
-	//bool on_button_press_event(GdkEventButton *ev);
-
-	/**
-	 * Gets called when the parent has changed (it was dragged)
-	 */
-	//void on_my_parent_changed(Gtk::Widget* previous_parent);
 
 };
 

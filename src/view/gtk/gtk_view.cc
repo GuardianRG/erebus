@@ -18,8 +18,7 @@ INIT_LOCATION;
 
 namespace erebus {
 
-GTK_View::GTK_View(BaseObjectType* cobject,
-                   const Glib::RefPtr<Gtk::Builder>& refBuilder): Gtk::Viewport(cobject) {
+GTK_View::GTK_View(BaseObjectType* cobject): Gtk::Viewport(cobject) {
 
 	/*	add_events(Gdk::BUTTON_PRESS_MASK );
 

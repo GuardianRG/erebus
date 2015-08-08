@@ -69,7 +69,9 @@ include_directories( ${Boost_INCLUDE_DIR} )
 
 #include header files
 include_directories(include)
+include_directories(include/exceptions)
 include_directories(include/view include/view/interfaces)
+include_directories(include/presenter include/presenter/interfaces)
 
 #set compileflags
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb -D_DEBUG_")

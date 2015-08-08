@@ -1,13 +1,12 @@
-#include <presenter/main_window_presenter.h>
+#include <main_window_presenter.h>
 
 #include <stdexcept>
 
-#include <view/interfaces/i_window.h>
-#include <view/interfaces/i_main_window.h>
-#include <view/interfaces/i_gui_manager.h>
+#include <i_window.h>
+#include <i_main_window.h>
+#include <i_gui_manager.h>
 
-#include <view/view_preferences_saver.h>
-#include <presenter/presenter_logger.h>
+#include <presenter_logger.h>
 
 INIT_LOCATION;
 
@@ -46,13 +45,5 @@ void MainWindowPresenter::on_menu_view_new_window_click() {
 
 	mainWindow_->getGUIManager().createNewViewWindow();
 }
-/*void MainWindowPresenter::on_menu_view_save_click() {
-
-}
-
-void MainWindowPresenter::on_menu_view_show_tabs_click() {
-
-}*/
-
 
 }//namespace erbus

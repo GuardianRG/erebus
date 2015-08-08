@@ -8,6 +8,7 @@
 namespace erebus {
 
 class IGUIManager;
+enum class ViewType;
 
 }
 

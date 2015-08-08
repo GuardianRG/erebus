@@ -13,14 +13,16 @@
 
 #include <memory>
 
-#include <presenter/interfaces/i_view_container_presenter.h>
-#include <view/interfaces/i_gui_manager.h>
-#include <view/interfaces/i_gui_object.h>
-#include <view/interfaces/i_view.h>
+#include <i_view_container_presenter.h>
+#include <i_gui_manager.h>
+#include <i_gui_object.h>
+#include <i_view.h>
 
 #include <gtk_logger.h>
 #include <gtk_view_container_factory.h>
-#include <view/view_type.h>
+#include <view_type.h>
+#include <view_container_presenter.h>
+#include <empty_view_presenter.h>
 #include <gtk_view.h>
 #include <gtk_view_factory.h>
 #include <gtk_empty_view.h>
@@ -457,9 +459,11 @@ void GTK_ViewContainer::split() {
 
 		Gtk::Container::remove(*notebook_);
 
-		child1_=GTK_ViewContainerFactory::createViewContainer(*guiManager_,get_hadjustment(),
+		child1_=GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>(*guiManager_,
+		        get_hadjustment(),
 		        get_vadjustment(),std::move(notebook_));
-		child2_=GTK_ViewContainerFactory::createViewContainer(*guiManager_,get_hadjustment(),
+		child2_=GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>(*guiManager_,
+		        get_hadjustment(),
 		        get_vadjustment());
 
 		paned_->pack1(*(child1_.get()),true,false);
@@ -517,7 +521,9 @@ void GTK_ViewContainer::addView(ViewType type) {
 	case ViewType::EMPTY_VIEW: {
 		auto title=std::string{"Empty View"};
 
-		auto view=GTK_ViewFactory::createEmptyView(*guiManager_);
+		//auto view=GTK_ViewFactory::createEmptyView(*guiManager_);
+		auto view=GTK_ViewFactory::createView<GTK_EmptyView,EmptyViewPresenter>(*guiManager_,
+		          ViewType::EMPTY_VIEW);
 		view->setTitle(title);
 		addViewPr(*view);
 		break;

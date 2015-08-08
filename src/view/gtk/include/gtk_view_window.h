@@ -20,6 +20,9 @@ class GTK_ViewContainer;
 
 namespace erebus {
 
+/**
+ * This class is a view window.
+ */
 class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	std::unique_ptr<IViewWindowPresenter>	presenter_;
 
@@ -27,9 +30,12 @@ class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	std::unique_ptr<GTK_ViewContainer>	basicViewContainer_;
 
 	bool 					isInitialized_;
-  protected:
-	IWindowPresenter& getPresenter();
+
   public:
+	/**
+	 * The classname that will be returned by GTK_ViewWindow::classname.
+	 */
+	static const std::string CLASSNAME;
 	/**
 	 * Constructor.
 	 */
@@ -46,7 +52,7 @@ class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Window cant be copied.
+	 * Cant be moved since Gtk::Window cant be moved.
 	 */
 	GTK_ViewWindow( GTK_ViewWindow&& )=delete;
 
@@ -60,7 +66,7 @@ class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Window cant be copied.
+	 * Cant be moved since Gtk::Window cant be moved.
 	 */
 	GTK_ViewWindow& operator=(GTK_ViewWindow&&)=delete;
 
@@ -69,27 +75,40 @@ class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	 */
 	~GTK_ViewWindow();
 
+
 	/**
 	 * See IViewWindow::setPresenter
 	 */
 	void setPresenter(std::unique_ptr<IViewWindowPresenter> presenter);
 
+	/**
+	 * Initializes the window.
+	 *
+	 * Should be called before every other method.
+	 *
+	 * @param manager the manager to use
+	 */
 	void initialize(IGUIManager& manager);
 
+	/**
+	 * See IViewWindow::addView.
+	 */
 	void addView(IView& view)override;
 
 	/**
-	 * See IViewWindow::classname
+	 * See IViewWindow::classname.
 	 */
 	virtual std::string classname()override;
 
 	/**
-	 * See IViewWindow::containsWidget
+	 * See IViewWindow::containsWidget.
 	 */
 	bool containsWidget(std::size_t id)override;
 
+	/**
+	 * See IViewWindow::getParentOf.
+	 */
 	IGUIObject* getParentOf(std::size_t id)override;
 };
-
 
 }//namespace erebus

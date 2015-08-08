@@ -12,7 +12,7 @@ namespace erebus {
  * This class is the base interface for a window presenter.
  */
 class IWindowPresenter {
-	
+
   public:
 	/**
 	 * Destructor.

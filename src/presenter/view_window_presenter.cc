@@ -1,8 +1,12 @@
-#include <presenter/view_window_presenter.h>
+#include <view_window_presenter.h>
 
-#include <assert.h>
+#include <stdexcept>
 
-#include <view/interfaces/i_view_window.h>
+#include <i_view_window.h>
+#include <presenter_logger.h>
+#include <i_window.h>
+
+INIT_LOCATION;
 
 namespace erebus {
 
@@ -27,8 +31,12 @@ ViewWindowPresenter& ViewWindowPresenter::operator=(ViewWindowPresenter&& obj) {
 }
 
 void ViewWindowPresenter::setWindow(IWindow& window) {
-	//viewWindow_=dynamic_cast<IViewWindow*>(window);
-	//assert(viewWindow_!=0);
+	try {
+		viewWindow_=&(dynamic_cast<IViewWindow&>(window));
+	} catch(const std::bad_cast& e) {
+		LOG_PRESENTER(error)<<"Cast failed.";
+		throw;
+	}
 }
 
 

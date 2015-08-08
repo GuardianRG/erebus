@@ -12,16 +12,17 @@
 
 #include <memory>
 
-#include <view/interfaces/i_view_container.h>
-
-#include <view/view_type.h>
+#include <i_view_container.h>
+#include <view_type.h>
 
 namespace erebus {
+
 class IViewContainerPresenter;
 class IGUIManager;
 class IGUIObject;
 class GTK_View;
 class IView;
+
 }
 
 namespace erebus {
@@ -53,13 +54,6 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 
 	bool on_button_press_event(GdkEventButton *ev) override;
 
-
-
-	//
-
-	//
-
-
 	void addViewPr(GTK_View& view);
 	void split();
 
@@ -68,12 +62,14 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	void on_context_menu_join_click();
 	void on_context_menu_split_horizontal_click();
 	void on_context_menu_split_vertical_click();
-
 	void on_context_menu_add_empty_view_click();
-	//void on_context_menu_add_view_hex_view_click();
 
   public:
+	/**
+	 * The classname that is returned by GTK_ViewContainer::classname.
+	 */
 	static const std::string CLASSNAME;
+
 	/**
 	 * Constructor.
 	 *
@@ -120,122 +116,104 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 */
 	~GTK_ViewContainer();
 
+
 	/**
-	 * See IViewContainer::setGUIManager
+	 * See IViewContainer::setGUIManager.
 	 */
 	void setGUIManager(IGUIManager& manager)override;
 
 	/**
-	 * See IViewContainer::getGUIManager
+	 * See IViewContainer::getGUIManager.
 	 */
 	IGUIManager& getGUIManager()override;
 
 	/**
-	 * See IViewContainer::getID
+	 * See IViewContainer::getID.
 	 */
 	std::size_t getID()override;
 
 	/**
-	 * See IViewContainer::getParentOf
+	 * See IViewContainer::getParentOf.
 	 */
 	IGUIObject* getParentOf(std::size_t id)override;
 
+	/**
+	 * See IViewContainer::getActiveView.
+	 */
 	IView* getActiveView()override;
 
+	/**
+	 * See IViewContainer::removeView.
+	 */
 	void removeView(IView& view)override;
 
 	/**
-	 * See IViewContainer::containsWidget
+	 * See IViewContainer::containsWidget.
 	 */
 	bool containsWidget(std::size_t id)override;
 
 	/**
-	 * See IViewContainer::classname
+	 * See IViewContainer::classname.
 	 */
 	std::string classname()override;
 
 	/**
 	 * Sets the presenter.
+	 *
+	 * @param presenter the presenter to set
 	 */
 	void setPresenter(std::unique_ptr<IViewContainerPresenter> presenter);
 
 	/**
-	 * See IViewContainer::splitHorizontal
+	 * See IViewContainer::splitHorizontal.
 	 */
 	void splitHorizontal() override;
 
 	/**
-	 * See IViewContainer::splitVertical
+	 * See IViewContainer::splitVertical.
 	 */
 	void splitVertical() override;
 
+	/**
+	 * See IViewContainer::closeActiveView.
+	 */
 	void closeActiveView()override;
 
 	/**
-	 * See IViewContainer::addView(IView* view)
+	 * See IViewContainer::addView(IView view).
 	 */
 	void addView(IView& view)override;
 
 	/**
-	 * See IViewContainer::addView(ViewType view)
+	 * See IViewContainer::addView(ViewType view).
 	 */
 	void addView(ViewType type)override;
 
 	/**
-	 * See IViewContainer::isSplitted
+	 * See IViewContainer::isSplitted.
 	 */
 	bool isSplitted()const override;
 
 	/**
-	 * See IViewContainer::closeView
+	 * See IViewContainer::closeView.
 	 */
 	void closeView(IView& view)override;
 
 	/**
-	 * See IViewContainer::showTabs
-	 */
-	//void showTabs(bool showTabs) override;
-
-	/**
-	 * See IViewContainer::showContextMenu
+	 * See IViewContainer::showContextMenu.
 	 */
 	void showContextMenu()override;
 
 	/**
-	 * See IViewContainer::closeView
-	 */
-	//void closeView(IView& view)override;
-
-	/**
-	 * See IViewContainer::join
+	 * See IViewContainer::join.
 	 */
 	void join() override;
 
 	/**
-	 * See IViewContainer::isEmpty
-	 */
-	//bool isEmpty(bool recursive)const override;
-
-	/**
-	 * See IViewContainer::popOutView
-	 */
-	//void popOutView(IView& view)override;
-
-	/**
-	 * See IViewContainer::isTopLevel
+	 * See IViewContainer::isTopLevel.
 	 */
 	bool isTopLevel()const override;
 
-	/**
-	 * Removes the view.
-	 *
-	 * @param view the view to remove.
-	 */
-	//void removeView(IView& view)override;
-
-	/**
-	 * Gets called when a mouseclick on this container occured.
-	 */
-
 };
+
 }//namespace erebus

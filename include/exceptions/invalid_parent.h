@@ -3,10 +3,10 @@
 #include <stdexcept>
 
 namespace erebus {
-	
-	/**
-	 * This class is an exception for the case an object has an invalid parent.
-	 */
+
+/**
+ * This class is an exception for the case an object has an invalid parent.
+ */
 class invalid_parent : public std::runtime_error {
 
   public:

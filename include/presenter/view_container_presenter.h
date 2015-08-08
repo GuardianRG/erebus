@@ -3,7 +3,7 @@
 #include <presenter/interfaces/i_view_container_presenter.h>
 
 namespace erebus {
-	
+
 class IViewContainer;
 enum class ViewType;
 
@@ -16,7 +16,7 @@ namespace erebus {
  */
 class ViewContainerPresenter:public IViewContainerPresenter {
 	IViewContainer*			container_;
-	
+
   public:
 	/**
 	 * Constructor.
@@ -77,7 +77,7 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	 * See IViewContainerPresenter::on_context_menu_close_click
 	 */
 	virtual void on_context_menu_close_click()override;
-	
+
 	/**
 	 * See IViewContainerPresenter::on_context_menu_pop_out_click
 	 */
@@ -97,7 +97,7 @@ class ViewContainerPresenter:public IViewContainerPresenter {
 	 * See IViewContainerPresenter::on_context_menu_add_view_click
 	 */
 	virtual void on_context_menu_add_view_click(ViewType type)override;
-	
+
 };
 
 }//namespace erbus

@@ -3,6 +3,7 @@
 #include <gtkmm/builder.h>
 #include <glibmm/refptr.h>
 #include <gtkmm/viewport.h>
+#include <gtkmm/adjustment.h>
 
 #include <string>
 #include <memory>
@@ -13,7 +14,7 @@
 #include <view/interfaces/i_view.h>
 
 #include <gtk_view_container.h>
-#include <presenter/view_container_presenter.h>
+#include <view_container_presenter.h>
 #include <view/view_type.h>
 #include <gtk_view_container_factory.h>
 #include <gtk_logger.h>
@@ -21,6 +22,9 @@
 INIT_LOCATION;
 
 namespace erebus  {
+
+
+const std::string 	GTK_ViewWindow::CLASSNAME="GTK_ViewWindow";
 GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
                                const Glib::RefPtr<Gtk::Builder>& refBuilder
                               ):GTK_Window(cobject) {
@@ -42,9 +46,10 @@ void GTK_ViewWindow::initialize(IGUIManager& manager) {
 	setGUIManager(manager);
 
 
-	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,
-	                              base_->get_hadjustment(),
-	                              base_->get_vadjustment()));
+	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>
+	                              (manager,
+	                               base_->get_hadjustment(),
+	                               base_->get_vadjustment()));
 
 	base_->add(*(basicViewContainer_.get()));
 
@@ -96,11 +101,6 @@ IGUIObject* GTK_ViewWindow::getParentOf(std::size_t id) {
 	if(basicViewContainer_->getID()==id)
 		return this;
 	return basicViewContainer_->getParentOf(id);
-}
-
-
-IWindowPresenter& GTK_ViewWindow::getPresenter() {
-	return *presenter_;
 }
 
 }//namespace erebus

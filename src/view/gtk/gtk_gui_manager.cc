@@ -14,14 +14,15 @@
 #include <view/interfaces/i_view.h>
 #include <view/interfaces/i_view_window.h>
 
-#include <presenter/main_window_presenter.h>
+#include <main_window_presenter.h>
 #include <gtk_main_window.h>
 #include <gtk_window.h>
 #include <gtk_logger.h>
 #include <gtk_view_container.h>
 #include <gtk_view_window.h>
+#include <view_window_presenter.h>
 #include <gtk_window_factory.h>
-#include <exceptions/invalid_parent.h>
+#include <invalid_parent.h>
 
 INIT_LOCATION;
 
@@ -165,7 +166,8 @@ void GTK_GUIManager::initialize(int argc, char** argv) {
 }
 
 IViewWindow& GTK_GUIManager::createNewViewWindow() {
-	auto viewWindow=GTK_WindowFactory::createViewWindow(*this);
+	auto viewWindow=GTK_WindowFactory::createWindow<GTK_ViewWindow,ViewWindowPresenter>(*this,
+	                WindowType::VIEW_WINDOW);
 	viewWindow->show();
 	auto& window=addWindow(std::move(viewWindow),false);
 	return dynamic_cast<GTK_ViewWindow&>(window);
@@ -174,7 +176,8 @@ IViewWindow& GTK_GUIManager::createNewViewWindow() {
 void GTK_GUIManager::runGUI() {
 	LOG_ASSERT(gtk_l::get(),isInitialized_);
 
-	auto window=GTK_WindowFactory::createMainWindow(*this);
+	auto window=GTK_WindowFactory::createWindow<GTK_MainWindow,MainWindowPresenter>(*this,
+	            WindowType::MAIN_WINDOW);
 
 	window->setPreferredSize(800,600);
 	window->maximize();

@@ -24,8 +24,8 @@ bool doesFileExist(const std::string& path) {
 
 void createFile(const std::string& path) {
 	if(!doesFileExist(path)) {
-	std::ofstream outfile (path);
-	outfile <<"";
-	outfile.close();
+		std::ofstream outfile (path);
+		outfile <<"";
+		outfile.close();
 	}
 }

@@ -1,9 +1,12 @@
-#include <presenter/hex_view_presenter.h>
+#include <hex_view_presenter.h>
 
 #include <assert.h>
 
-#include <view/interfaces/i_view.h>
-#include <view/interfaces/i_hex_view.h>
+#include <i_view.h>
+#include <i_hex_view.h>
+#include <presenter_logger.h>
+
+INIT_LOCATION;
 
 namespace erebus {
 
@@ -28,27 +31,11 @@ HexViewPresenter& HexViewPresenter::operator=(HexViewPresenter&& obj) {
 
 
 void HexViewPresenter::setView(IView& view)  {
-	//view_=dynamic_cast<IHexView*>(view);
-	//assert(view_!=0);
+	try {
+		view_=&(dynamic_cast<IHexView&>(view));
+	} catch(const std::bad_cast& e) {
+		LOG_PRESENTER(error)<<"Cast failed.";
+		throw;
+	}
 }
-/*
-void HexViewPresenter::on_right_button_click() {
-	assert(view_!=nullptr);
-	view_->showContextMenu();
-}
-
-void HexViewPresenter::on_left_button_click() {
-
-}
-
-void HexViewPresenter::on_context_menu_close_click() {
-	assert(view_!=nullptr);
-	view_->close();
-}
-
-void HexViewPresenter::on_context_menu_pop_out_click() {
-	assert(view_!=nullptr);
-	view_->popOut();
-}*/
-
 }//namespace erebus

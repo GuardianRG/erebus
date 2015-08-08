@@ -1,15 +1,16 @@
 #pragma once
 
+#include <gtkmm/builder.h>
+#include <glibmm/refptr.h>
+
 #include <memory>
 
-namespace erebus {
-
-class IMainWindowPresenter;
-class IViewWindowPresenter;
-class IGUIManager;
-class GTK_MainWindow;
-class GTK_ViewWindow;
-}
+#include <gtk_window.h>
+#include <i_window_presenter.h>
+#include <window_type.h>
+#include <i_gui_manager.h>
+#include <gtk_builder_factory.h>
+#include <glade_file.h>
 
 namespace erebus {
 
@@ -25,36 +26,33 @@ class GTK_WindowFactory {
 	~GTK_WindowFactory();
 
 	/**
-	 * Creats a GTK_MainWindow.
+	 * Creates a window.
 	 *
-	 * @param manager the manager this window belongs to
-	 * @param presenter the presenter to use
+	 * first template argument: the window to create. must be derived from GTK_Window.
+	 * second template argument: the presenter to use. must be derived from IWindowPresenter.
+	 *
+	 * @param manager the manager to use
+	 * @param type the WindoType of the first template argument
+	 *
+	 * @return the created window
 	 */
-	static std::unique_ptr<GTK_MainWindow> createMainWindow(IGUIManager& manager,
-	        std::unique_ptr<IMainWindowPresenter> presenter);
+	template <class T,class F>
+	typename std::enable_if<std::is_base_of<GTK_Window, T>::value&&std::is_base_of<IWindowPresenter,F>::value,
+	         std::unique_ptr<T>>::type
+	static createWindow(IGUIManager& manager,WindowType type) {
+		auto presenter=std::make_unique<F>();
 
-	/**
-	 * Creates a GTK_MainWindow.
-	 *
-	 * @param manager the manager this window belongs to
-	 */
-	static std::unique_ptr<GTK_MainWindow> createMainWindow(IGUIManager& manager);
+		auto builder=GTK_BuilderFactory::getBuilder(GladeFile::getFile(type));
 
-	/**
-	 * Creats a GTK_ViewWindow.
-	 *
-	 * @param manager the manager this window belongs to
-	 * @param presenter the presenter to use
-	 */
-	static std::unique_ptr<GTK_ViewWindow> createViewWindow(IGUIManager& manager,
-	        std::unique_ptr<IViewWindowPresenter> presenter);
+		T* window=nullptr;
+		builder->get_widget_derived("window", window);
 
-	/**
-	 * Creates a GTK_ViewWindow.
-	 *
-	 * @param manager the manager this window belongs to
-	 */
-	static std::unique_ptr<GTK_ViewWindow> createViewWindow(IGUIManager& manager);
+		presenter->setWindow(*window);
+		window->setPresenter(std::move(presenter));
+		window->initialize(manager);
+
+		return std::unique_ptr<T>(window);
+	}
 
 };
 

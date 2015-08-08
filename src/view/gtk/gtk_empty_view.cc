@@ -11,6 +11,7 @@
 
 #include <gtk_view.h>
 #include <gtk_logger.h>
+#include <view_type.h>
 
 INIT_LOCATION;
 
@@ -20,7 +21,7 @@ const std::string 	GTK_EmptyView::CLASSNAME="GTK_EmptyView";
 
 GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
                              const Glib::RefPtr<Gtk::Builder>& refBuilder)
-	:GTK_View(cobject,refBuilder) {
+	:GTK_View(cobject) {
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
@@ -45,6 +46,7 @@ void GTK_EmptyView::setPresenter(std::unique_ptr<IEmptyViewPresenter>
                                  presenter) {
 	presenter_=std::move(presenter);
 }
+
 /*
 IViewPresenter& GTK_EmptyView::getPresenter() const {
 	return *(presenter_.get());

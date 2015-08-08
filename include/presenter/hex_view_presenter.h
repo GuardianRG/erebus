@@ -3,18 +3,18 @@
 #include <presenter/interfaces/i_hex_view_presenter.h>
 
 namespace erebus {
-	class IHexView;
-	class IView;
+class IHexView;
+class IView;
 }
 
 namespace erebus {
 
-	/**
-	 * This class is a concrete HexView presenter
-	 */
+/**
+ * This class is a concrete HexView presenter
+ */
 class HexViewPresenter:public IHexViewPresenter {
 	IHexView*	view_;
-	
+
   public:
 	/**
 	 * Constructor.
@@ -23,7 +23,7 @@ class HexViewPresenter:public IHexViewPresenter {
 
 	/**
 	 * Copy constructor.
-	 * 
+	 *
 	 * Cant be copied.
 	 */
 	HexViewPresenter(const HexViewPresenter &obj)=delete;

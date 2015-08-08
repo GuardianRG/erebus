@@ -10,6 +10,7 @@
 #include <gtk_logger.h>
 #include <gtk_view_container_factory.h>
 #include <gtk_view_container.h>
+#include <view_container_presenter.h>
 
 INIT_LOCATION;
 
@@ -78,9 +79,11 @@ void GTK_MainWindow::initialize(IGUIManager& manager) {
 	setGUIManager(manager);
 
 
-	basicViewContainer_=std::move(GTK_ViewContainerFactory::createViewContainer(manager,
-	                              base_->get_hadjustment(),
-	                              base_->get_vadjustment()));
+	basicViewContainer_=std::move(GTK_ViewContainerFactory::template
+	                              createViewContainer<ViewContainerPresenter>
+	                              (manager,
+	                               base_->get_hadjustment(),
+	                               base_->get_vadjustment()));
 
 	base_->add(*(basicViewContainer_.get()));
 
@@ -112,17 +115,10 @@ void GTK_MainWindow::setPresenter(std::unique_ptr<IMainWindowPresenter>
 	presenter_=std::move(presenter);
 }
 
-void GTK_MainWindow::close() {
-	LOG_ASSERT(gtk_l::get(),isInitialized_);
-	GTK_Window::close();
-}
 
 std::string GTK_MainWindow::classname() {
 	return CLASSNAME;
 }
 
-IWindowPresenter& GTK_MainWindow::getPresenter() {
-	return *presenter_;
-}
 
 }//namespace erebus

@@ -26,13 +26,6 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 */
 	IGUIManager*	guiManager_;
 
-	/**
-	 * Returns the presenter.
-	 *
-	 * @return the presenter
-	 */
-	virtual IWindowPresenter& getPresenter()=0;
-
   public:
 	/**
 	 * Construcctor.
@@ -51,7 +44,7 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	/**
 	 * Move Constructor.
 	 *
-	 * Cant be copied since Gtk::Window cant be copied.
+	 * Cant be moved since Gtk::Window cant be moved.
 	 */
 	GTK_Window( GTK_Window&& )=delete;
 
@@ -65,7 +58,7 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	/**
 	 * Move assignment operator.
 	 *
-	 * Cant be copied since Gtk::Window cant be copied.
+	 * Cant be moved since Gtk::Window cant be moved.
 	 */
 	GTK_Window& operator=(GTK_Window&&)=delete;
 
@@ -74,54 +67,57 @@ class GTK_Window:public Gtk::Window,virtual public IWindow {
 	 */
 	virtual ~GTK_Window();
 
+
 	/**
-	 * See IWindow::setTitle
+	 * See IWindow::setTitle.
 	 */
 	void setTitle(const std::string& title) override;
 
 	/**
-	 * See IWindow::getTitle
+	 * See IWindow::getTitle.
 	 */
 	std::string getTitle() const override;
 
 	/**
-	 * See IWindow::classname
+	 * See IWindow::classname.
 	 */
 	virtual std::string classname()override;
 
 	/**
-	 * See IWindow::setPreferredSize
+	 * See IWindow::setPreferredSize.
 	 */
 	void setPreferredSize(int width,int height) override;
 
 	/**
-	 * See IWindow::maximize
+	 * See IWindow::maximize.
 	 */
 	void maximize() override;
 
 	/**
-	 * See IWindow::setGUIManager
+	 * See IWindow::setGUIManager.
 	 */
 	void setGUIManager(IGUIManager& manager)override;
 
 	/**
-	 * See IWindow::getGUIManager
+	 * See IWindow::getGUIManager.
 	 */
 	IGUIManager& getGUIManager()override;
 
 	/**
-	 * See IWindow::unmaximize
+	 * See IWindow::unmaximize.
 	 */
 	void unmaximize() override;
 
 	/**
-	 * See IWindow::getID
+	 * See IWindow::getID.
 	 */
 	std::size_t getID()override;
 
 	/**
-	 * See IWindow::close
+	 * See IWindow::close.
 	 */
 	virtual void close() override;
+
 };
+
 }//namespace erebus

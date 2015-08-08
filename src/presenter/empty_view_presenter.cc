@@ -1,11 +1,10 @@
-#include <presenter/empty_view_presenter.h>
+#include <empty_view_presenter.h>
 
 #include <stdexcept>
 
-#include <view/interfaces/i_view.h>
-#include <view/interfaces/i_empty_view.h>
-
-#include <presenter/presenter_logger.h>
+#include <i_view.h>
+#include <i_empty_view.h>
+#include <presenter_logger.h>
 
 INIT_LOCATION;
 
@@ -19,8 +18,7 @@ EmptyViewPresenter::~EmptyViewPresenter() {
 
 }
 
-EmptyViewPresenter::EmptyViewPresenter( EmptyViewPresenter&& obj): view_
-	(obj.view_) {
+EmptyViewPresenter::EmptyViewPresenter( EmptyViewPresenter&& obj): view_(obj.view_) {
 
 }
 
@@ -35,25 +33,9 @@ void EmptyViewPresenter::setView(IView& view) {
 	try {
 		view_=&(dynamic_cast<IEmptyView&>(view));
 	} catch(const std::bad_cast& e) {
-		LOG_ASSERT(presenter_l::get(),false);
+		LOG_PRESENTER(error)<<"Cast failed.";
+		throw;
 	}
 }
-/*
-void EmptyViewPresenter::on_right_button_click() {
-	assert(view_!=nullptr);
-	view_->showContextMenu();
-}
-void EmptyViewPresenter::on_left_button_click() {
-
-}
-void EmptyViewPresenter::on_context_menu_close_click() {
-	assert(view_!=nullptr);
-	view_->close();
-}
-
-void EmptyViewPresenter::on_context_menu_pop_out_click() {
-	assert(view_!=nullptr);
-	view_->popOut();
-}*/
 
 }//namespace erbus

@@ -12,6 +12,11 @@ enum class ViewType {
 	 * Only used for testing purpose.
 	 */
 	EMPTY_VIEW,
+
+	/**
+	 * An hex view.
+	 */
 	HEX_VIEW
 };
+
 }//namespace erebus

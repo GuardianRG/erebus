@@ -7,15 +7,17 @@
 #include <memory>
 #include <string>
 
-#include <view/interfaces/i_main_window.h>
+#include <i_main_window.h>
 
 #include <gtk_window.h>
 
 namespace erebus {
+
 class IMainWindowPresenter;
 class GTK_ViewContainer;
 class IGUIManager;
 class IGUIObject;
+
 }
 
 namespace erebus {
@@ -33,16 +35,13 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 
 
 	void on_menu_view_new_window_click();
-	//void on_menu_view_save_click();
-	//void on_menu_view_show_tabs_click();
-  protected:
-	/**
-	 * See GTK_Window::getPresenter
-	 */
-	IWindowPresenter& getPresenter()override;
 
   public:
+	/**
+	 * The classname that gets returned by GTK_MainWindow::classname.
+	 */
 	static const std::string CLASSNAME;
+
 	/**
 	 * Constructor.
 	 *
@@ -84,30 +83,37 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 	 */
 	~GTK_MainWindow();
 
+
 	/**
-	 * See IMainWindow::containsWidget
+	 * See IMainWindow::containsWidget.
 	 */
 	bool containsWidget(std::size_t id)override;
 
+	/**
+	 * See IMainWindow::getParentOf.
+	 */
 	IGUIObject* getParentOf(std::size_t id)override;
 
 	/**
-	 * See IMainWindow::classname
+	 * See IMainWindow::classname.
 	 */
 	virtual std::string classname()override;
+
 	/**
-	 * See IMainWindow::setPresenter
+	 * Sets the presenter.
+	 *
+	 * @param presenter the presenter to set
 	 */
 	void setPresenter(std::unique_ptr<IMainWindowPresenter> presenter);
 
 	/**
-	 * See IMainWindow::close
-	 */
-	void close() override;
-
-	/**
 	 * Initializes the window.
+	 *
+	 * This method should be called before every other method.
+	 *
+	 * @param manager the manager to use
 	 */
 	void initialize(IGUIManager& manager);
 };
+
 }//namespace erebus

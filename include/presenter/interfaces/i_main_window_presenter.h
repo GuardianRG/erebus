@@ -13,12 +13,12 @@ class IMainWindowPresenter:public IWindowPresenter {
 	 * Destructor.
 	 */
 	virtual ~IMainWindowPresenter() {}
-	
+
 	/**
 	 * Handels a click on the menu entry (view->"New Window").
 	 */
 	virtual void on_menu_view_new_window_click()=0;
-	
+
 };
 
 }//namespace erbus

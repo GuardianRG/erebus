@@ -3,7 +3,7 @@
 #include <presenter/interfaces/i_window_presenter.h>
 
 namespace erebus {
-	
+
 }
 
 namespace erebus {
@@ -12,7 +12,7 @@ namespace erebus {
  * This class is the interface for a view window presenter.
  */
 class IViewWindowPresenter:public IWindowPresenter {
-	
+
   public:
 	/**
 	 * Destructor.
