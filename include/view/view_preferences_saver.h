@@ -5,9 +5,9 @@
 namespace erebus {
 
 class ViewPreferencesSaver {
-	std::ofstream*		preferenceFile_;
+	//std::ofstream*		preferenceFile_;
 
-	void writeToFile(std::string pref,std::string val);
+	//void writeToFile(std::string pref,std::string val);
   public:
 	ViewPreferencesSaver();
 
@@ -37,7 +37,7 @@ class ViewPreferencesSaver {
 
 	~ViewPreferencesSaver();
 
-	void saveViewPreferences();
+	//void saveViewPreferences();
 };
 
 }//namespace erebus

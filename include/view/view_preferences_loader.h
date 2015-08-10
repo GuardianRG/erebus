@@ -1,18 +1,23 @@
 #pragma once
 
 #include <string>
+#include <memory>
+
+#include <view_preferences_manager.h>
 
 namespace erebus {
 
 class ViewPreferencesLoader {
-	void loadPreferences(const std::string& file);
+	std::string file_;
   public:
-	ViewPreferencesLoader();
+	ViewPreferencesLoader(const std::string& file);
 	~ViewPreferencesLoader();
+	
+	std::unique_ptr<ViewPreferencesManager> loadPreferences(const std::string&);
 
-	void loadViewPreferences();
+	static std::unique_ptr<ViewPreferencesManager> loadCustomViewPreferences();
 
-	void loadDefaultViewPreferences();
+	static std::unique_ptr<ViewPreferencesManager> loadDefaultViewPreferences();
 };
 
 }//namespace erebus

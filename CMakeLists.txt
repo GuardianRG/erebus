@@ -70,7 +70,7 @@ include_directories( ${Boost_INCLUDE_DIR} )
 #include header files
 include_directories(include)
 include_directories(include/exceptions)
-include_directories(include/view include/view/interfaces)
+include_directories(include/view include/view/interfaces include/view/preferences)
 include_directories(include/presenter include/presenter/interfaces)
 
 #set compileflags

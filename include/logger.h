@@ -46,7 +46,9 @@
 #define LOG(X,Y) BOOST_LOG_SEV(X,Y)<<LOCATION
 
 //Logs a message with LOG(X,Y) to the logger main_l::get()
-#define MAIN_LOG(X) LOG(main_l::get(),X)
+#define LOG_MAIN(X) LOG(main_l::get(),X)
+
+#define LOG_ASSERT_MAIN(X) LOG_ASSERT(main_l::get(),X)
 
 //The different serevrity levels for the logger
 enum severity_level {
