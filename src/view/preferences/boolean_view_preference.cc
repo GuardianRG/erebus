@@ -7,8 +7,8 @@
 
 namespace erebus {
 	
-	const std::string BooleanViewPreference::TRUE="true";
-	const std::string BooleanViewPreference::FALSE="false";
+	const std::string BooleanViewPreference::STRUE="true";
+	const std::string BooleanViewPreference::SFALSE="false";
 	
 	BooleanViewPreference::BooleanViewPreference(const std::string& value):ViewPreference(value) {
 		
@@ -23,19 +23,19 @@ namespace erebus {
 	}
 	
 	bool BooleanViewPreference::strToBool(const std::string& value) {
-		return value=="true";
+		return value==STRUE;
 	}
 	
 	bool BooleanViewPreference::isValueValid(const std::string& value) {
-		return (value=="false"||value=="true")&&ViewPreference::isValueValid(value);
+		return (value==SFALSE||value==STRUE)&&ViewPreference::isValueValid(value);
 	}
 	
 	std::string BooleanViewPreference::boolToStr(bool value) {
-		return value?"true":"false";
+		return value?STRUE:SFALSE;
 	}
 	
 	bool BooleanViewPreference::getValueBool() {
-		return strToBool(getValueString());
+		return strToBool(getValue());
 	}
 	
 	void BooleanViewPreference::setValue(bool value) {

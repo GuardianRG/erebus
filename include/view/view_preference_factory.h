@@ -12,8 +12,9 @@ namespace erebus {
 		
 		ViewPreferenceFactory();
 	public:
-		static const std::string INVALID_KEY;
+		static const std::string INVALID_VALUE;
 		~ViewPreferenceFactory();
+		
 		static bool isKeyValid(const std::string& key);
 		
 		static std::unique_ptr<ViewPreference> createViewPreference(const std::string& key, const std::string& value);

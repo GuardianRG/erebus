@@ -20,6 +20,7 @@
 #include <i_gui_manager.h>
 #include <logger.h>
 #include <view_preferences_loader.h>
+#include <view_preferences_manager.h>
 #include <file_system.h>
 
 #ifdef _GTKMM_
@@ -95,9 +96,14 @@ int main(int argc, char *argv[]) {
 
 			//Here the model should be initialized.
 			LOG_MAIN(notification)<< "Model initialized";
+			
+			auto defaultViewPreferences=erebus::ViewPreferencesLoader::loadDefaultViewPreferences();
+			auto customViewPreferences=erebus::ViewPreferencesLoader::loadCustomViewPreferences(std::move(defaultViewPreferences));
+			LOG_MAIN(notification)<<"View preferences loaded";
+			
 
 #ifdef _GTKMM_
-			guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>());
+			guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>(std::move(customViewPreferences)));
 			auto gmc=static_cast<erebus::GTK_GUIManager*>(guiManager.get());
 			gmc->initialize(argc,argv);
 			LOG_MAIN(notification)<<"GUI initialized";

@@ -19,16 +19,11 @@ namespace erebus {
 	}
 	
 	bool ViewPreference::isValueValid(const std::string& value) {
-		return value!=ViewPreferenceFactory::INVALID_KEY;
+		return value!=ViewPreferenceFactory::INVALID_VALUE;
 	}
 	
-	std::string ViewPreference::getValueString() {
+	std::string ViewPreference::getValue() {
 		return value_;
-	}
-	
-	bool ViewPreference::getValueBool() {
-		LOG_ASSERT_MAIN(false);
-		return true;
 	}
 	
 	void ViewPreference::setValue(const std::string& value) {

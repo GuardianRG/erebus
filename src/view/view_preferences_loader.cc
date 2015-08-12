@@ -20,47 +20,45 @@ INIT_LOCATION;
 
 namespace erebus {
 	
-ViewPreferencesLoader::ViewPreferencesLoader(const std::string& file):file_(file) {
+ViewPreferencesLoader::ViewPreferencesLoader(const std::string& file):file_(file),fileStream_(file) {
 
 }
 ViewPreferencesLoader::~ViewPreferencesLoader() {
 
 }
 
-std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadCustomViewPreferences() {
-	/*LOG_MAIN(notification)<<"Loading custom view preferences";
+std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadCustomViewPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
+	LOG_MAIN(notification)<<"Loading custom view preferences";
 
-	if(!doesFileExist(ViewPreferences::CUSTOM_VIEW_PREFERENCES_FILE)) {
+	if(!doesFileExist(ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE)) {
 		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
-		return;
+		return std::make_unique<ViewPreferencesManager>();
 	}
 
-	ViewPreferencesLoader loader(ViewPreferences::CUSTOM_VIEW_PREFERENCE_FILE);
-	*/
-	return nullptr;//std::move(loader.loadPreferences());
+	ViewPreferencesLoader loader(ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE);
+	
+	return std::move(loader.loadPreferences(std::move(manager)));
 }
 
-std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadDefaultViewPreferences() {
-	/*LOG_MAIN(notification)<<"Loading default view preferences";
-
-	if(!doesFileExist(ViewPreferences::DEFAULT_VIEW_PREFERENCES_FILE)) {
+std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadDefaultViewPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
+	LOG_MAIN(notification)<<"Loading default view preferences";
+	
+	if(!doesFileExist(ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE)) {
 		LOG_MAIN(warning)<<"Default view preferences file does not exist";
-		return;
+		return std::make_unique<ViewPreferencesManager>();
 	}
 	
-	ViewPreferencesLoader loader(ViewPreferences::DEFAULT_VIEW_PREFERENCE_FILE);
-*/
-	return nullptr;//std::move(loader.loadPreferences());
+	ViewPreferencesLoader loader(ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE);
+	
+	return std::move(loader.loadPreferences(std::move(manager)));
 }
 
-std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(const std::string& file) {
-	auto preferences=std::make_unique<ViewPreferencesManager>();
-
-	/*std::ifstream infile(ViewPreferences::DEFAULT_VIEW_PREFERENCE_FILE);
+std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
+	fileStream_.clear();                 // clear fail and eof bits
+	fileStream_.seekg(0, std::ios::beg); 
 	
-	std::string line=="";
-	bool faultyFile=false;
-	while (std::getline(infile, line)) {
+	std::string line("");
+	while (std::getline(fileStream_, line)) {
 		if(line=="") {
 			continue;
 		}
@@ -72,10 +70,9 @@ std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(c
 		std::vector<std::string> strs;
 		boost::split(strs,line,boost::is_any_of("="));
 		if(strs.size()!=2) {
-			BOOST_LOG_SEV(main_l::get(),warning)<<LOCATION
-			                                    <<"Uncorrect preference line '"
+			LOG_MAIN(warning)<<LOCATION<<"Incorrect preference line '"
 			                                    <<line<<"' in '"
-			                                    <<file<<"'";
+			                                    <<file_<<"'";
 			continue;
 		}
 
@@ -84,17 +81,20 @@ std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(c
 		boost::trim_if(strs[0],boost::is_any_of("\t"));
 		boost::trim_if(strs[1],boost::is_any_of("\t"));
 
-		if(!preferences.setPreference<std::string>(strs[0],strs[1])) {
-			LOG_MAIN(warning)<<"Faulty key,value pair ("<<strs[0]<<","<<strs[1]<<")";
-			faultyFile=true;
+		try {
+			manager->setPreference(strs[0],strs[1]);
+			LOG_MAIN(normal)<<"Loading view preference ("<<strs[0]<<"|"<<strs[1]<<")";
+		}
+		catch(const std::invalid_argument&e){
+			LOG_MAIN(warning)<<"Wrong value '"<<strs[1]<<"' for key '"<<strs[0]<<"'";
+		}
+		catch(const no_such_element& e) {
+			
+			LOG_MAIN(warning)<<"Unknown key '"<<strs[0]<<"'";
 		}
 	}
 	
-	if(faultyFile) {
-		LOG_MAIN(notification)<<"Repairing preferences file '"<<file<<"'";
-	}*/
-	
-	return preferences;
+	return std::move(manager);
 }
 
 }//namespace erebus

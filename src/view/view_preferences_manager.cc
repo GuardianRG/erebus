@@ -11,6 +11,7 @@
 #include <view_preference_factory.h>
 #include <boolean_view_preference.h>
 
+INIT_LOCATION;
 
 namespace erebus {
 	
@@ -27,6 +28,10 @@ ViewPreferencesManager::~ViewPreferencesManager() {
 
 
 std::string ViewPreferencesManager::getPreference(const std::string& key) {
+	return getPreferencePr(key)->getValue();
+}
+
+ViewPreference* ViewPreferencesManager::getPreferencePr(const std::string& key) {
 	if(!ViewPreferenceFactory::isKeyValid(key)) {
 		throw no_such_element(std::string("'")+key+"' is not a valid key");
 	}
@@ -34,28 +39,17 @@ std::string ViewPreferencesManager::getPreference(const std::string& key) {
 	auto preference=preferences_.find(key);
 	
 	if(preference==preferences_.end()) {
-		throw no_such_element(std::string("'")+key+"' was not found");
+		return insertDefaultViewPreference(key);
 	}
 	
-	return preference->second->getValueString();
+	return preference->second.get();
 }
 
 void ViewPreferencesManager::setPreference(const std::string& key,const std::string& value) {
-	if(!ViewPreferenceFactory::isKeyValid(key)) {
-		throw no_such_element(std::string("'")+key+"' is not a valid key");
-	}
-	
-	auto preference=preferences_.find(key);
-	
-	if(preference==preferences_.end()) {
-		preferences_.insert(std::make_pair<std::string,std::unique_ptr<ViewPreference>>(std::string(key),ViewPreferenceFactory::createViewPreference(key,value)));
-	}
-	else {
-		preference->second->setValue(key);
-	}
+	getPreferencePr(key)->setValue(value);
 }
 
-bool ViewPreferencesManager::getBooleanPreference(const std::string& key) {
+ViewPreference* ViewPreferencesManager::insertDefaultViewPreference(const std::string& key) {
 	if(!ViewPreferenceFactory::isKeyValid(key)) {
 		throw no_such_element(std::string("'")+key+"' is not a valid key");
 	}
@@ -63,10 +57,24 @@ bool ViewPreferencesManager::getBooleanPreference(const std::string& key) {
 	auto preference=preferences_.find(key);
 	
 	if(preference==preferences_.end()) {
-		throw no_such_element(std::string("'")+key+"' was not found");
+		auto pref=ViewPreferenceFactory::createViewPreference(key);
+		auto ptr=pref.get();
+		preferences_.insert(std::make_pair<std::string,std::unique_ptr<ViewPreference>>(std::string(key),std::move(pref)));
+		return ptr;
 	}
 	
-	return preference->second->getValueBool();
+	return preference->second.get();
+}
+
+
+bool ViewPreferencesManager::getBooleanPreference(const std::string& key) {
+	auto pref=dynamic_cast<BooleanViewPreference*>(getPreferencePr(key));
+	
+	if(pref==0) {
+		throw no_such_element(std::string("'")+key+"' is not a bool view preference");
+	}
+	
+	return pref->getValueBool();
 }
 
 void ViewPreferencesManager::setBooleanPreference(const std::string&key, bool value) {

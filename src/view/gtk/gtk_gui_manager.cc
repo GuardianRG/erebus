@@ -16,8 +16,10 @@
 
 #include <main_window_presenter.h>
 #include <gtk_main_window.h>
+#include <allow_multiple_application_instances_pref.h>
 #include <gtk_window.h>
 #include <gtk_logger.h>
+#include <view_preferences_manager.h>
 #include <gtk_view_container.h>
 #include <gtk_view_window.h>
 #include <view_window_presenter.h>
@@ -31,7 +33,7 @@ namespace erebus {
 const std::string  GTK_GUIManager::STD_APP_ID="org.werner.erebus";
 
 
-GTK_GUIManager::GTK_GUIManager() {
+GTK_GUIManager::GTK_GUIManager(std::unique_ptr<ViewPreferencesManager> viewPreferences):viewPreferences_(std::move(viewPreferences)) {
 	LOG_GTK(normal)<<"Constructing the gui manager";
 
 	isInitialized_=false;
@@ -156,8 +158,12 @@ void GTK_GUIManager::initialize(int argc, char** argv) {
 	LOG_ASSERT_GTK(!isInitialized_);
 
 	//Allow multiple instances of the appliation by adding the time to the application id
-	std::string id=STD_APP_ID+std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>
+	std::string id=STD_APP_ID;
+	
+	if(viewPreferences_->getBooleanPreference(AllowMultipleApplicationInstancesPref::KEY)) {
+	id+=std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>
 	               (std::chrono::system_clock::now().time_since_epoch()).count());
+	}
 
 	application_=Gtk::Application::create(argc, argv,id);
 

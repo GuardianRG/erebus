@@ -9,11 +9,13 @@ namespace erebus {
 	protected:
 		bool isValueValid(const std::string& value)override;
 	public:
-		static const std::string TRUE;
-		static const std::string FALSE;
+		static const std::string STRUE;
+		static const std::string SFALSE;
 		
 		static std::string boolToStr(bool value);
+		
 		static bool strToBool(const std::string& value);
+		
 		using ViewPreference::setValue;
 		
 		BooleanViewPreference(const std::string& value);
@@ -22,7 +24,7 @@ namespace erebus {
 		
 		void setValue(bool value);
 		
-		bool getValueBool()override;
+		bool getValueBool();
 		
 	};
 

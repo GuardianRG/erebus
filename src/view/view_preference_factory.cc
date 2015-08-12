@@ -11,11 +11,11 @@
 INIT_LOCATION;
 
 namespace erebus {
-	const std::string ViewPreferenceFactory::INVALID_KEY="--no_value--";
+	const std::string ViewPreferenceFactory::INVALID_VALUE="--no_value--";
 	
-	std::vector<std::string> ViewPreferenceFactory::validKeys_;/*= {
+	std::vector<std::string> ViewPreferenceFactory::validKeys_{
 			AllowMultipleApplicationInstancesPref::KEY
-	};*/
+	};
 	
 	ViewPreferenceFactory::ViewPreferenceFactory() {
 		
@@ -40,7 +40,7 @@ namespace erebus {
 		
 		if(key==AllowMultipleApplicationInstancesPref::KEY) {
 			if(value!="--no_value--") {
-			return std::make_unique<AllowMultipleApplicationInstancesPref>(value);
+				return std::make_unique<AllowMultipleApplicationInstancesPref>(value);
 			}
 			return std::make_unique<AllowMultipleApplicationInstancesPref>();
 		}

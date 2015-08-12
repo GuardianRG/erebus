@@ -14,7 +14,8 @@ namespace erebus {
 class ViewPreferencesManager {
 	std::unordered_map<std::string,std::unique_ptr<ViewPreference>>	preferences_;
 	
-	
+	ViewPreference* insertDefaultViewPreference(const std::string& key);
+	ViewPreference* getPreferencePr(const std::string& key);
 
   public:
 	  static const std::string CUSTOM_VIEW_PREFERENCES_FILE;

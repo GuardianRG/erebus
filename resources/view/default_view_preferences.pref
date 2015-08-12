@@ -1,2 +1,2 @@
 #This is a view preferences file
-always_show_tabs=true
+allow_multiple_application_instances=true

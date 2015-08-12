@@ -17,9 +17,7 @@ namespace erebus {
 		
 		virtual void setValue(const std::string& value);
 		
-		virtual std::string getValueString();
-		
-		virtual bool getValueBool();
+		virtual std::string getValue();
 		
 		virtual std::string getDefaultValue()=0;
 	};

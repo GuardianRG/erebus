@@ -8,6 +8,7 @@
 #include <memory>
 
 #include <i_gui_manager.h>
+#include <view_preferences_manager.h>
 
 namespace erebus {
 
@@ -27,6 +28,8 @@ class GTK_GUIManager:public IGUIManager {
 
 	std::unique_ptr<Gtk::Window>			dummyWindow_;
 	std::vector<std::unique_ptr<IWindow>>		windows_;
+	
+	std::unique_ptr<ViewPreferencesManager>		viewPreferences_;
 
 	bool	 					isInitialized_;
 
@@ -45,8 +48,10 @@ class GTK_GUIManager:public IGUIManager {
 
 	/**
 	 * Constructor.
+	 * 
+	 * @param viewPreferences the manager that hold the view preferences
 	 */
-	GTK_GUIManager();
+	GTK_GUIManager(std::unique_ptr<ViewPreferencesManager> viewPreferences);
 
 	/**
 	 * Copy constructor.
