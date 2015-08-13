@@ -67,7 +67,7 @@ ViewPreference* ViewPreferencesManager::insertDefaultViewPreference(const std::s
 }
 
 
-bool ViewPreferencesManager::getBooleanPreference(const std::string& key) {
+bool ViewPreferencesManager::getPreferenceBool(const std::string& key) {
 	auto pref=dynamic_cast<BooleanViewPreference*>(getPreferencePr(key));
 	
 	if(pref==0) {
@@ -77,7 +77,7 @@ bool ViewPreferencesManager::getBooleanPreference(const std::string& key) {
 	return pref->getValueBool();
 }
 
-void ViewPreferencesManager::setBooleanPreference(const std::string&key, bool value) {
+void ViewPreferencesManager::setPreferenceBool(const std::string&key, bool value) {
 	setPreference(key,BooleanViewPreference::boolToStr(value));
 }
 

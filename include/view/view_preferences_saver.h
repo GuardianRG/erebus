@@ -1,15 +1,21 @@
 #pragma once
 
 #include <fstream>
+#include <string>
+#include <memory>
+
+#include <view_preferences_manager.h>
 
 namespace erebus {
 
 class ViewPreferencesSaver {
-	//std::ofstream*		preferenceFile_;
+	std::unique_ptr<std::ofstream>		preferenceFile_;
+	std::string file_;
+	ViewPreferencesManager& manager_;
 
-	//void writeToFile(std::string pref,std::string val);
+	void writeToFile(std::string pref,std::string val);
   public:
-	ViewPreferencesSaver();
+	ViewPreferencesSaver(const std::string& file,ViewPreferencesManager& manager);
 
 	/**
 	 * Copy constructor.
@@ -21,7 +27,7 @@ class ViewPreferencesSaver {
 	/**
 	 * Move Constructor.
 	 */
-	ViewPreferencesSaver( ViewPreferencesSaver&& );
+	ViewPreferencesSaver( ViewPreferencesSaver&& )=delete;
 
 	/**
 	 * Copy assignment operator.
@@ -33,11 +39,13 @@ class ViewPreferencesSaver {
 	/**
 	 * Move assignment operator.
 	 */
-	ViewPreferencesSaver& operator=(ViewPreferencesSaver&&);
+	ViewPreferencesSaver& operator=(ViewPreferencesSaver&&)=delete;
 
 	~ViewPreferencesSaver();
 
-	//void saveViewPreferences();
+	void saveViewPreferences();
+	
+	static void saveAsCustomViewPreferences(ViewPreferencesManager& manager);
 };
 
 }//namespace erebus

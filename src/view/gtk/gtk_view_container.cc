@@ -12,6 +12,7 @@
 #include <gtkmm/viewport.h>
 
 #include <memory>
+#include <iostream>
 
 #include <i_view_container_presenter.h>
 #include <i_gui_manager.h>
@@ -28,6 +29,8 @@
 #include <gtk_hex_view.h>
 #include <hex_view_presenter.h>
 #include <gtk_empty_view.h>
+#include <view_preferences_manager.h>
+#include <always_show_tabs_pref.h>
 
 INIT_LOCATION;
 
@@ -55,12 +58,12 @@ GTK_ViewContainer::GTK_ViewContainer(
 #endif
 	
 	if(notebook.get()==nullptr) {
-		notebook_=std::make_unique<Gtk::Notebook>();
+		createNoteBook();
 	} else {
 		notebook_=std::move(notebook);
 	}
-	notebook_->set_group_name("notebooks");
-	notebook_->set_scrollable(true);
+	
+	
 	add(*notebook_);
 
 	buildContextMenu();
@@ -71,6 +74,21 @@ GTK_ViewContainer::GTK_ViewContainer(
 
 GTK_ViewContainer::~GTK_ViewContainer() {
 	LOG_DESTRUCTOR;
+}
+
+void GTK_ViewContainer::createNoteBook() {
+	notebook_=std::make_unique<Gtk::Notebook>();
+	
+	auto ptr=notebook_.get();
+	auto updater=[=](Gtk::Widget* page, guint page_num){
+		auto pref=getGUIManager().getViewPreferences().getPreferenceBool(AlwaysShowTabsPref::KEY);
+		
+		ptr->set_show_tabs(pref||ptr->get_n_pages()>1);
+	};
+	notebook_->signal_page_added().connect(updater);
+	notebook_->signal_page_removed().connect(updater);
+	notebook_->set_group_name("notebooks");
+	notebook_->set_scrollable(true);
 }
 
 void GTK_ViewContainer::on_context_menu_split_horizontal_click() {
@@ -274,9 +292,10 @@ void GTK_ViewContainer::join() {
 
 	LOG_GTK(normal)<<"Joining view container '"<<getID()<<"'";
 	
-		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
-		LOG_ASSERT(gtk_l::get(),child1_.get()!=nullptr);
-		LOG_ASSERT(gtk_l::get(),child2_.get()!=nullptr);
+		LOG_ASSERT_GTK(paned_.get()!=nullptr);
+		LOG_ASSERT_GTK(child1_.get()!=nullptr);
+		LOG_ASSERT_GTK(child2_.get()!=nullptr);
+		LOG_ASSERT_GTK(notebook_.get()==nullptr);
 
 		if(!child1_->isTopLevel()) {
 			child1_->join();
@@ -285,16 +304,15 @@ void GTK_ViewContainer::join() {
 			child2_->join();
 		}
 
-		notebook_=std::make_unique<Gtk::Notebook>();
-		notebook_->set_group_name("notebooks");
+		createNoteBook();
 
-		LOG_ASSERT(gtk_l::get(),child1_->notebook_.get()!=nullptr);
+		LOG_ASSERT_GTK(child1_->notebook_.get()!=nullptr);
 
 		for(auto it:child1_->notebook_->get_children()) {
 			auto buffer=dynamic_cast<GTK_View*>(it);
 
 			if(buffer==0) {
-				BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed.";
+				LOG_GTK(error)<<LOCATION<<"Cast failed.";
 				continue;
 			}
 
@@ -309,7 +327,7 @@ void GTK_ViewContainer::join() {
 			auto buffer=dynamic_cast<GTK_View*>(it);
 
 			if(buffer==0) {
-				BOOST_LOG_SEV(gtk_l::get(),error)<<LOCATION<<"Cast failed.";
+				LOG_GTK(error)<<LOCATION<<"Cast failed.";
 				continue;
 			}
 
@@ -540,18 +558,16 @@ void GTK_ViewContainer::addView(ViewType type) {
 }
 
 void GTK_ViewContainer::addViewPr(GTK_View& view) {
-	if(!isTopLevel()) {
-		LOG_ASSERT(gtk_l::get(),false);
-	}
-	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
-
-	if(notebook_->get_n_pages()>=1)
-		notebook_->set_show_tabs(true);
+	LOG_ASSERT_GTK(isTopLevel());
+	LOG_ASSERT_GTK(notebook_.get()!=nullptr);
 
 	notebook_->append_page(view,view.getTitle());
 	notebook_->set_tab_reorderable(view);
 	notebook_->set_tab_detachable(view);
-
+	
+	//if(notebook_->get_n_pages()>1)
+	//	notebook_->set_show_tabs(true);
+	
 	show_all_children();
 }
 

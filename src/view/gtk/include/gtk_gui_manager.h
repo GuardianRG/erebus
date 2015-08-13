@@ -8,13 +8,13 @@
 #include <memory>
 
 #include <i_gui_manager.h>
-#include <view_preferences_manager.h>
 
 namespace erebus {
 
 class IWindow;
 class GTK_Window;
 class IViewWindow;
+class ViewPreferencesManager;
 
 }
 
@@ -96,6 +96,11 @@ class GTK_GUIManager:public IGUIManager {
 	 * @param argv command line arg argv
 	 */
 	void initialize(int argc,char** argv);
+	
+	/**
+	 * See IGUIManager::getViewPreferences.
+	 */
+	ViewPreferencesManager& getViewPreferences()override;
 
 	/**
 	 * See IGUIManager::getParentOf.

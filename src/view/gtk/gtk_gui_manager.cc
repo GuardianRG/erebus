@@ -16,7 +16,6 @@
 
 #include <main_window_presenter.h>
 #include <gtk_main_window.h>
-#include <allow_multiple_application_instances_pref.h>
 #include <gtk_window.h>
 #include <gtk_logger.h>
 #include <view_preferences_manager.h>
@@ -41,6 +40,15 @@ GTK_GUIManager::GTK_GUIManager(std::unique_ptr<ViewPreferencesManager> viewPrefe
 
 GTK_GUIManager::~GTK_GUIManager() {
 	LOG_GTK(normal)<<"Destructing the gui manager";
+	
+	//Even though this seems to be redundant since the vector and its elements
+	//get automatically destroyed during destruction it isnt.
+	//This is necessary to allow the children of the windows and the windows itsel to
+	//refer to the gui manager.
+	//Otherwise a destroyed gui manager would be dereferenced -> really bad.
+	while(!windows_.empty()) {
+		windows_.pop_back();
+	}
 }
 
 void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secondaryText,
@@ -160,10 +168,10 @@ void GTK_GUIManager::initialize(int argc, char** argv) {
 	//Allow multiple instances of the appliation by adding the time to the application id
 	std::string id=STD_APP_ID;
 	
-	if(viewPreferences_->getBooleanPreference(AllowMultipleApplicationInstancesPref::KEY)) {
+	//if(viewPreferences_->getBooleanPreference(AllowMultipleApplicationInstancesPref::KEY)) {
 	id+=std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>
 	               (std::chrono::system_clock::now().time_since_epoch()).count());
-	}
+	//}
 
 	application_=Gtk::Application::create(argc, argv,id);
 
@@ -203,6 +211,10 @@ void GTK_GUIManager::runGUI() {
 		throw;
 	}
 
+}
+
+ViewPreferencesManager& GTK_GUIManager::getViewPreferences() {
+	return *viewPreferences_.get();
 }
 
 IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePersistent) {

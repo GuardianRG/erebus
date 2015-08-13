@@ -10,7 +10,7 @@ namespace erebus {
 
 class ViewPreferencesLoader {
 	std::string file_;
-	std::ifstream fileStream_;
+	std::unique_ptr<std::ifstream> fileStream_;
 	
   public:
 	ViewPreferencesLoader(const std::string& file);

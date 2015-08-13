@@ -30,13 +30,17 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 
 	base_=nullptr;
 	refBuilder->get_widget("basic_viewport",base_);
-	LOG_ASSERT(gtk_l::get(),base_!=nullptr);
+	LOG_ASSERT_GTK(base_!=nullptr);
 
-	Gtk::MenuItem* view_save;
-	refBuilder->get_widget("view_new_window",view_save);
-	view_save->signal_activate().
+	Gtk::MenuItem* view_new_windo;
+	refBuilder->get_widget("view_new_window",view_new_windo);
+	view_new_windo->signal_activate().
 	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_new_window_click) );
-
+	
+	Gtk::MenuItem* view_save_preferences;
+	refBuilder->get_widget("view_save_preferences",view_save_preferences);
+	view_save_preferences->signal_activate().
+	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_save_preferences_click) );
 
 	show_all_children();
 }
@@ -51,7 +55,7 @@ IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
 	if(!containsWidget(id))
 		return nullptr;
 
-	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
+	LOG_ASSERT_GTK(basicViewContainer_.get()!=nullptr);
 
 	if(basicViewContainer_->getID()==id)
 		return this;
@@ -60,13 +64,13 @@ IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
 
 void GTK_MainWindow::on_menu_view_new_window_click() {
 	LOG_ASSERT_GTK(isInitialized_);
-	LOG_ASSERT(gtk_l::get(),presenter_.get()!=nullptr);
+	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
 
 	presenter_->on_menu_view_new_window_click();
 }
 
 void GTK_MainWindow::initialize(IGUIManager& manager) {
-	LOG_ASSERT(gtk_l::get(),!isInitialized_);
+	LOG_ASSERT_GTK(!isInitialized_);
 
 	setGUIManager(manager);
 
@@ -82,9 +86,15 @@ void GTK_MainWindow::initialize(IGUIManager& manager) {
 	isInitialized_=true;
 }
 
+void GTK_MainWindow::on_menu_view_save_preferences_click() {
+	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
+	
+	presenter_->on_menu_view_save_preferences_click();
+}
+
 bool GTK_MainWindow::containsWidget(std::size_t id) {
-	LOG_ASSERT(gtk_l::get(),isInitialized_);
-	LOG_ASSERT(gtk_l::get(),basicViewContainer_.get()!=nullptr);
+	LOG_ASSERT_GTK(isInitialized_);
+	LOG_ASSERT_GTK(basicViewContainer_.get()!=nullptr);
 
 	if(basicViewContainer_->getID()==id)
 		return true;

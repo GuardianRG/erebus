@@ -35,8 +35,15 @@ class ViewPreferencesManager {
 	  std::string getPreference(const std::string& key);
 	  void setPreference(const std::string& key,const std::string& value);
 	  
-	  bool getBooleanPreference(const std::string& key);
-	  void setBooleanPreference(const std::string&key, bool value);
+	  decltype(preferences_.begin()) begin() {
+		return preferences_.begin();  
+	  }
+	  decltype(preferences_.end()) end() {
+		return preferences_.end();  
+	  }
+	  
+	  bool getPreferenceBool(const std::string& key);
+	  void setPreferenceBool(const std::string&key, bool value);
 };
 
 }//namespace erebus

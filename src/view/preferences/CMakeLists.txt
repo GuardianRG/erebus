@@ -2,7 +2,7 @@
 
 set(SOURCE
 	${SOURCE}
-	${CMAKE_CURRENT_SOURCE_DIR}/allow_multiple_application_instances_pref.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/always_show_tabs_pref.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/boolean_view_preference.cc
 	PARENT_SCOPE
 )

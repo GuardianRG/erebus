@@ -56,6 +56,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 
 	void addViewPr(GTK_View& view);
 	void split();
+	void createNoteBook();
 
 	void on_context_menu_close_click();
 	void on_context_menu_pop_out_click();

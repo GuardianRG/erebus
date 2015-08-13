@@ -3,6 +3,7 @@
 #include <sstream>
 #include <typeinfo>
 #include <string>
+#include <memory>
 #include <fstream>
 #include <vector>
 
@@ -14,51 +15,61 @@
 #include <view_preferences_manager.h>
 #include <logger.h>
 #include <file_system.h>
+#include <file_not_found.h>
 #include <types.h>
 
 INIT_LOCATION;
 
 namespace erebus {
 	
-ViewPreferencesLoader::ViewPreferencesLoader(const std::string& file):file_(file),fileStream_(file) {
-
+ViewPreferencesLoader::ViewPreferencesLoader(const std::string& file):file_(file) {
+	if(!doesFileExist(file)) {
+		throw file_not_found(std::string(file)+" does not exist");
+	}
+	fileStream_=std::make_unique<std::ifstream>(file);
 }
 ViewPreferencesLoader::~ViewPreferencesLoader() {
-
+	fileStream_->close();
 }
 
 std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadCustomViewPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
 	LOG_MAIN(notification)<<"Loading custom view preferences";
-
-	if(!doesFileExist(ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE)) {
+	
+	std::unique_ptr<ViewPreferencesLoader> loader;
+	try {
+		loader=std::make_unique<ViewPreferencesLoader>(ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE);
+	}
+	catch(const file_not_found& e) {
 		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
 		return std::make_unique<ViewPreferencesManager>();
 	}
-
-	ViewPreferencesLoader loader(ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE);
 	
-	return std::move(loader.loadPreferences(std::move(manager)));
+	return std::move(loader->loadPreferences(std::move(manager)));
 }
 
 std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadDefaultViewPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
 	LOG_MAIN(notification)<<"Loading default view preferences";
 	
-	if(!doesFileExist(ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE)) {
-		LOG_MAIN(warning)<<"Default view preferences file does not exist";
+	std::unique_ptr<ViewPreferencesLoader> loader;
+	try {
+		loader=std::make_unique<ViewPreferencesLoader>(ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE);
+	}
+	catch(const file_not_found& e) {
+		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
 		return std::make_unique<ViewPreferencesManager>();
 	}
 	
-	ViewPreferencesLoader loader(ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE);
-	
-	return std::move(loader.loadPreferences(std::move(manager)));
+	return std::move(loader->loadPreferences(std::move(manager)));
 }
 
 std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
-	fileStream_.clear();                 // clear fail and eof bits
-	fileStream_.seekg(0, std::ios::beg); 
+	LOG_ASSERT_MAIN(manager.get()!=nullptr);
 	
-	std::string line("");
-	while (std::getline(fileStream_, line)) {
+	fileStream_->clear();                 // clear fail and eof bits
+	fileStream_->seekg(0, std::ios::beg); 
+	
+	std::string line;
+	while (std::getline(*fileStream_.get(), line)) {
 		if(line=="") {
 			continue;
 		}

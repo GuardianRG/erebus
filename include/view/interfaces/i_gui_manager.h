@@ -9,6 +9,7 @@ class IWindow;
 class IGUIObject;
 class IView;
 class IViewWindow;
+class ViewPreferencesManager;
 
 }
 
@@ -100,6 +101,13 @@ class IGUIManager {
 	 * Creates a new view window and shows it.
 	 */
 	virtual IViewWindow& createNewViewWindow()=0;
+	
+	/**
+	 * Returns the manager that holds the view preferences.
+	 * 
+	 * @return the manager that holds the view preferences.
+	 */
+	virtual ViewPreferencesManager& getViewPreferences()=0;
 
 	/**
 	 * Creats a new view window and moves the given view to this new window.

@@ -5,7 +5,7 @@
 
 #include <view_preference.h>
 #include <no_such_element.h>
-#include <allow_multiple_application_instances_pref.h>
+#include <always_show_tabs_pref.h>
 #include <logger.h>
 
 INIT_LOCATION;
@@ -14,7 +14,7 @@ namespace erebus {
 	const std::string ViewPreferenceFactory::INVALID_VALUE="--no_value--";
 	
 	std::vector<std::string> ViewPreferenceFactory::validKeys_{
-			AllowMultipleApplicationInstancesPref::KEY
+		AlwaysShowTabsPref::KEY
 	};
 	
 	ViewPreferenceFactory::ViewPreferenceFactory() {
@@ -38,11 +38,11 @@ namespace erebus {
 			throw no_such_element(std::string("'")+key+"' is not a valid key");
 		}
 		
-		if(key==AllowMultipleApplicationInstancesPref::KEY) {
+		if(key==AlwaysShowTabsPref::KEY) {
 			if(value!="--no_value--") {
-				return std::make_unique<AllowMultipleApplicationInstancesPref>(value);
+				return std::make_unique<AlwaysShowTabsPref>(value);
 			}
-			return std::make_unique<AllowMultipleApplicationInstancesPref>();
+			return std::make_unique<AlwaysShowTabsPref>();
 		}
 		else {
 			LOG_ASSERT_MAIN(false);

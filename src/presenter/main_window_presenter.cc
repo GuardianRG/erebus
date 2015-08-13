@@ -7,6 +7,7 @@
 #include <i_gui_manager.h>
 
 #include <presenter_logger.h>
+#include <view_preferences_saver.h>
 
 INIT_LOCATION;
 
@@ -40,6 +41,13 @@ void MainWindowPresenter::setWindow(IWindow& window) {
 		throw;
 	}
 }
+
+void MainWindowPresenter::on_menu_view_save_preferences_click() {
+	LOG_ASSERT_PRESENTER(mainWindow_!=nullptr);
+	
+	ViewPreferencesSaver::saveAsCustomViewPreferences(mainWindow_->getGUIManager().getViewPreferences());
+}
+
 void MainWindowPresenter::on_menu_view_new_window_click() {
 	LOG_ASSERT_PRESENTER(mainWindow_!=nullptr);
 
