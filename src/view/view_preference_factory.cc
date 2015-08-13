@@ -6,7 +6,7 @@
 #include <view_preference.h>
 #include <no_such_element.h>
 #include <always_show_tabs_pref.h>
-#include <close_view_window_when_empty_pref.h>
+#include <close_empty_view_windows_pref.h>
 #include <logger.h>
 
 INIT_LOCATION;
@@ -16,7 +16,7 @@ namespace erebus {
 	
 	std::vector<std::string> ViewPreferenceFactory::validKeys_{
 		AlwaysShowTabsPref::KEY,
-		CloseViewWindowWhenEmptyPref::KEY
+		CloseEmptyViewWindowsPref::KEY
 	};
 	
 	ViewPreferenceFactory::ViewPreferenceFactory() {
@@ -43,8 +43,8 @@ namespace erebus {
 		if(key==AlwaysShowTabsPref::KEY) {
 			return createViewPreferencePr<AlwaysShowTabsPref>(key,value);
 		}
-		else if(key==CloseViewWindowWhenEmptyPref::KEY) {
-			return createViewPreferencePr<CloseViewWindowWhenEmptyPref>(key,value);
+		else if(key==CloseEmptyViewWindowsPref::KEY) {
+			return createViewPreferencePr<CloseEmptyViewWindowsPref>(key,value);
 		}
 		else {
 			LOG_ASSERT_MAIN(false);

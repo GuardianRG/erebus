@@ -29,7 +29,7 @@
 #include <gtk_hex_view.h>
 #include <hex_view_presenter.h>
 #include <gtk_empty_view.h>
-#include <close_view_window_when_empty_pref.h>
+#include <close_empty_view_windows_pref.h>
 #include <view_preferences_manager.h>
 #include <always_show_tabs_pref.h>
 
@@ -87,7 +87,7 @@ void GTK_ViewContainer::createNoteBook() {
 		
 		ptr->set_show_tabs(pref||ptr->get_n_pages()>1);
 		
-		if(!getGUIManager().getViewPreferences().getPreferenceBool(CloseViewWindowWhenEmptyPref::KEY)) {
+		if(getGUIManager().getViewPreferences().getPreferenceBool(CloseEmptyViewWindowsPref::KEY)) {
 		getGUIManager().closeEmptyViewWindows();
 		}
 	};
@@ -475,7 +475,7 @@ void GTK_ViewContainer::closeView(IView& view) {
 	try {
 		auto& buffer=dynamic_cast<GTK_View&>(view);
 		notebook_->remove_page(buffer);
-		if(!getGUIManager().getViewPreferences().getPreferenceBool(CloseViewWindowWhenEmptyPref::KEY)) {
+		if(getGUIManager().getViewPreferences().getPreferenceBool(CloseEmptyViewWindowsPref::KEY)) {
 			getGUIManager().closeEmptyViewWindows();
 		}
 	} catch(std::bad_cast e) {

@@ -6,15 +6,15 @@
 
 namespace erebus {
 
-	class CloseViewWindowWhenEmptyPref:public BooleanViewPreference {
+	class CloseEmptyViewWindowsPref:public BooleanViewPreference {
 		static const bool DEFAULT_VALUE;
 	public:
 		static const std::string KEY;
 		
-		CloseViewWindowWhenEmptyPref(const std::string& value);
-		CloseViewWindowWhenEmptyPref(bool value);
-		CloseViewWindowWhenEmptyPref();
-		~CloseViewWindowWhenEmptyPref();
+		CloseEmptyViewWindowsPref(const std::string& value);
+		CloseEmptyViewWindowsPref(bool value);
+		CloseEmptyViewWindowsPref();
+		~CloseEmptyViewWindowsPref();
 		
 		std::string getKey()override;
 		

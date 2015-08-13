@@ -41,7 +41,7 @@ std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadCustomViewPre
 	}
 	catch(const file_not_found& e) {
 		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
-		return std::make_unique<ViewPreferencesManager>();
+		return std::move(manager);
 	}
 	
 	return std::move(loader->loadPreferences(std::move(manager)));
@@ -56,7 +56,7 @@ std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadDefaultViewPr
 	}
 	catch(const file_not_found& e) {
 		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
-		return std::make_unique<ViewPreferencesManager>();
+		return std::move(manager);
 	}
 	
 	return std::move(loader->loadPreferences(std::move(manager)));
