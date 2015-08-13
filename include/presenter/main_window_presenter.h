@@ -62,12 +62,12 @@ class MainWindowPresenter:public IMainWindowPresenter {
 	 * See IMainWindowPresenter::on_menu_view_new_window_click.
 	 */
 	virtual void on_menu_view_new_window_click()override;
-	
+
 	/**
 	 * See IMainWindowPresenter::on_menu_view_save_preferences_click.
 	 */
 	virtual void on_menu_view_save_preferences_click()override;
-	
+
 	/**
 	 * see IMainWindowPresenter::on_menu_view_restore_defaults_click.
 	 */

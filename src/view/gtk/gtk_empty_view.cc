@@ -20,9 +20,9 @@ const std::string 	GTK_EmptyView::CLASSNAME="GTK_EmptyView";
 
 GTK_EmptyView::GTK_EmptyView(BaseObjectType* cobject,
                              const Glib::RefPtr<Gtk::Builder>& refBuilder)
-:GTK_View(cobject) {
+	:GTK_View(cobject) {
 	LOG_CONSTRUCTOR;
-	
+
 	Gdk::RGBA color("red");
 	color.set_rgba(0.8,0.8,0.8);
 	override_background_color(color);
@@ -45,7 +45,7 @@ std::size_t GTK_EmptyView::getID() {
 void GTK_EmptyView::setPresenter(std::unique_ptr<IEmptyViewPresenter>
                                  presenter) {
 	LOG_ASSERT_GTK(presenter.get()!=nullptr);
-	
+
 	presenter_=std::move(presenter);
 }
 

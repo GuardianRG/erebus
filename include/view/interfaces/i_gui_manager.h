@@ -101,24 +101,24 @@ class IGUIManager {
 	 * Creates a new view window and shows it.
 	 */
 	virtual IViewWindow& createNewViewWindow()=0;
-	
+
 	/**
 	 * Returns the manager that holds the view preferences.
-	 * 
+	 *
 	 * @return the manager that holds the view preferences.
 	 */
 	virtual ViewPreferencesManager& getViewPreferences()=0;
-	
+
 	/**
 	 * Loads the default view preferences.
 	 */
 	virtual void loadDefaultViewPreferences()=0;
-	
+
 	/**
 	 * Loads the custom view preferences.
 	 */
 	virtual void loadCustomViewPreferences()=0;
-	
+
 	/**
 	 * Closes all view windows that dont contain views.
 	 */

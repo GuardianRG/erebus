@@ -37,12 +37,12 @@ GTK_ViewWindow::GTK_ViewWindow(BaseObjectType* cobject,
 	LOG_ASSERT_GTK(base_!=nullptr);
 
 	setPreferredSize(600,400);
-	
+
 	//This handler has to be connected since when clicking on the close button
 	//only the hide method gets called. this way the window and its constructors
 	//and views would be destroyed only after the whole application gets closed.
 	signal_hide().connect(sigc::mem_fun(*this,&GTK_ViewWindow::close) );
-	
+
 	show_all_children();
 }
 
@@ -74,7 +74,7 @@ std::string GTK_ViewWindow::classname() {
 void GTK_ViewWindow::setPresenter(std::unique_ptr<IViewWindowPresenter>
                                   presenter) {
 	LOG_ASSERT_GTK(presenter.get()!=nullptr);
-	
+
 	presenter_=std::move(presenter);
 }
 

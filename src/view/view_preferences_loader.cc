@@ -21,7 +21,7 @@
 INIT_LOCATION;
 
 namespace erebus {
-	
+
 ViewPreferencesLoader::ViewPreferencesLoader(const std::string& file):file_(file) {
 	if(!doesFileExist(file)) {
 		throw file_not_found(std::string(file)+" does not exist");
@@ -32,48 +32,51 @@ ViewPreferencesLoader::~ViewPreferencesLoader() {
 	fileStream_->close();
 }
 
-std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadCustomViewPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
+std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadCustomViewPreferences(
+    std::unique_ptr<ViewPreferencesManager> manager) {
 	LOG_MAIN(notification)<<"Loading custom view preferences";
-	
+
 	std::unique_ptr<ViewPreferencesLoader> loader;
 	try {
-		loader=std::make_unique<ViewPreferencesLoader>(ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE);
-	}
-	catch(const file_not_found& e) {
+		loader=std::make_unique<ViewPreferencesLoader>
+		       (ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE);
+	} catch(const file_not_found& e) {
 		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
 		return std::move(manager);
 	}
-	
+
 	return std::move(loader->loadPreferences(std::move(manager)));
 }
 
-std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadDefaultViewPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
+std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadDefaultViewPreferences(
+    std::unique_ptr<ViewPreferencesManager> manager) {
 	LOG_MAIN(notification)<<"Loading default view preferences";
-	
+
 	std::unique_ptr<ViewPreferencesLoader> loader;
 	try {
-		loader=std::make_unique<ViewPreferencesLoader>(ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE);
-	}
-	catch(const file_not_found& e) {
+		loader=std::make_unique<ViewPreferencesLoader>
+		       (ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE);
+	} catch(const file_not_found& e) {
 		LOG_MAIN(warning)<<"Custom view preferences file does not exist";
 		return std::move(manager);
 	}
-	
+
 	return std::move(loader->loadPreferences(std::move(manager)));
 }
 
-std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(std::unique_ptr<ViewPreferencesManager> manager) {
+std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(
+    std::unique_ptr<ViewPreferencesManager> manager) {
 	LOG_ASSERT_MAIN(manager.get()!=nullptr);
-	
+
 	fileStream_->clear();                 // clear fail and eof bits
-	fileStream_->seekg(0, std::ios::beg); 
-	
+	fileStream_->seekg(0, std::ios::beg);
+
 	std::string line;
 	while (std::getline(*fileStream_.get(), line)) {
 		if(line=="") {
 			continue;
 		}
-		
+
 		if(boost::starts_with(line, "#")) {
 			continue;
 		}
@@ -82,8 +85,8 @@ std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(s
 		boost::split(strs,line,boost::is_any_of("="));
 		if(strs.size()!=2) {
 			LOG_MAIN(warning)<<LOCATION<<"Incorrect preference line '"
-			                                    <<line<<"' in '"
-			                                    <<file_<<"'";
+			                 <<line<<"' in '"
+			                 <<file_<<"'";
 			continue;
 		}
 
@@ -95,16 +98,14 @@ std::unique_ptr<ViewPreferencesManager> ViewPreferencesLoader::loadPreferences(s
 		try {
 			manager->setPreference(strs[0],strs[1]);
 			LOG_MAIN(normal)<<"Loading view preference ("<<strs[0]<<"|"<<strs[1]<<")";
-		}
-		catch(const std::invalid_argument&e){
+		} catch(const std::invalid_argument&e) {
 			LOG_MAIN(warning)<<"Wrong value '"<<strs[1]<<"' for key '"<<strs[0]<<"'";
-		}
-		catch(const no_such_element& e) {
-			
+		} catch(const no_such_element& e) {
+
 			LOG_MAIN(warning)<<"Unknown key '"<<strs[0]<<"'";
 		}
 	}
-	
+
 	return std::move(manager);
 }
 

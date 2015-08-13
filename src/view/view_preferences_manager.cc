@@ -14,12 +14,13 @@
 INIT_LOCATION;
 
 namespace erebus {
-	
-	const std::string ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE="view_preferences.pref";
-	const std::string ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE="resources/default_view_preferences.pref";
+
+const std::string ViewPreferencesManager::CUSTOM_VIEW_PREFERENCES_FILE="view_preferences.pref";
+const std::string ViewPreferencesManager::DEFAULT_VIEW_PREFERENCES_FILE=
+    "resources/default_view_preferences.pref";
 
 ViewPreferencesManager::ViewPreferencesManager() {
-	
+
 }
 
 ViewPreferencesManager::~ViewPreferencesManager() {
@@ -35,13 +36,13 @@ ViewPreference* ViewPreferencesManager::getPreferencePr(const std::string& key) 
 	if(!ViewPreferenceFactory::isKeyValid(key)) {
 		throw no_such_element(std::string("'")+key+"' is not a valid key");
 	}
-	
+
 	auto preference=preferences_.find(key);
-	
+
 	if(preference==preferences_.end()) {
 		return insertDefaultViewPreference(key);
 	}
-	
+
 	return preference->second.get();
 }
 
@@ -53,27 +54,28 @@ ViewPreference* ViewPreferencesManager::insertDefaultViewPreference(const std::s
 	if(!ViewPreferenceFactory::isKeyValid(key)) {
 		throw no_such_element(std::string("'")+key+"' is not a valid key");
 	}
-	
+
 	auto preference=preferences_.find(key);
-	
+
 	if(preference==preferences_.end()) {
 		auto pref=ViewPreferenceFactory::createViewPreference(key);
 		auto ptr=pref.get();
-		preferences_.insert(std::make_pair<std::string,std::unique_ptr<ViewPreference>>(std::string(key),std::move(pref)));
+		preferences_.insert(std::make_pair<std::string,std::unique_ptr<ViewPreference>>(std::string(key),
+		                    std::move(pref)));
 		return ptr;
 	}
-	
+
 	return preference->second.get();
 }
 
 
 bool ViewPreferencesManager::getPreferenceBool(const std::string& key) {
 	auto pref=dynamic_cast<BooleanViewPreference*>(getPreferencePr(key));
-	
+
 	if(pref==0) {
 		throw no_such_element(std::string("'")+key+"' is not a bool view preference");
 	}
-	
+
 	return pref->getValueBool();
 }
 

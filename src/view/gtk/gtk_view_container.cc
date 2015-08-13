@@ -57,14 +57,14 @@ GTK_ViewContainer::GTK_ViewContainer(
 	signal_button_press_event().connect(sigc::mem_fun(*this, &GTK_ViewContainer::on_button_press_event),
 	                                    false);
 #endif
-	
+
 	if(notebook.get()==nullptr) {
 		createNoteBook();
 	} else {
 		notebook_=std::move(notebook);
 	}
-	
-	
+
+
 	add(*notebook_);
 
 	buildContextMenu();
@@ -79,26 +79,26 @@ GTK_ViewContainer::~GTK_ViewContainer() {
 
 void GTK_ViewContainer::createNoteBook() {
 	notebook_=std::make_unique<Gtk::Notebook>();
-	
+
 	auto ptr=notebook_.get();
-	
-	auto updaterAdd=[=](Gtk::Widget* page, guint page_num){
+
+	auto updaterAdd=[=](Gtk::Widget* page, guint page_num) {
 		auto pref=getGUIManager().getViewPreferences().getPreferenceBool(AlwaysShowTabsPref::KEY);
-		
+
 		ptr->set_show_tabs(pref||ptr->get_n_pages()>1);
-		
+
 		if(getGUIManager().getViewPreferences().getPreferenceBool(CloseEmptyViewWindowsPref::KEY)) {
-		getGUIManager().closeEmptyViewWindows();
+			getGUIManager().closeEmptyViewWindows();
 		}
 	};
-	
-	auto updaterRemove=[=](Gtk::Widget* page, guint page_num){
-		
+
+	auto updaterRemove=[=](Gtk::Widget* page, guint page_num) {
+
 		auto pref=getGUIManager().getViewPreferences().getPreferenceBool(AlwaysShowTabsPref::KEY);
-		
+
 		ptr->set_show_tabs(pref||ptr->get_n_pages()>1);
 	};
-	
+
 	notebook_->signal_page_added().connect(updaterAdd);
 	notebook_->signal_page_removed().connect(updaterRemove);
 	notebook_->set_group_name("notebooks");
@@ -121,7 +121,7 @@ void GTK_ViewContainer::showContextMenu() {
 	LOG_ASSERT(gtk_l::get(), popupMenu_.get()!=nullptr);
 
 	updateContextMenu();
-	
+
 	//The following has to be here and not in updateContextMenu
 	//since it should only get executed when an actual click was performed
 	auto parent=guiManager_->getParentOf(getID());
@@ -131,14 +131,14 @@ void GTK_ViewContainer::showContextMenu() {
 	} else {
 		LOG_GTK(warning)<<"There is somewehere a bug in the getParentOf() method";
 	}
-	
+
 	popupMenu_->popup(clickBuffer_,timeBuffer_);
 }
 
 void GTK_ViewContainer::updateContextMenu() {
 	if(isSplitted())
 		LOG_ASSERT(gtk_l::get(),false);
-	
+
 	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
 
 	static int currentPage=-2;
@@ -176,7 +176,7 @@ void GTK_ViewContainer::updateContextMenu() {
 		separator_->hide();
 		separator1_->hide();
 	}
-	
+
 }
 
 void GTK_ViewContainer::addView(IView& view) {
@@ -252,13 +252,13 @@ void GTK_ViewContainer::buildContextMenu() {
 	empty_view->signal_activate().
 	connect(sigc::mem_fun(*this,
 	                      &GTK_ViewContainer::on_context_menu_add_empty_view_click) );
-	
+
 	auto hex_view = Gtk::manage(new Gtk::MenuItem{"Hex View"});
 	view_menu->append(*hex_view);
 	hex_view->signal_activate().
 	connect(sigc::mem_fun(*this,
-			      &GTK_ViewContainer::on_context_menu_add_hex_view_click) );
-	
+	                      &GTK_ViewContainer::on_context_menu_add_hex_view_click) );
+
 	add_view->set_submenu(*view_menu);
 
 	popupMenu_->append(*separator_);
@@ -305,62 +305,62 @@ void GTK_ViewContainer::join() {
 	isSplitted_=false;
 
 	LOG_GTK(normal)<<"Joining view container '"<<getID()<<"'";
-	
-		LOG_ASSERT_GTK(paned_.get()!=nullptr);
-		LOG_ASSERT_GTK(child1_.get()!=nullptr);
-		LOG_ASSERT_GTK(child2_.get()!=nullptr);
-		LOG_ASSERT_GTK(notebook_.get()==nullptr);
 
-		if(!child1_->isTopLevel()) {
-			child1_->join();
-		}
-		if(!child2_->isTopLevel()) {
-			child2_->join();
-		}
+	LOG_ASSERT_GTK(paned_.get()!=nullptr);
+	LOG_ASSERT_GTK(child1_.get()!=nullptr);
+	LOG_ASSERT_GTK(child2_.get()!=nullptr);
+	LOG_ASSERT_GTK(notebook_.get()==nullptr);
 
-		createNoteBook();
+	if(!child1_->isTopLevel()) {
+		child1_->join();
+	}
+	if(!child2_->isTopLevel()) {
+		child2_->join();
+	}
 
-		LOG_ASSERT_GTK(child1_->notebook_.get()!=nullptr);
+	createNoteBook();
 
-		for(auto it:child1_->notebook_->get_children()) {
-			auto buffer=dynamic_cast<GTK_View*>(it);
+	LOG_ASSERT_GTK(child1_->notebook_.get()!=nullptr);
 
-			if(buffer==0) {
-				LOG_GTK(error)<<LOCATION<<"Cast failed.";
-				continue;
-			}
+	for(auto it:child1_->notebook_->get_children()) {
+		auto buffer=dynamic_cast<GTK_View*>(it);
 
-			child1_->notebook_->remove(*it);
-
-			addView(*buffer);
+		if(buffer==0) {
+			LOG_GTK(error)<<LOCATION<<"Cast failed.";
+			continue;
 		}
 
-		LOG_ASSERT(gtk_l::get(),child2_->notebook_.get()!=nullptr);
+		child1_->notebook_->remove(*it);
 
-		for(auto it:child2_->notebook_->get_children()) {
-			auto buffer=dynamic_cast<GTK_View*>(it);
+		addView(*buffer);
+	}
 
-			if(buffer==0) {
-				LOG_GTK(error)<<LOCATION<<"Cast failed.";
-				continue;
-			}
+	LOG_ASSERT(gtk_l::get(),child2_->notebook_.get()!=nullptr);
 
-			child2_->notebook_->remove(*it);
+	for(auto it:child2_->notebook_->get_children()) {
+		auto buffer=dynamic_cast<GTK_View*>(it);
 
-			addView(*buffer);
+		if(buffer==0) {
+			LOG_GTK(error)<<LOCATION<<"Cast failed.";
+			continue;
 		}
 
-		paned_->remove(*(child1_.get()));
-		paned_->remove(*(child2_.get()));
-		Gtk::Container::remove(*(paned_.get()));
-		paned_=std::unique_ptr<Gtk::Paned>(nullptr);
-		child1_=std::unique_ptr<GTK_ViewContainer>(nullptr);
-		child2_=std::unique_ptr<GTK_ViewContainer>(nullptr);
+		child2_->notebook_->remove(*it);
 
-		show_all_children();
+		addView(*buffer);
+	}
 
-		add(*notebook_);
-		
+	paned_->remove(*(child1_.get()));
+	paned_->remove(*(child2_.get()));
+	Gtk::Container::remove(*(paned_.get()));
+	paned_=std::unique_ptr<Gtk::Paned>(nullptr);
+	child1_=std::unique_ptr<GTK_ViewContainer>(nullptr);
+	child2_=std::unique_ptr<GTK_ViewContainer>(nullptr);
+
+	show_all_children();
+
+	add(*notebook_);
+
 	show_all_children();
 }
 
@@ -372,7 +372,7 @@ void GTK_ViewContainer::on_context_menu_add_empty_view_click() {
 
 void GTK_ViewContainer::on_context_menu_add_hex_view_click() {
 	LOG_ASSERT(gtk_l::get(), presenter_.get()!=nullptr);
-	
+
 	presenter_->on_context_menu_add_view_click(ViewType::HEX_VIEW);
 }
 
@@ -492,10 +492,10 @@ bool GTK_ViewContainer::isEmpty() {
 	if(isSplitted()) {
 		LOG_ASSERT_GTK(child1_.get()!=nullptr);
 		LOG_ASSERT_GTK(child2_.get()!=nullptr);
-		
+
 		return child1_->isEmpty()||child2_->isEmpty();
 	}
-	
+
 	LOG_ASSERT_GTK(notebook_.get()!=nullptr);
 	return notebook_->get_n_pages()==0;
 }
@@ -511,25 +511,25 @@ void GTK_ViewContainer::split() {
 	}
 
 	isSplitted_=true;
-	
-		LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
-		LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
-		LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
 
-		Gtk::Container::remove(*notebook_);
+	LOG_ASSERT(gtk_l::get(),paned_.get()!=nullptr);
+	LOG_ASSERT(gtk_l::get(),guiManager_!=nullptr);
+	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
 
-		child1_=GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>(*guiManager_,
-		        get_hadjustment(),
-		        get_vadjustment(),std::move(notebook_));
-		child2_=GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>(*guiManager_,
-		        get_hadjustment(),
-		        get_vadjustment());
+	Gtk::Container::remove(*notebook_);
 
-		paned_->pack1(*(child1_.get()),true,false);
-		paned_->pack2(*(child2_.get()),true,false);
+	child1_=GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>(*guiManager_,
+	        get_hadjustment(),
+	        get_vadjustment(),std::move(notebook_));
+	child2_=GTK_ViewContainerFactory::createViewContainer<ViewContainerPresenter>(*guiManager_,
+	        get_hadjustment(),
+	        get_vadjustment());
 
-		add(*paned_);
-		
+	paned_->pack1(*(child1_.get()),true,false);
+	paned_->pack2(*(child2_.get()),true,false);
+
+	add(*paned_);
+
 	show_all_children();
 }
 
@@ -573,9 +573,9 @@ void GTK_ViewContainer::addView(ViewType type) {
 	}
 	case ViewType::HEX_VIEW: {
 		auto title=std::string{"Hex View"};
-		
+
 		auto view=GTK_ViewFactory::createView<GTK_HexView,HexViewPresenter>(*guiManager_,
-											ViewType::HEX_VIEW);
+		          ViewType::HEX_VIEW);
 		view->setTitle(title);
 		addViewPr(*view);
 		break;
@@ -593,7 +593,7 @@ void GTK_ViewContainer::addViewPr(GTK_View& view) {
 	notebook_->append_page(view,view.getTitle());
 	notebook_->set_tab_reorderable(view);
 	notebook_->set_tab_detachable(view);
-	
+
 	show_all_children();
 }
 

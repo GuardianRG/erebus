@@ -13,13 +13,13 @@
 INIT_LOCATION;
 
 namespace erebus {
-	
+
 const std::string GTK_HexView::CLASSNAME="GTK_HexView";
 
 GTK_HexView::GTK_HexView(BaseObjectType* cobject,
                          const Glib::RefPtr<Gtk::Builder>& refBuilder):GTK_View(cobject) {
 	LOG_CONSTRUCTOR;
-	
+
 	Gdk::RGBA color("red");
 	color.set_rgba(1.0,1.0,1.0);
 	override_background_color(color);
@@ -31,7 +31,7 @@ GTK_HexView::~GTK_HexView() {
 
 void GTK_HexView::setPresenter(std::unique_ptr<IHexViewPresenter> presenter) {
 	LOG_ASSERT_GTK(presenter.get()!=nullptr);
-	
+
 	presenter_=std::move(presenter);
 }
 

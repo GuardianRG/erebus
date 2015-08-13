@@ -12,7 +12,8 @@
 INIT_LOCATION;
 
 namespace erebus {
-	ViewPreferencesSaver::ViewPreferencesSaver(const std::string& file,ViewPreferencesManager& manager):file_(file),manager_(manager) {
+ViewPreferencesSaver::ViewPreferencesSaver(const std::string& file,
+        ViewPreferencesManager& manager):file_(file),manager_(manager) {
 	if(!doesFileExist(file)) {
 		createFile(file);
 		LOG_MAIN(notification)<<"Created view preferences file '"<<file<<"'";
@@ -33,7 +34,7 @@ void ViewPreferencesSaver::saveAsCustomViewPreferences(ViewPreferencesManager& m
 
 void ViewPreferencesSaver::saveViewPreferences() {
 	LOG_MAIN(notification)<<"Saving view preferences to file '"<<file_<<"'";
-	
+
 	auto it=manager_.begin();
 	while(it!=manager_.end()) {
 		writeToFile(it->second.get()->getKey(),it->second.get()->getValue());

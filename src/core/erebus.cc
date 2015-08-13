@@ -96,8 +96,8 @@ int main(int argc, char *argv[]) {
 
 			//Here the model should be initialized.
 			LOG_MAIN(notification)<< "Model initialized";
-			
-			
+
+
 
 #ifdef _GTKMM_
 			guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>());
@@ -105,7 +105,7 @@ int main(int argc, char *argv[]) {
 			gmc->loadDefaultViewPreferences();
 			gmc->loadCustomViewPreferences();
 			LOG_MAIN(notification)<<"View preferences loaded";
-			
+
 			gmc->initialize(argc,argv);
 			LOG_MAIN(notification)<<"GUI initialized";
 #else

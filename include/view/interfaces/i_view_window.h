@@ -29,10 +29,10 @@ class IViewWindow:virtual public IWindow {
 	 * @param view the view to add to the window
 	 */
 	virtual void addView(IView& view)=0;
-	
+
 	/**
 	 * Whether the view window contains views.
-	 * 
+	 *
 	 * @return true if the window contains views.
 	 */
 	virtual bool isEmpty()=0;

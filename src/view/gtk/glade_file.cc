@@ -9,7 +9,7 @@
 INIT_LOCATION;
 
 namespace erebus {
-	
+
 GladeFile::GladeFile() {
 
 }

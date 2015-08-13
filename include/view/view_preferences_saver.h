@@ -44,7 +44,7 @@ class ViewPreferencesSaver {
 	~ViewPreferencesSaver();
 
 	void saveViewPreferences();
-	
+
 	static void saveAsCustomViewPreferences(ViewPreferencesManager& manager);
 };
 

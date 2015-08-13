@@ -41,7 +41,7 @@ GTK_GUIManager::GTK_GUIManager():viewPreferences_(std::make_unique<ViewPreferenc
 
 GTK_GUIManager::~GTK_GUIManager() {
 	LOG_GTK(normal)<<"Destructing the gui manager";
-	
+
 	//Even though this seems to be redundant since the vector and its elements
 	//get automatically destroyed during destruction it isnt.
 	//This is necessary to allow the children of the windows and the windows itsel to
@@ -56,22 +56,22 @@ void GTK_GUIManager::showMessageDialog(std::string primaryText,std::string secon
                                        ErrorLevel errorLevel) {
 	LOG_ASSERT_GTK(isInitialized_);
 	LOG_ASSERT_GTK(dummyWindow_.get()!=nullptr);
-	
+
 	showMessageDialogPr(*(dummyWindow_.get()),primaryText,secondaryText,errorLevel);
 }
 
 void GTK_GUIManager::showMessageDialog(std::size_t id,std::string primaryText,
                                        std::string secondaryText,
-				       ErrorLevel errorLevel) {
+                                       ErrorLevel errorLevel) {
 	LOG_ASSERT_GTK(isInitialized_);
-	
-		Gtk::Window* window=getWindow(id);
-		if(window==nullptr) {
-			LOG_GTK(warning)<<"Could not find widget.";
-			
-			window=dummyWindow_.get();
-		}
-		showMessageDialogPr(*window,primaryText,secondaryText,errorLevel);
+
+	Gtk::Window* window=getWindow(id);
+	if(window==nullptr) {
+		LOG_GTK(warning)<<"Could not find widget.";
+
+		window=dummyWindow_.get();
+	}
+	showMessageDialogPr(*window,primaryText,secondaryText,errorLevel);
 }
 
 void GTK_GUIManager::loadCustomViewPreferences() {
@@ -84,7 +84,7 @@ void GTK_GUIManager::loadDefaultViewPreferences() {
 
 GTK_Window* GTK_GUIManager::getWindow(std::size_t id) {
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	for(auto& window:windows_) {
 		if(window->containsWidget(id)) {
 			auto c_window=dynamic_cast<GTK_Window*>(window.get());
@@ -99,7 +99,7 @@ GTK_Window* GTK_GUIManager::getWindow(std::size_t id) {
 
 void GTK_GUIManager::closeEmptyViewWindows() {
 	auto i = std::begin(windows_);
-	
+
 	while (i != std::end(windows_)) {
 		if((*i)->classname()==GTK_ViewWindow::CLASSNAME) {
 			auto view_window=dynamic_cast<GTK_ViewWindow*>((*i).get());
@@ -109,8 +109,7 @@ void GTK_GUIManager::closeEmptyViewWindows() {
 					windows_.erase(i);//view_window->close();
 					continue;
 				}
-			}
-			else {
+			} else {
 				LOG_GTK(error)<<"Cast failed!";
 			}
 		}
@@ -120,7 +119,7 @@ void GTK_GUIManager::closeEmptyViewWindows() {
 
 void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primaryText,
         std::string secondaryText,
-	ErrorLevel errorLevel) {
+        ErrorLevel errorLevel) {
 	LOG_ASSERT_GTK(isInitialized_);
 
 	Gtk::MessageType type=Gtk::MESSAGE_INFO;
@@ -148,21 +147,22 @@ void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primary
 
 void GTK_GUIManager::joinContainer(std::size_t id) {
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	IGUIObject* parent=nullptr;
 	try {
 		parent=getParentOf(id);
 	} catch(const invalid_parent& e) {
-		LOG_GTK(error)<<"Cannot join container due to a widget '"<<id<<"' having more tha one parent ("<<e.what()<<")";
+		LOG_GTK(error)
+		        <<"Cannot join container due to a widget '"<<id<<"' having more tha one parent ("<<e.what()<<")";
 		showMessageDialog(id,"Cannot join the container!",
 		                  std::string("There has been a problem with the object hierachy. (")+e.what()+")",ErrorLevel::ERROR);
 	}
-	
+
 	if(parent==nullptr) {
 		LOG_GTK(warning)<<"'"<<id<<"' was not found. There is most likely a bug somwhere in the code.";
 		return;
 	}
-	
+
 	if(parent->classname()==GTK_ViewContainer::CLASSNAME) {
 		auto viewcontainer=dynamic_cast<GTK_ViewContainer*>(parent);
 		if(viewcontainer==0) {
@@ -177,7 +177,7 @@ void GTK_GUIManager::joinContainer(std::size_t id) {
 
 IGUIObject* GTK_GUIManager::getParentOf(std::size_t id) {
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	IGUIObject* parent=nullptr;
 	for(auto& window:windows_) {
 		auto buff=window->getParentOf(id);
@@ -197,10 +197,10 @@ void GTK_GUIManager::initialize(int argc, char** argv) {
 
 	//Allow multiple instances of the appliation by adding the time to the application id
 	std::string id=STD_APP_ID;
-	
+
 	//if(viewPreferences_->getBooleanPreference(AllowMultipleApplicationInstancesPref::KEY)) {
 	id+=std::to_string(std::chrono::duration_cast<std::chrono::milliseconds>
-	               (std::chrono::system_clock::now().time_since_epoch()).count());
+	                   (std::chrono::system_clock::now().time_since_epoch()).count());
 	//}
 
 	application_=Gtk::Application::create(argc, argv,id);
@@ -212,13 +212,13 @@ void GTK_GUIManager::initialize(int argc, char** argv) {
 
 IViewWindow& GTK_GUIManager::createNewViewWindow() {
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	auto viewWindow=GTK_WindowFactory::createWindow<GTK_ViewWindow,ViewWindowPresenter>(*this,
 	                WindowType::VIEW_WINDOW);
 	viewWindow->show();
 	auto& window=addWindow(std::move(viewWindow),false);
-	
-	//This cast is safe since it gets just casted from 
+
+	//This cast is safe since it gets just casted from
 	//dervied to base back to the same derived class.
 	return dynamic_cast<GTK_ViewWindow&>(window);
 }
@@ -252,7 +252,7 @@ IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePers
 	LOG_ASSERT_GTK(isInitialized_);
 
 	windows_.push_back(std::move(window));
-	
+
 	//we put it in and then get it back out since window gets moved and is nullptr at this point.
 	auto v_window=(windows_.back()).get();
 
@@ -261,7 +261,7 @@ IWindow& GTK_GUIManager::addWindow(std::unique_ptr<IWindow> window,bool makePers
 
 		if(c_window==0) {
 			LOG_GTK(error)<<"Could not make "<<c_window->classname()
-			                                 <<" '"<<c_window->getID()<<"' persistent";
+			              <<" '"<<c_window->getID()<<"' persistent";
 		} else {
 			application_->add_window(*c_window);
 		}
@@ -284,14 +284,14 @@ void GTK_GUIManager::destroyWindow(IWindow& window) {
 		}
 	} catch(const std::exception& e) {
 		LOG_GTK(warning)<<"Could not destroy "<<window.classname()<<" '"<<window.getID()
-		                                   <<"' ("<<e.what()
-		                                   <<"). It will be destroyed when closing the application";
+		                <<"' ("<<e.what()
+		                <<"). It will be destroyed when closing the application";
 	}
 }
 
 void GTK_GUIManager::moveViewToNewWindow(IView& view) {
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	auto& window=createNewViewWindow();
 	LOG_GTK(normal)<<"Moving "<<view.classname()<<" '"<<view.getID()<<"' to "<<window.classname()
 	               <<" '"<<window.getID()<<"'";

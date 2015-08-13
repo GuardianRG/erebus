@@ -22,7 +22,7 @@ GTK_View::GTK_View(BaseObjectType* cobject): Gtk::Viewport(cobject) {
 
 	title_="";
 	guiManager_=nullptr;
-	
+
 }
 
 GTK_View::~GTK_View() {
@@ -39,12 +39,12 @@ void GTK_View::setGUIManager(IGUIManager& manager) {
 
 std::unique_ptr<Gtk::Menu> GTK_View::createContextMenu() {
 	auto contextMenu=std::make_unique<Gtk::Menu>();
-	
+
 	auto emptyItem=new Gtk::MenuItem("(no entries)");
 	emptyItem->set_sensitive(false);
-	
+
 	contextMenu->append(*emptyItem);
-	
+
 	return std::move(contextMenu);
 }
 

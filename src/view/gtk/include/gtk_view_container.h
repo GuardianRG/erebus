@@ -153,7 +153,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	 * See IViewContainer::containsWidget.
 	 */
 	bool containsWidget(std::size_t id)override;
-	
+
 	/**
 	 * See IViewContainer::isEmpty.
 	 */

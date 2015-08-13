@@ -36,12 +36,12 @@ GTK_MainWindow::GTK_MainWindow(BaseObjectType* cobject,
 	refBuilder->get_widget("view_new_window",view_new_windo);
 	view_new_windo->signal_activate().
 	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_new_window_click) );
-	
+
 	Gtk::MenuItem* view_save_preferences;
 	refBuilder->get_widget("view_save_preferences",view_save_preferences);
 	view_save_preferences->signal_activate().
 	connect(sigc::mem_fun(*this, &GTK_MainWindow::on_menu_view_save_preferences_click) );
-	
+
 	Gtk::MenuItem* view_restore_defaults;
 	refBuilder->get_widget("view_restore_defaults",view_restore_defaults);
 	view_restore_defaults->signal_activate().
@@ -57,13 +57,13 @@ GTK_MainWindow::~GTK_MainWindow() {
 void GTK_MainWindow::on_menu_view_restore_defaults_click() {
 	LOG_ASSERT_GTK(isInitialized_);
 	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
-	
+
 	presenter_->on_menu_view_restore_defaults_click();
 }
 
 IGUIObject* GTK_MainWindow::getParentOf(std::size_t id) {
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	if(!containsWidget(id))
 		return nullptr;
 
@@ -101,7 +101,7 @@ void GTK_MainWindow::initialize(IGUIManager& manager) {
 void GTK_MainWindow::on_menu_view_save_preferences_click() {
 	LOG_ASSERT_GTK(presenter_.get()!=nullptr);
 	LOG_ASSERT_GTK(isInitialized_);
-	
+
 	presenter_->on_menu_view_save_preferences_click();
 }
 
