@@ -80,13 +80,24 @@ void GTK_ViewContainer::createNoteBook() {
 	notebook_=std::make_unique<Gtk::Notebook>();
 	
 	auto ptr=notebook_.get();
-	auto updater=[=](Gtk::Widget* page, guint page_num){
+	
+	auto updaterAdd=[=](Gtk::Widget* page, guint page_num){
+		auto pref=getGUIManager().getViewPreferences().getPreferenceBool(AlwaysShowTabsPref::KEY);
+		
+		ptr->set_show_tabs(pref||ptr->get_n_pages()>1);
+		
+		getGUIManager().closeEmptyViewWindows();
+	};
+	
+	auto updaterRemove=[=](Gtk::Widget* page, guint page_num){
+		
 		auto pref=getGUIManager().getViewPreferences().getPreferenceBool(AlwaysShowTabsPref::KEY);
 		
 		ptr->set_show_tabs(pref||ptr->get_n_pages()>1);
 	};
-	notebook_->signal_page_added().connect(updater);
-	notebook_->signal_page_removed().connect(updater);
+	
+	notebook_->signal_page_added().connect(updaterAdd);
+	notebook_->signal_page_removed().connect(updaterRemove);
 	notebook_->set_group_name("notebooks");
 	notebook_->set_scrollable(true);
 }
@@ -461,6 +472,7 @@ void GTK_ViewContainer::closeView(IView& view) {
 	try {
 		auto& buffer=dynamic_cast<GTK_View&>(view);
 		notebook_->remove_page(buffer);
+		getGUIManager().closeEmptyViewWindows();
 	} catch(std::bad_cast e) {
 		LOG_GTK(error)<<"Cast failed.";
 		throw;
@@ -469,6 +481,18 @@ void GTK_ViewContainer::closeView(IView& view) {
 
 bool GTK_ViewContainer::isTopLevel() const {
 	return !isSplitted();
+}
+
+bool GTK_ViewContainer::isEmpty() {
+	if(isSplitted()) {
+		LOG_ASSERT_GTK(child1_.get()!=nullptr);
+		LOG_ASSERT_GTK(child2_.get()!=nullptr);
+		
+		return child1_->isEmpty()||child2_->isEmpty();
+	}
+	
+	LOG_ASSERT_GTK(notebook_.get()!=nullptr);
+	return notebook_->get_n_pages()==0;
 }
 
 bool GTK_ViewContainer::isSplitted() const {
@@ -564,9 +588,6 @@ void GTK_ViewContainer::addViewPr(GTK_View& view) {
 	notebook_->append_page(view,view.getTitle());
 	notebook_->set_tab_reorderable(view);
 	notebook_->set_tab_detachable(view);
-	
-	//if(notebook_->get_n_pages()>1)
-	//	notebook_->set_show_tabs(true);
 	
 	show_all_children();
 }

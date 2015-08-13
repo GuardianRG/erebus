@@ -51,7 +51,7 @@ class GTK_GUIManager:public IGUIManager {
 	 * 
 	 * @param viewPreferences the manager that hold the view preferences
 	 */
-	GTK_GUIManager(std::unique_ptr<ViewPreferencesManager> viewPreferences);
+	GTK_GUIManager();
 
 	/**
 	 * Copy constructor.
@@ -85,8 +85,17 @@ class GTK_GUIManager:public IGUIManager {
 	 * Destructor.
 	 */
 	~GTK_GUIManager();
-
-
+	
+	/**
+	 * See IGUIManager::loadCustomViewPreferences.
+	 */
+	void loadCustomViewPreferences()override;
+	
+	/**
+	 * See IGUIManager::loadDefaultViewPreferences.
+	 */
+	void loadDefaultViewPreferences()override;
+	
 	/**
 	 * Initializes the gui.
 	 *
@@ -96,6 +105,11 @@ class GTK_GUIManager:public IGUIManager {
 	 * @param argv command line arg argv
 	 */
 	void initialize(int argc,char** argv);
+	
+	/**
+	 * See IGUIManager::closeEmptyViewWindows;
+	 */
+	void closeEmptyViewWindows()override;
 	
 	/**
 	 * See IGUIManager::getViewPreferences.

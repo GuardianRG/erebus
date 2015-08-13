@@ -48,6 +48,12 @@ void MainWindowPresenter::on_menu_view_save_preferences_click() {
 	ViewPreferencesSaver::saveAsCustomViewPreferences(mainWindow_->getGUIManager().getViewPreferences());
 }
 
+void MainWindowPresenter::on_menu_view_restore_defaults_click() {
+	LOG_ASSERT_PRESENTER(mainWindow_!=nullptr);
+	
+	mainWindow_->getGUIManager().loadDefaultViewPreferences();
+}
+
 void MainWindowPresenter::on_menu_view_new_window_click() {
 	LOG_ASSERT_PRESENTER(mainWindow_!=nullptr);
 

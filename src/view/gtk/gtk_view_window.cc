@@ -96,6 +96,10 @@ bool GTK_ViewWindow::containsWidget(std::size_t id) {
 	return basicViewContainer_->containsWidget(id);
 }
 
+bool GTK_ViewWindow::isEmpty() {
+	return basicViewContainer_->isEmpty();
+}
+
 IGUIObject* GTK_ViewWindow::getParentOf(std::size_t id) {
 	if(!containsWidget(id))
 		return nullptr;

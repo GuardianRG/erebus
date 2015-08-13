@@ -97,14 +97,15 @@ int main(int argc, char *argv[]) {
 			//Here the model should be initialized.
 			LOG_MAIN(notification)<< "Model initialized";
 			
-			auto defaultViewPreferences=erebus::ViewPreferencesLoader::loadDefaultViewPreferences();
-			auto customViewPreferences=erebus::ViewPreferencesLoader::loadCustomViewPreferences(std::move(defaultViewPreferences));
-			LOG_MAIN(notification)<<"View preferences loaded";
 			
 
 #ifdef _GTKMM_
-			guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>(std::move(customViewPreferences)));
+			guiManager=std::unique_ptr<erebus::IGUIManager>(std::make_unique<erebus::GTK_GUIManager>());
 			auto gmc=static_cast<erebus::GTK_GUIManager*>(guiManager.get());
+			gmc->loadDefaultViewPreferences();
+			gmc->loadCustomViewPreferences();
+			LOG_MAIN(notification)<<"View preferences loaded";
+			
 			gmc->initialize(argc,argv);
 			LOG_MAIN(notification)<<"GUI initialized";
 #else

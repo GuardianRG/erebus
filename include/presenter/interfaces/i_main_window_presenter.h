@@ -23,6 +23,11 @@ class IMainWindowPresenter:public IWindowPresenter {
 	 * Handels a click on the menu entry (view->"Save Preferences").
 	 */
 	virtual void on_menu_view_save_preferences_click()=0;
+	
+	/**
+	 * Handels a click on the menu entry (view->"Restore Defaults").
+	 */
+	virtual void on_menu_view_restore_defaults_click()=0;
 
 };
 

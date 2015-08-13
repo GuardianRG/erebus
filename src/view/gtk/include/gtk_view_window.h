@@ -99,6 +99,11 @@ class GTK_ViewWindow:public GTK_Window,public IViewWindow {
 	 * See IViewWindow::classname.
 	 */
 	virtual std::string classname()override;
+	
+	/**
+	 * See IViewWindow::isEmpty.
+	 */
+	bool isEmpty()override;
 
 	/**
 	 * See IViewWindow::containsWidget.

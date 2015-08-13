@@ -36,6 +36,7 @@ class GTK_MainWindow : public GTK_Window, public IMainWindow {
 
 	void on_menu_view_new_window_click();
 	void on_menu_view_save_preferences_click();
+	void on_menu_view_restore_defaults_click();
 
   public:
 	/**

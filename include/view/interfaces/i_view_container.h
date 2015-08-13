@@ -118,6 +118,14 @@ class IViewContainer:public IContainer {
 	 * @param view the view to add to the container
 	 */
 	virtual void addView(IView& view)=0;
+	
+	/**
+	 * Whether this container or its children contain views.
+	 * 
+	 * @return true if views are contained
+	 */
+	virtual bool isEmpty()=0;
+	
 
 };
 

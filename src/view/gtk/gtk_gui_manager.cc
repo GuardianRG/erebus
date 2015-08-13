@@ -20,6 +20,7 @@
 #include <gtk_logger.h>
 #include <view_preferences_manager.h>
 #include <gtk_view_container.h>
+#include <view_preferences_loader.h>
 #include <gtk_view_window.h>
 #include <view_window_presenter.h>
 #include <gtk_window_factory.h>
@@ -32,7 +33,7 @@ namespace erebus {
 const std::string  GTK_GUIManager::STD_APP_ID="org.werner.erebus";
 
 
-GTK_GUIManager::GTK_GUIManager(std::unique_ptr<ViewPreferencesManager> viewPreferences):viewPreferences_(std::move(viewPreferences)) {
+GTK_GUIManager::GTK_GUIManager():viewPreferences_(std::make_unique<ViewPreferencesManager>()) {
 	LOG_GTK(normal)<<"Constructing the gui manager";
 
 	isInitialized_=false;
@@ -73,6 +74,14 @@ void GTK_GUIManager::showMessageDialog(std::size_t id,std::string primaryText,
 		showMessageDialogPr(*window,primaryText,secondaryText,errorLevel);
 }
 
+void GTK_GUIManager::loadCustomViewPreferences() {
+	viewPreferences_=ViewPreferencesLoader::loadCustomViewPreferences(std::move(viewPreferences_));
+}
+
+void GTK_GUIManager::loadDefaultViewPreferences() {
+	viewPreferences_=ViewPreferencesLoader::loadDefaultViewPreferences(std::move(viewPreferences_));
+}
+
 GTK_Window* GTK_GUIManager::getWindow(std::size_t id) {
 	LOG_ASSERT_GTK(isInitialized_);
 	
@@ -86,6 +95,27 @@ GTK_Window* GTK_GUIManager::getWindow(std::size_t id) {
 		}
 	}
 	return nullptr;
+}
+
+void GTK_GUIManager::closeEmptyViewWindows() {
+	auto i = std::begin(windows_);
+	
+	while (i != std::end(windows_)) {
+		if((*i)->classname()==GTK_ViewWindow::CLASSNAME) {
+			auto view_window=dynamic_cast<GTK_ViewWindow*>((*i).get());
+			if(view_window!=0) {
+				if (view_window->isEmpty()) {
+					LOG_GTK(normal)<<"IS empty";
+					windows_.erase(i);//view_window->close();
+					continue;
+				}
+			}
+			else {
+				LOG_GTK(error)<<"Cast failed!";
+			}
+		}
+		++i;
+	}
 }
 
 void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primaryText,

@@ -108,6 +108,21 @@ class IGUIManager {
 	 * @return the manager that holds the view preferences.
 	 */
 	virtual ViewPreferencesManager& getViewPreferences()=0;
+	
+	/**
+	 * Loads the default view preferences.
+	 */
+	virtual void loadDefaultViewPreferences()=0;
+	
+	/**
+	 * Loads the custom view preferences.
+	 */
+	virtual void loadCustomViewPreferences()=0;
+	
+	/**
+	 * Closes all view windows that dont contain views.
+	 */
+	virtual void closeEmptyViewWindows()=0;
 
 	/**
 	 * Creats a new view window and moves the given view to this new window.

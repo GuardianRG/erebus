@@ -3,6 +3,7 @@
 set(SOURCE
 	${SOURCE}
 	${CMAKE_CURRENT_SOURCE_DIR}/always_show_tabs_pref.cc
+	${CMAKE_CURRENT_SOURCE_DIR}/close_view_window_when_empty_pref.cc
 	${CMAKE_CURRENT_SOURCE_DIR}/boolean_view_preference.cc
 	PARENT_SCOPE
 )
