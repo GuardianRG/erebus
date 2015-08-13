@@ -43,7 +43,7 @@ GTK_ViewContainer::GTK_ViewContainer(
     Glib::RefPtr<Gtk::Adjustment> h_adjustment,
     Glib::RefPtr<Gtk::Adjustment> v_adjustment,
     std::unique_ptr<Gtk::Notebook> notebook,IGUIManager& manager):
-	Gtk::Viewport(h_adjustment,v_adjustment),timeBuffer_(0),clickBuffer_(0),isSplitted_(false) {
+	Gtk::Viewport(h_adjustment,v_adjustment),timeBuffer_(0),clickBuffer_(0),isSplitted_(false),lastPageClicked_(-2) {
 
 	LOG_CONSTRUCTOR;
 
@@ -141,12 +141,11 @@ void GTK_ViewContainer::updateContextMenu() {
 
 	LOG_ASSERT(gtk_l::get(),notebook_.get()!=nullptr);
 
-	static int currentPage=-2;
 	if(notebook_->get_n_pages()>=1) {
-		if(currentPage!=notebook_->get_current_page()) {
+		if(lastPageClicked_!=notebook_->get_current_page()) {
 			buildContextMenu();
-			currentPage=notebook_->get_current_page();
-			auto child=dynamic_cast<GTK_View*>(notebook_->get_nth_page(currentPage));
+			lastPageClicked_=notebook_->get_current_page();
+			auto child=dynamic_cast<GTK_View*>(notebook_->get_nth_page(lastPageClicked_));
 
 			if(child!=0) {
 				auto child_menu=std::move(child->createContextMenu());
@@ -170,7 +169,7 @@ void GTK_ViewContainer::updateContextMenu() {
 			separator1_->show();
 		}
 	} else {
-		currentPage=-2;
+		lastPageClicked_=-2;
 		buildContextMenu();
 		viewItem_->hide();
 		separator_->hide();

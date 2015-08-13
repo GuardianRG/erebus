@@ -48,6 +48,7 @@ class GTK_ViewContainer:public IViewContainer,public Gtk::Viewport {
 	int 						timeBuffer_;
 	int 						clickBuffer_;
 	bool						isSplitted_;
+	int 						lastPageClicked_;
 
 	void buildContextMenu();
 	void updateContextMenu();
