@@ -1,3 +1,3 @@
 #This is a view preferences file
-always_show_tabs=true
-close_view_window_when_empty=true
+always_show_tabs=false
+close_view_window_when_empty=false
