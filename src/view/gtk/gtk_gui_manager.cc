@@ -145,6 +145,10 @@ void GTK_GUIManager::showMessageDialogPr(Gtk::Window& window,std::string primary
 	dialog.run();
 }
 
+void GTK_GUIManager::resetViewPreferences() {
+	viewPreferences_=std::make_unique<ViewPreferencesManager>();
+}
+
 void GTK_GUIManager::joinContainer(std::size_t id) {
 	LOG_ASSERT_GTK(isInitialized_);
 

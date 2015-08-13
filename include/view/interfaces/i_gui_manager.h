@@ -123,6 +123,11 @@ class IGUIManager {
 	 * Closes all view windows that dont contain views.
 	 */
 	virtual void closeEmptyViewWindows()=0;
+	
+	/**
+	 * Resets the view preferences to the built in default values.
+	 */
+	virtual void resetViewPreferences()=0;
 
 	/**
 	 * Creats a new view window and moves the given view to this new window.

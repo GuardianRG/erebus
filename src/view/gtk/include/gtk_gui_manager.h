@@ -151,6 +151,11 @@ class GTK_GUIManager:public IGUIManager {
 	 * See IGUIManager::joinContainer.
 	 */
 	void joinContainer(std::size_t id)override;
+	
+	/**
+	 * See IGUIManager::resetViewPreferences.
+	 */
+	void resetViewPreferences()override;
 
 	/**
 	 * See IGUIManager::createNewViewWindow.

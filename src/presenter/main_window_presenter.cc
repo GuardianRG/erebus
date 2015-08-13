@@ -51,7 +51,8 @@ void MainWindowPresenter::on_menu_view_save_preferences_click() {
 
 void MainWindowPresenter::on_menu_view_restore_defaults_click() {
 	LOG_ASSERT_PRESENTER(mainWindow_!=nullptr);
-
+	
+	mainWindow_->getGUIManager().resetViewPreferences();
 	mainWindow_->getGUIManager().loadDefaultViewPreferences();
 }
 
