@@ -105,8 +105,9 @@ void GTK_GUIManager::closeEmptyViewWindows() {
 			auto view_window=dynamic_cast<GTK_ViewWindow*>((*i).get());
 			if(view_window!=0) {
 				if (view_window->isEmpty()) {
-					LOG_GTK(normal)<<"IS empty";
-					windows_.erase(i);//view_window->close();
+					LOG_GTK(normal)<<view_window->getID();
+					view_window->Gtk::Window::close();
+					windows_.erase(i);
 					continue;
 				}
 			} else {

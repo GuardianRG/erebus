@@ -97,6 +97,8 @@ bool GTK_ViewWindow::containsWidget(std::size_t id) {
 }
 
 bool GTK_ViewWindow::isEmpty() {
+	LOG_ASSERT_GTK(basicViewContainer_.get()!=nullptr);
+	
 	return basicViewContainer_->isEmpty();
 }
 

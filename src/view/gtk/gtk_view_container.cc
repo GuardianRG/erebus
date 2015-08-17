@@ -492,10 +492,11 @@ bool GTK_ViewContainer::isEmpty() {
 		LOG_ASSERT_GTK(child1_.get()!=nullptr);
 		LOG_ASSERT_GTK(child2_.get()!=nullptr);
 
-		return child1_->isEmpty()||child2_->isEmpty();
+		return child1_->isEmpty()&&child2_->isEmpty();
 	}
 
 	LOG_ASSERT_GTK(notebook_.get()!=nullptr);
+	
 	return notebook_->get_n_pages()==0;
 }
 
